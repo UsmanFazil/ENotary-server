@@ -79,7 +79,6 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode("Invalid password")
 }
 
-
 // Newuser : Method to add new user into the system
 func (d *dbServer) Newuser(w http.ResponseWriter, r *http.Request) {
 
