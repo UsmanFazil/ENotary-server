@@ -1,8 +1,8 @@
 package main
 
 import (
-	"Server/DB"
-	"Server/Hashing"
+	"ENOTARY-Server/DB"
+	"ENOTARY-Server/Hashing"
 	"log"
 	"net/http"
 
@@ -12,6 +12,7 @@ import (
 
 func main() {
 
+	// Database connection here
 	var settings = mysql.ConnectionURL{
 		User:     "root",
 		Host:     "localhost",
@@ -25,15 +26,14 @@ func main() {
 	log.Print("Maria DB server started ....")
 	defer db.CloseSession()
 
-	r := mux.NewRouter()
-
 	//routes for the server
-	r.HandleFunc("/login", db.Login).Methods("POST")
-	r.HandleFunc("/Signup", db.Newuser).Methods("POST")
-	r.HandleFunc("/hashfile", Hashing.Servehash).Methods("POST")
-	r.HandleFunc("/validateuser/{email}", db.Validateuser).Methods("GET")
+	r := mux.NewRouter()
+	r.HandleFunc("/login", db.Login).Methods(http.MethodPost)
+	r.HandleFunc("/signup", db.Signup).Methods(http.MethodPost)
+	r.HandleFunc("/hashfile", Hashing.Servehash).Methods(http.MethodPost)
+	//	r.HandleFunc("/validateuser/{email}", db.Validateuser).Methods("GET")
 
-	log.Println("Go-lang server started at port 8000 ...")
+	log.Println("Go-lang server started at port 8000 ....")
 	log.Println(http.ListenAndServe(":8000", r))
 
 }

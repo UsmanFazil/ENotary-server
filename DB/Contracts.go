@@ -1,25 +1,36 @@
 package DB
 
 import (
-	"net/http"
+	db "upper.io/db.v3"
 )
 
 const ContractCollection = "Contract"
+const SignerCollection = "Signer"
 
-type Contract struct {
-	ContractID           string `db:"ContractID"`
-	Filepath             string `db:"filepath"`
-	Status               string `db:"status"`
-	ContractcreationTime string `db:"creationTime"`
-	Creator              User   `db:"Creator"`
-	DelStatus            string `db:"delStatus"`
-	UpdateTime           string `db:"updateTime"`
-	ContractName         string `db:"contractName"`
-	ExpirationTime       string `db:"ExpirationTime"`
-	Blockchain           int    `db:"Blockchain"`
-	Message              string `db:"Message"`
+func (d *dbServer) WaitingforOther(userid string) (uint64, error) {
+	Collection := d.sess.Collection(ContractCollection)
+	res := Collection.Find(db.Cond{"Creator": userid, "delStatus": 0, "status": "in progress"})
+	total, err := res.Count()
+
+	if err != nil {
+		return 0, err
+	}
+	return total, nil
 }
 
-func (d *dbServer) CreateContract(w http.ResponseWriter, r *http.Request) {
+func (d *dbServer) WaitingforMe(userid string) (uint64, error) {
+	Collection := d.sess.Collection(SignerCollection)
+	res := Collection.Find(db.Cond{"userID": userid, "Access": 1, "SignStatus": "needs to sign", "DeleteApprove": 0})
+	total, err := res.Count()
 
+	if err != nil {
+		return 0, err
+	}
+	return total, nil
 }
+
+// TO DO when insertion with time stamps is done
+// func (d *dbServer) MyExpiring(userid string) (uint64, error) {
+// 	Collection := d.sess.Collection(ContractCollection)
+// 	res := Collection.Find(db.Cond{""})
+// }
