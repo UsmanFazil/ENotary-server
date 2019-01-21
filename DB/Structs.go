@@ -38,10 +38,28 @@ type Signer struct {
 	Access        int    `db:"Access"`
 }
 
+type VerifUser struct {
+	UserID           string `db:"userID"`
+	VerificationCode string `db:"VerificationCode"`
+	ExpTime          string `db:"expTime"`
+}
+
 type JwtToken struct {
 	Token string `json:"token"`
 }
 
 type Exception struct {
 	Message string `json:"message"`
+}
+
+type LoginStruct struct {
+	Userdata     User
+	WaitingME    uint64
+	WaitingOther uint64
+	Token        string
+}
+
+type LogCheck struct {
+	Email    string `json:"email"`
+	Password string `json:password`
 }

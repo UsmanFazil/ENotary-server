@@ -1,6 +1,8 @@
 package DB
 
 import (
+	"crypto/rand"
+	"fmt"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -33,12 +35,18 @@ func RenderResponse(w http.ResponseWriter, message string, statusCode int) {
 	w.Write([]byte(message))
 }
 
+func GenerateToken(len int) string {
+	b := make([]byte, len)
+	rand.Read(b)
+	return fmt.Sprintf("%x", b)
+}
+
 func CredentialValidation(usr User) (bool, string) {
-	mailRE, errstring := verifyEmail(usr.Email)
+	mailRE, errstring := VerifyEmail(usr.Email)
 	if !mailRE {
 		return false, errstring
 	}
-	pswdRE, errstring := verifyPassword(usr.Password)
+	pswdRE, errstring := VerifyPassword(usr.Password)
 	if !pswdRE {
 		return false, errstring
 	}
@@ -86,7 +94,7 @@ func verifyComp(company string) (bool, string) {
 	return true, ""
 }
 
-func verifyEmail(mail string) (bool, string) {
+func VerifyEmail(mail string) (bool, string) {
 	mailRE := regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 	if !mailRE.MatchString(mail) {
 		return false, "invalid email address"
@@ -94,7 +102,7 @@ func verifyEmail(mail string) (bool, string) {
 	return true, ""
 }
 
-func verifyPassword(password string) (bool, string) {
+func VerifyPassword(password string) (bool, string) {
 	var uppercasePresent bool
 	var lowercasePresent bool
 	var numberPresent bool
@@ -135,29 +143,3 @@ func verifyPassword(password string) (bool, string) {
 
 	return true, ""
 }
-
-// func (d *dbServer) Validateuser(w http.ResponseWriter, r *http.Request) {
-// 	w.Header().Set("Content-Type", "application/json")
-// 	params := mux.Vars(r)
-
-// 	Collection := d.sess.Collection(userCollection)
-// 	var user User
-// 	res := Collection.Find(db.Cond{"email": params["email"]})
-
-// 	err := res.One(&user)
-// 	if err != nil {
-// 		json.NewEncoder(w).Encode("invalid email")
-// 		return
-// 	}
-
-// 	if user.Verified == 1 {
-// 		json.NewEncoder(w).Encode("user already verified")
-// 		return
-// 	}
-// 	user.Verified = 1
-// 	if err := res.Update(user); err != nil {
-// 		json.NewEncoder(w).Encode("internal error please try again")
-// 	}
-// 	json.NewEncoder(w).Encode("User verified successfully")
-
-// }

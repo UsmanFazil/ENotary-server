@@ -31,7 +31,7 @@ func main() {
 	r.HandleFunc("/login", db.Login).Methods(http.MethodPost)
 	r.HandleFunc("/signup", db.Signup).Methods(http.MethodPost)
 	r.HandleFunc("/hashfile", Hashing.Servehash).Methods(http.MethodPost)
-	//	r.HandleFunc("/validateuser/{email}", db.Validateuser).Methods("GET")
+	//r.HandleFunc("/verifyemail", db.Verif).Methods(http.MethodGet)
 
 	log.Println("Go-lang server started at port 8000 ....")
 	log.Println(http.ListenAndServe(":8000", r))

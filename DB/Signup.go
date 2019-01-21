@@ -1,12 +1,15 @@
 package DB
 
 import (
+	"ENOTARY-Server/Email"
 	"encoding/json"
 	"net/http"
 	"time"
 
 	uuid "github.com/satori/go.uuid"
 )
+
+const VerifCollection = "userVerification"
 
 func (d *dbServer) Signup(w http.ResponseWriter, r *http.Request) {
 
@@ -35,8 +38,30 @@ func (d *dbServer) Signup(w http.ResponseWriter, r *http.Request) {
 		Values(id, user.Email, user.Password, user.Name, user.Company, user.Phone, "non", "non", "non", time.Now().Format(time.RFC850), 0).
 		Exec()
 	if err != nil {
-		RenderError(w, "CAN_NOT_GENERATE_USER_ID")
+		RenderError(w, "CAN_NOT_GENERATE_USER_ID_TRY_AGAIN")
 		return
 	}
-	RenderResponse(w, "ACCOUNT_CREATED_PLEASE_VALIDATE_YOUR_EMAIL_TO_LOGIN", http.StatusOK)
+	verfCode := GenerateToken(3)
+
+	//save verification code in DB
+	svc := d.InsertVerfCode(id.String(), verfCode)
+	if !svc {
+		RenderError(w, "USER CREATED BUT CAN NOT GENERATE VERIFICATION EMAIL TRY LOGIN")
+	}
+
+	_, err = Email.SendMail(user.Email, verfCode)
+	if err != nil {
+		RenderError(w, "ACCOUNT GENERATED BUT CAN NOT GENERATE VERIFICATION EMAIL TRY LOGIN")
+	}
+	RenderResponse(w, "YOUR ACCOUNT HAS BEEN CREATED AND A VERIFICATION EMAIL HAS BEEN SENT TO YOUR EMAIL ADDRESS", http.StatusOK)
+}
+
+func (d *dbServer) InsertVerfCode(userid string, verfcode string) bool {
+	_, err := d.sess.InsertInto(VerifCollection).Values(userid, verfcode, time.Now().Add(2*time.Hour).Unix()).
+		Exec()
+
+	if err != nil {
+		return false
+	}
+	return true
 }
