@@ -9,8 +9,6 @@ import (
 	db "upper.io/db.v3"
 )
 
-const userCollection = "Users"
-
 // Login : Method to check weather the user exists on the system or not ()
 
 func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
@@ -52,7 +50,6 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 		if error != nil {
 			RenderError(w, "INTERNAL ERROR TRY AGAIN")
 			return
-
 		}
 		waitingOther, err := d.WaitingforOther(user.Userid)
 		if err != nil {

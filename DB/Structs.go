@@ -1,5 +1,9 @@
 package DB
 
+const userCollection = "Users"
+const ContractCollection = "Contract"
+const SignerCollection = "Signer"
+
 type User struct {
 	Userid       string `db:"userid"`
 	Email        string `db:"email"`
@@ -19,7 +23,7 @@ type Contract struct {
 	Filepath             string `db:"filepath"`
 	Status               string `db:"status"`
 	ContractcreationTime string `db:"creationTime"`
-	Creator              User   `db:"Creator"`
+	Creator              string `db:"Creator"`
 	DelStatus            int    `db:"delStatus"`
 	UpdateTime           string `db:"updateTime"`
 	ContractName         string `db:"contractName"`

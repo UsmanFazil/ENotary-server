@@ -4,9 +4,6 @@ import (
 	db "upper.io/db.v3"
 )
 
-const ContractCollection = "Contract"
-const SignerCollection = "Signer"
-
 func (d *dbServer) WaitingforOther(userid string) (uint64, error) {
 	Collection := d.sess.Collection(ContractCollection)
 	res := Collection.Find(db.Cond{"Creator": userid, "delStatus": 0, "status": "in progress"})

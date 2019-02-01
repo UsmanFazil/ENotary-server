@@ -34,6 +34,7 @@ func (d *dbServer) Signup(w http.ResponseWriter, r *http.Request) {
 		RenderError(w, errmsg)
 		return
 	}
+	// todo : create user struct and use "collection.Insert(user)"
 	_, err = d.sess.InsertInto(userCollection).
 		Values(id, user.Email, user.Password, user.Name, user.Company, user.Phone, "non", "non", "non", time.Now().Format(time.RFC850), 0).
 		Exec()
@@ -59,7 +60,6 @@ func (d *dbServer) Signup(w http.ResponseWriter, r *http.Request) {
 func (d *dbServer) InsertVerfCode(userid string, verfcode string) bool {
 	_, err := d.sess.InsertInto(VerifCollection).Values(userid, verfcode, time.Now().Add(2*time.Hour).Unix()).
 		Exec()
-
 	if err != nil {
 		return false
 	}
