@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 )
 
-const uploadPath = "./tmp"
+const uploadPath = "./Profile_pics"
 
 func main() {
 	http.HandleFunc("/up", foo)

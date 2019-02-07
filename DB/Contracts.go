@@ -25,9 +25,3 @@ func (d *dbServer) WaitingforMe(userid string) (uint64, error) {
 	}
 	return total, nil
 }
-
-// TO DO when insertion with time stamps is done
-// func (d *dbServer) MyExpiring(userid string) (uint64, error) {
-// 	Collection := d.sess.Collection(ContractCollection)
-// 	res := Collection.Find(db.Cond{""})
-// }

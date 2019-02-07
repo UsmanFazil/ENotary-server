@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"upper.io/db.v3/mysql"
 )
@@ -16,7 +17,7 @@ func main() {
 	var settings = mysql.ConnectionURL{
 		User:     "root",
 		Host:     "localhost",
-		Password: "",
+		Password: "mypass",
 		Database: "ENotary",
 	}
 	db, err := DB.Dbinit(settings)
@@ -37,6 +38,5 @@ func main() {
 	r.HandleFunc("/sent", db.SentContract).Methods(http.MethodGet)
 
 	log.Println("Go-lang server started at port 8000 ....")
-	log.Println(http.ListenAndServe(":8000", r))
-
+	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(r)))
 }
