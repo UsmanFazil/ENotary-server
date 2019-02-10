@@ -10,7 +10,7 @@ import (
 )
 
 const VerifCollection = "userVerification"
-const def_pic_path = "../fileupload/Profile_pics/default.png"
+const def_pic_path = "Files/Profile_pics/default.png"
 
 func (d *dbServer) Signup(w http.ResponseWriter, r *http.Request) {
 	var user User
@@ -34,7 +34,7 @@ func (d *dbServer) Signup(w http.ResponseWriter, r *http.Request) {
 		RenderError(w, errmsg)
 		return
 	}
-	// todo : create user struct and use "collection.Insert(user)"
+	// TODO : create user struct and use "collection.Insert(user)"
 	_, err = d.sess.InsertInto(userCollection).
 		Values(id, user.Email, user.Password, user.Name, user.Company, user.Phone, def_pic_path, "non", "non", time.Now().Format(time.RFC850), 0).
 		Exec()

@@ -24,6 +24,15 @@ func main() {
 	http.ListenAndServe(":8000", nil)
 }
 
+// This function deletes files
+func deletefile(path string) bool {
+	var err = os.Remove(path)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func foo(w http.ResponseWriter, r *http.Request) {
 	var s string
 

@@ -1,0 +1,3 @@
+1- JWT token validation 
+2- User profile pic : get userid from the token 
+3- Create user struct and then insert in DB during signup

@@ -4,6 +4,11 @@ const userCollection = "Users"
 const ContractCollection = "Contract"
 const SignerCollection = "Signer"
 
+const Profilepicspath = "./Files/Profile_pics"
+const Contractfilepath = "./Files/Contracts"
+
+const MaxpicSize = 5 * 1024 * 1024
+
 type User struct {
 	Userid       string `db:"userid"`
 	Email        string `db:"email"`

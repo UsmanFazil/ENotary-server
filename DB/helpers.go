@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"regexp"
 	"strconv"
+	"strings"
 	"unicode"
 
 	db "upper.io/db.v3"
@@ -142,4 +143,17 @@ func VerifyPassword(password string) (bool, string) {
 	}
 
 	return true, ""
+}
+
+func (d *dbServer) GetimageName(userid string) (string, string, error) {
+	collection := d.sess.Collection(userCollection)
+	res := collection.Find(db.Cond{"userid": userid})
+	var user User
+	err := res.One(&user)
+	if err != nil {
+		return "", "", err
+	}
+	spliter := strings.Split(user.Picture, "/")
+	picName := spliter[3]
+	return picName, user.Picture, nil
 }
