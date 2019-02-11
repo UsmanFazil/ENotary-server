@@ -31,14 +31,16 @@ func main() {
 
 	//routes for the server
 	r := mux.NewRouter()
-	r.HandleFunc("/login", db.Login).Methods(http.MethodPost)
+	r.HandleFunc("/login", db.Login).Methods(http.MethodGet)
 	r.HandleFunc("/signup", db.Signup).Methods(http.MethodPost)
-	r.HandleFunc("/hashfile", Hashing.Servehash).Methods(http.MethodPost)
-	r.HandleFunc("/verifyemail", db.AccountVerif).Methods(http.MethodPost)
-	r.HandleFunc("/resendcode", db.ResendCode).Methods(http.MethodPost)
+	r.HandleFunc("/hashFile", Hashing.Servehash).Methods(http.MethodGet)
+	r.HandleFunc("/verifyEmail", db.AccountVerif).Methods(http.MethodGet)
+	r.HandleFunc("/resendCode", db.ResendCode).Methods(http.MethodGet)
 	r.HandleFunc("/inbox", db.InboxData).Methods(http.MethodGet)
 	r.HandleFunc("/sent", db.SentContract).Methods(http.MethodGet)
-	r.HandleFunc("/uploadprofilepic", db.ProfilePic).Methods(http.MethodPost)
+	r.HandleFunc("/uploadProfilePic", db.ProfilePic).Methods(http.MethodPost)
+	r.HandleFunc("/newContract", db.NewContract).Methods(http.MethodPost)
+
 	r.PathPrefix("/Files/").Handler(http.StripPrefix("/Files/", http.FileServer(http.Dir(dir))))
 
 	log.Println("Go-lang server started at port 8000 ....")

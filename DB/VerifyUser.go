@@ -13,6 +13,8 @@ import (
 
 const UserverifCollecion = "userVerification"
 
+//TODO here : account verification with email not userid
+
 func (d *dbServer) AccountVerif(w http.ResponseWriter, r *http.Request) {
 	var VU VerifUser
 	var temp VerifUser
