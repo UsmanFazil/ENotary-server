@@ -1,7 +1,6 @@
 package DB
 
 import (
-	"fmt"
 	"io/ioutil"
 	"mime"
 	"net/http"
@@ -24,13 +23,15 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	f, _, err := r.FormFile("contractFile")
+	f, header, err := r.FormFile("contractFile")
 	userid := r.FormValue("userid")
 	if err != nil {
 		RenderError(w, "INVALID_FILE")
 		return
 	}
 	defer f.Close()
+
+	upFileName := header.Filename
 
 	bs, err := ioutil.ReadAll(f)
 	if err != nil {
@@ -49,7 +50,7 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fileName := contractID.String()
+	filepathName := contractID.String()
 	fileEndings, err := mime.ExtensionsByType(filetype)
 	if err != nil {
 		RenderError(w, "INVALID_FILE")
@@ -57,7 +58,7 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 	}
 
 	s = string(bs)
-	newpath := filepath.Join(Contractfilepath, fileName+fileEndings[0])
+	newpath := filepath.Join(Contractfilepath, filepathName+fileEndings[0])
 	file, err := os.Create(newpath)
 
 	if err != nil {
@@ -67,7 +68,7 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 	defer file.Close()
 	file.WriteString(s)
 
-	cid := d.ContractInDB(fileName, userid, newpath)
+	cid := d.ContractInDB(upFileName, filepathName, userid, newpath)
 	if !cid {
 		RenderError(w, "CAN NOT ADD CONTRACT FILE TRY AGAIN")
 		return
@@ -75,7 +76,7 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 	RenderResponse(w, "FILE UPLOADED SUCCESSFULY", http.StatusOK)
 }
 
-func (d *dbServer) ContractInDB(cID string, userid string, filepath string) bool {
+func (d *dbServer) ContractInDB(cName string, cID string, userid string, filepath string) bool {
 	var contract Contract
 	contract.ContractID = cID
 	contract.Creator = userid
@@ -84,11 +85,9 @@ func (d *dbServer) ContractInDB(cID string, userid string, filepath string) bool
 	contract.ContractcreationTime = time.Now().Format(time.RFC850)
 	contract.DelStatus = 0
 	contract.Blockchain = 0
-	contract.ContractName = "default_name.pdf"
+	contract.ContractName = cName
 
 	contract.ExpirationTime = strconv.FormatInt(time.Now().Add(1440*time.Hour).Unix(), 10) // 1440 = 60 days
-
-	fmt.Println(contract)
 
 	Collection := d.sess.Collection(ContractCollection)
 	_, err := Collection.Insert(contract)
