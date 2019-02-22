@@ -1,6 +1,7 @@
 package DB
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"mime"
 	"net/http"
@@ -73,7 +74,7 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 		RenderError(w, "CAN NOT ADD CONTRACT FILE TRY AGAIN")
 		return
 	}
-	RenderResponse(w, "FILE UPLOADED SUCCESSFULY", http.StatusOK)
+	RenderResponse(w, filepathName, http.StatusOK)
 }
 
 func (d *dbServer) ContractInDB(cName string, cID string, userid string, filepath string) bool {
@@ -95,6 +96,15 @@ func (d *dbServer) ContractInDB(cName string, cID string, userid string, filepat
 		return false
 	}
 	return true
+}
+
+func (d *dbServer) AddRecipients(w http.ResponseWriter, r *http.Request) {
+	var input []Signerdata
+	_ = json.NewDecoder(r.Body).Decode(&input)
+
+	//	signCollection := d.sess.Collection(SignerCollection)
+	//	userCollection := d.sess.Collection(UserCollection)
+
 }
 
 func (d *dbServer) WaitingforOther(userid string) (uint64, error) {

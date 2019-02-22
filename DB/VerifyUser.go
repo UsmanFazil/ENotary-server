@@ -11,8 +11,6 @@ import (
 	db "upper.io/db.v3"
 )
 
-const UserverifCollecion = "userVerification"
-
 //TODO here : account verification with email not userid
 
 func (d *dbServer) AccountVerif(w http.ResponseWriter, r *http.Request) {
@@ -21,8 +19,8 @@ func (d *dbServer) AccountVerif(w http.ResponseWriter, r *http.Request) {
 
 	_ = json.NewDecoder(r.Body).Decode(&temp)
 
-	Collection := d.sess.Collection(UserverifCollecion)
-	res := Collection.Find(db.Cond{"userID": temp.UserID, "VerificationCode": temp.VerificationCode})
+	Collection := d.sess.Collection(VerifCollection)
+	res := Collection.Find(db.Cond{"userid": temp.UserID, "VerificationCode": temp.VerificationCode})
 	err := res.One(&VU)
 	if err != nil {
 		RenderError(w, "INVALID_CODE")
@@ -48,7 +46,7 @@ func (d *dbServer) ResendCode(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewDecoder(r.Body).Decode(&temp)
 
 	// find user user id using his email
-	UColletion := d.sess.Collection(userCollection)
+	UColletion := d.sess.Collection(UserCollection)
 	res1 := UColletion.Find(db.Cond{"email": temp.Email})
 	err := res1.One(&user)
 	if err != nil {
@@ -56,7 +54,7 @@ func (d *dbServer) ResendCode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// update user verification code and exp using his userid
-	Collection := d.sess.Collection(UserverifCollecion)
+	Collection := d.sess.Collection(VerifCollection)
 	res := Collection.Find(db.Cond{"userID": user.Userid})
 	vcode := GenerateToken(3)
 	fmt.Println(vcode)
@@ -72,5 +70,3 @@ func (d *dbServer) ResendCode(w http.ResponseWriter, r *http.Request) {
 	RenderResponse(w, "NEW CODE SENT TO YOUR EMAIL", http.StatusOK)
 	return
 }
-
-//	d.sess.Query(`Update userVerification set VerificationCode= "aa" AND expTime="123" where userID=?`, vcode, time.Now().Add(2*time.Hour).Unix(), user.Userid)

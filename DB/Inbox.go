@@ -12,6 +12,7 @@ func (d *dbServer) InboxData(w http.ResponseWriter, r *http.Request) {
 	var signer []Signer
 	var tmpContract Contract
 	i := 0
+
 	_ = json.NewDecoder(r.Body).Decode(&tmp)
 
 	signercollection := d.sess.Collection(SignerCollection)

@@ -9,7 +9,6 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-const VerifCollection = "userVerification"
 const def_pic_path = "Files/Profile_pics/default.png"
 
 func (d *dbServer) Signup(w http.ResponseWriter, r *http.Request) {
@@ -35,7 +34,7 @@ func (d *dbServer) Signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// TODO : create user struct and use "collection.Insert(user)"
-	_, err = d.sess.InsertInto(userCollection).
+	_, err = d.sess.InsertInto(UserCollection).
 		Values(id, user.Email, user.Password, user.Name, user.Company, user.Phone, def_pic_path, "non", "non", time.Now().Format(time.RFC850), 0).
 		Exec()
 	if err != nil {
@@ -48,11 +47,13 @@ func (d *dbServer) Signup(w http.ResponseWriter, r *http.Request) {
 	svc := d.InsertVerfCode(id.String(), verfCode)
 	if !svc {
 		RenderError(w, "USER CREATED BUT CAN NOT GENERATE VERIFICATION EMAIL TRY LOGIN")
+		return
 	}
 
 	_, err = Email.SendMail(user.Email, verfCode)
 	if err != nil {
 		RenderError(w, "ACCOUNT GENERATED BUT CAN NOT GENERATE VERIFICATION EMAIL TRY LOGIN")
+		return
 	}
 	RenderResponse(w, "YOUR ACCOUNT HAS BEEN CREATED AND A VERIFICATION EMAIL HAS BEEN SENT TO YOUR EMAIL ADDRESS", http.StatusOK)
 }

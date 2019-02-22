@@ -72,7 +72,7 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 }
 
 func (d *dbServer) updatePicPath(userid string, picpath string) bool {
-	collection := d.sess.Collection(userCollection)
+	collection := d.sess.Collection(UserCollection)
 	res := collection.Find(db.Cond{"userid": userid})
 	res.Update(map[string]string{
 		"picture": picpath,
@@ -81,7 +81,7 @@ func (d *dbServer) updatePicPath(userid string, picpath string) bool {
 }
 
 func (d *dbServer) removeOldPic(userid string) bool {
-	collection := d.sess.Collection(userCollection)
+	collection := d.sess.Collection(UserCollection)
 	res := collection.Find(db.Cond{"userid": userid})
 	var user User
 	err := res.One(&user)

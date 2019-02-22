@@ -1,8 +1,9 @@
 package DB
 
-const userCollection = "Users"
+const UserCollection = "Users"
 const ContractCollection = "Contract"
 const SignerCollection = "Signer"
+const VerifCollection = "Verification"
 
 const Profilepicspath = "./Files/Profile_pics"
 const Contractfilepath = "./Files/Contracts"
@@ -41,6 +42,7 @@ type Contract struct {
 type Signer struct {
 	ContractID    string `db:"ContractID"`
 	UserID        string `db:"userID"`
+	Name          string `db:"name"`
 	SignStatus    string `db:"SignStatus"`
 	SignDate      string `db:"SignDate"`
 	DeleteApprove int    `db:"DeleteApprove"`
@@ -49,9 +51,9 @@ type Signer struct {
 }
 
 type VerifUser struct {
-	UserID           string `db:"userID"`
+	UserID           string `db:"userid"`
 	VerificationCode string `db:"VerificationCode"`
-	ExpTime          string `db:"expTime"`
+	ExpTime          string `db:"exptime"`
 }
 
 type JwtToken struct {
@@ -72,4 +74,9 @@ type LoginStruct struct {
 type LogCheck struct {
 	Email    string `json:"email"`
 	Password string `json:password`
+}
+
+type Signerdata struct {
+	Email string `json:"email"`
+	Name  string `json:"name"`
 }

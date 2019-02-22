@@ -12,7 +12,7 @@ import (
 )
 
 func (d *dbServer) GetUser(email string) (*User, bool, error) {
-	Collection := d.sess.Collection(userCollection)
+	Collection := d.sess.Collection(UserCollection)
 	res := Collection.Find(db.Cond{"email": email})
 	var user User
 	err := res.One(&user)

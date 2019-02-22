@@ -26,7 +26,7 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 		RenderError(w, "INVALID PASSWORD")
 		return
 	}
-	Collection := d.sess.Collection(userCollection)
+	Collection := d.sess.Collection(UserCollection)
 	res := Collection.Find(db.Cond{"email": logcheck.Email})
 
 	err := res.One(&user)
