@@ -25,7 +25,8 @@ func (d *dbServer) Signup(w http.ResponseWriter, r *http.Request) {
 	_, exists, _ := d.GetUser(mailID)
 
 	if exists == true {
-		RenderResponse(w, "EMAIL_ALREADY_EXISTS", http.StatusOK)
+		RenderError(w, "EMAIL_ALREADY_EXISTS")
+
 		return
 	}
 	verify, errmsg := CredentialValidation(user)
