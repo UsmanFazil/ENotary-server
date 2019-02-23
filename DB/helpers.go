@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"regexp"
 	"strconv"
+	"strings"
 	"unicode"
 
 	db "upper.io/db.v3"
@@ -79,6 +80,29 @@ func verifyPhone(ph string) (bool, string) {
 }
 
 func verifyName(name string) (bool, string) {
+	if len(name) < 5 {
+		return false, "invalid name"
+	}
+
+	splitter := strings.Split(name, " ")
+
+	if len(splitter) != 2 {
+		return false, "Invalid name"
+	}
+	if splitter[1] == "" || splitter[0] == "" {
+		return false, "invalid name "
+	}
+
+	for _, ch := range splitter[0] {
+		if !unicode.IsLetter(ch) {
+			return false, "invalid name"
+		}
+	}
+	for _, ch := range splitter[1] {
+		if !unicode.IsLetter(ch) {
+			return false, "invalid name"
+		}
+	}
 
 	return true, ""
 }
