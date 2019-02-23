@@ -56,6 +56,11 @@ type VerifUser struct {
 	ExpTime          string `db:"exptime"`
 }
 
+type EmailVerf struct {
+	Email            string `json:"email"`
+	VerificationCode string `json:"VerificationCode"`
+}
+
 type JwtToken struct {
 	Token string `json:"token"`
 }

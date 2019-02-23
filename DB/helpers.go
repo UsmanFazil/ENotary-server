@@ -79,15 +79,13 @@ func verifyPhone(ph string) (bool, string) {
 }
 
 func verifyName(name string) (bool, string) {
-	nonNameRE := regexp.MustCompile("^[0-9!#$%&*+/=?^_`{|}~]+")
-	if !(len(name) > 7) || nonNameRE.MatchString(name) {
-		return false, "invalid name"
-	}
+
 	return true, ""
 }
 
 func verifyComp(company string) (bool, string) {
-	compRE := regexp.MustCompile("^[a-zA-Z0-9]{3,50}")
+	compRE := regexp.MustCompile("^[a-zA-Z0-9]{2,50}")
+
 	if !compRE.MatchString(company) {
 		return false, "invalid company name"
 	}
@@ -103,21 +101,21 @@ func VerifyEmail(mail string) (bool, string) {
 }
 
 func VerifyPassword(password string) (bool, string) {
-	var uppercasePresent bool
+	//var uppercasePresent bool
 	var lowercasePresent bool
-	var numberPresent bool
+	//	var numberPresent bool
 	var space bool
 	const minPassLength = 8
-	const maxPassLength = 16
+	const maxPassLength = 24
 	var passLen int
 
 	for _, ch := range password {
 		passLen++
 		switch {
-		case unicode.IsNumber(ch):
-			numberPresent = true
-		case unicode.IsUpper(ch):
-			uppercasePresent = true
+		// case unicode.IsNumber(ch):
+		// 	numberPresent = true
+		// case unicode.IsUpper(ch):
+		// 	uppercasePresent = true
 		case unicode.IsLower(ch):
 			lowercasePresent = true
 		case ch == ' ':
@@ -129,17 +127,17 @@ func VerifyPassword(password string) (bool, string) {
 		return false, "space fields are not allowed in password"
 	}
 	if !(minPassLength <= passLen && passLen <= maxPassLength) {
-		return false, "password length must be between 8 to 16 characters long"
+		return false, "password length must be between 8 to 24 characters long"
 	}
 	if !lowercasePresent {
 		return false, "lowercase letter missing in password"
 	}
-	if !uppercasePresent {
-		return false, "uppercase letter missing in password"
-	}
-	if !numberPresent {
-		return false, "atleast one numeric character required in password"
-	}
+	// if !uppercasePresent {
+	// 	return false, "uppercase letter missing in password"
+	// }
+	// if !numberPresent {
+	// 	return false, "atleast one numeric character required in password"
+	// }
 
 	return true, ""
 }

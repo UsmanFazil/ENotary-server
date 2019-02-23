@@ -15,14 +15,24 @@ import (
 
 func (d *dbServer) AccountVerif(w http.ResponseWriter, r *http.Request) {
 	var VU VerifUser
-	var temp VerifUser
+	var temp EmailVerf
+	var user User
 
 	_ = json.NewDecoder(r.Body).Decode(&temp)
 
-	Collection := d.sess.Collection(VerifCollection)
-	res := Collection.Find(db.Cond{"userid": temp.UserID, "VerificationCode": temp.VerificationCode})
-	err := res.One(&VU)
+	userCol := d.sess.Collection(UserCollection)
+	res := userCol.Find(db.Cond{"email": temp.Email})
+	err := res.One(&user)
+
 	if err != nil {
+		RenderError(w, "INVALID USER")
+		return
+	}
+
+	Collection := d.sess.Collection(VerifCollection)
+	res1 := Collection.Find(db.Cond{"userid": user.Userid, "VerificationCode": temp.VerificationCode})
+	errstring := res1.One(&VU)
+	if errstring != nil {
 		RenderError(w, "INVALID_CODE")
 		return
 	}
@@ -35,7 +45,7 @@ func (d *dbServer) AccountVerif(w http.ResponseWriter, r *http.Request) {
 		RenderResponse(w, "VERIFICATION CODE HAS EXPIRED", http.StatusOK)
 		return
 	}
-	d.sess.Query(`Update Users set verified ="1" where userID= ?`, temp.UserID)
+	d.sess.Query(`Update Users set verified ="1" where userID= ?`, user.Userid)
 	RenderResponse(w, "USER EMAIL VERIFIED SUCCESSFULLY ", http.StatusOK)
 	return
 }
