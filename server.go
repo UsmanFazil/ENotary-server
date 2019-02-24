@@ -32,7 +32,7 @@ func main() {
 
 	//API ENDPOINTS HERE
 	r := mux.NewRouter()
-	r.HandleFunc("/login", db.Login).Methods(http.MethodGet)
+	r.HandleFunc("/login", db.Login).Methods(http.MethodPost)
 	r.HandleFunc("/signup", db.Signup).Methods(http.MethodPost)
 	r.HandleFunc("/hashFile", Hashing.Servehash).Methods(http.MethodGet)
 	r.HandleFunc("/verifyEmail", db.AccountVerif).Methods(http.MethodPost)

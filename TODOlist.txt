@@ -3,3 +3,7 @@
 3- Create user struct and then insert in DB during signup
 4- Contract : get userid from token
 5- Contract : default contract name
+
+DONE :
+user verification with email instead of userid
+Sign up credential verification testing and update
