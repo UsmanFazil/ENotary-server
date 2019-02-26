@@ -1,12 +1,15 @@
 package DB
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"mime"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
+	"time"
 
 	db "upper.io/db.v3"
 )
@@ -22,8 +25,15 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	tokenstring := r.Header["Token"][0]
+	claims, cBool := GetClaims(tokenstring)
+	if !cBool {
+		RenderError(w, "Invalid user request")
+		return
+	}
+	uID := claims["userid"].(string)
+
 	f, _, err := r.FormFile("userfile")
-	userid := r.FormValue("userid")
 	if err != nil {
 		RenderError(w, "INVALID_FILE")
 		return
@@ -42,7 +52,6 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fileName := userid
 	fileEndings, err := mime.ExtensionsByType(filetype)
 	if err != nil {
 		RenderError(w, "INVALID_FILE")
@@ -50,14 +59,15 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// remove users old picture before adding new one
-	rop := d.removeOldPic(userid)
+	rop := d.removeOldPic(uID)
 	if !rop {
 		RenderError(w, "CAN NOT UPDATE PICTURE TRY AGAIN")
 		return
 	}
 
 	s = string(bs)
-	newpath := filepath.Join(Profilepicspath, fileName+fileEndings[0])
+	newpath := filepath.Join(Profilepicspath, uID+fileEndings[0])
+
 	file, err := os.Create(newpath)
 
 	if err != nil {
@@ -66,7 +76,7 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 	file.WriteString(s)
-	d.updatePicPath(userid, newpath)
+	d.updatePicPath(uID, newpath)
 
 	RenderResponse(w, "FILE UPLOADED SUCCESSFULY", http.StatusOK)
 }
@@ -92,13 +102,46 @@ func (d *dbServer) removeOldPic(userid string) bool {
 	spliter := strings.Split(user.Picture, "/")
 	picName := spliter[2]
 
-	if picName != "default.png" {
+	if picName != "default.jpeg" {
 		err = os.Remove(user.Picture)
 		if err != nil {
 			return false
 		}
 	}
 	return true
+
+}
+
+func (d *dbServer) ForgotPassword(w http.ResponseWriter, r *http.Request) {
+	var temp EmailVerf
+	var user User
+	var VU VerifUser
+
+	_ = json.NewDecoder(r.Body).Decode(&temp)
+	userCol := d.sess.Collection(UserCollection)
+	res := userCol.Find(db.Cond{"email": temp.Email})
+	err := res.One(&user)
+
+	if err != nil {
+		RenderError(w, "INVALID USER")
+		return
+	}
+	Collection := d.sess.Collection(VerifCollection)
+	res1 := Collection.Find(db.Cond{"userid": user.Userid, "VerificationCode": temp.VerificationCode})
+	errstring := res1.One(&VU)
+	if errstring != nil {
+		RenderError(w, "INVALID_CODE")
+		return
+	}
+	expTime, err := strconv.ParseInt(VU.ExpTime, 10, 64)
+	if err != nil {
+		RenderError(w, "INTERNAL ERROR TRY AGAIN")
+		return
+	}
+	if expTime < time.Now().Unix() {
+		RenderResponse(w, "VERIFICATION CODE HAS EXPIRED", http.StatusOK)
+		return
+	}
 
 }
 

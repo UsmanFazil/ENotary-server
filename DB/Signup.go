@@ -9,8 +9,6 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-const def_pic_path = "Files/Profile_pics/default.jpeg"
-
 func (d *dbServer) Signup(w http.ResponseWriter, r *http.Request) {
 	var user User
 	_ = json.NewDecoder(r.Body).Decode(&user)

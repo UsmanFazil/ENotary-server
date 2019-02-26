@@ -3,7 +3,6 @@ package DB
 import (
 	"ENOTARY-Server/Email"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -13,7 +12,7 @@ import (
 
 //TODO here : account verification with email not userid
 
-func (d *dbServer) AccountVerif(w http.ResponseWriter, r *http.Request) {
+func (d *dbServer) EmailVerification(w http.ResponseWriter, r *http.Request) {
 	var VU VerifUser
 	var temp EmailVerf
 	var user User
@@ -42,7 +41,7 @@ func (d *dbServer) AccountVerif(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if expTime < time.Now().Unix() {
-		RenderResponse(w, "VERIFICATION CODE HAS EXPIRED", http.StatusOK)
+		RenderError(w, "VERIFICATION CODE HAS EXPIRED")
 		return
 	}
 	d.sess.Query(`Update Users set verified ="1" where userID= ?`, user.Userid)
@@ -50,7 +49,7 @@ func (d *dbServer) AccountVerif(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func (d *dbServer) ResendCode(w http.ResponseWriter, r *http.Request) {
+func (d *dbServer) SendCode(w http.ResponseWriter, r *http.Request) {
 	var user User
 	var temp User
 	_ = json.NewDecoder(r.Body).Decode(&temp)
@@ -67,7 +66,6 @@ func (d *dbServer) ResendCode(w http.ResponseWriter, r *http.Request) {
 	Collection := d.sess.Collection(VerifCollection)
 	res := Collection.Find(db.Cond{"userID": user.Userid})
 	vcode := GenerateToken(3)
-	fmt.Println(vcode)
 	res.Update(map[string]string{
 		"VerificationCode": vcode,
 		"expTime":          strconv.FormatInt(time.Now().Add(2*time.Hour).Unix(), 10),

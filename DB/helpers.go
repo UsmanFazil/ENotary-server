@@ -35,6 +35,7 @@ func RenderError(w http.ResponseWriter, message string) {
 func RenderResponse(w http.ResponseWriter, message string, statusCode int) {
 	w.WriteHeader(statusCode)
 	w.Write([]byte(message))
+
 }
 
 func GenerateToken(len int) string {
