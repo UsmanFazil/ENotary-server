@@ -42,7 +42,7 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 		}
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 			"userid": user.Userid,
-			"exp":    time.Now().Add(time.Minute * 10).Unix(),
+			"exp":    time.Now().Add(time.Minute * 60).Unix(),
 			"iat":    time.Now().Unix(),
 			"iss":    "ENotary",
 		})

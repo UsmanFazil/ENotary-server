@@ -7,18 +7,25 @@ import (
 	db "upper.io/db.v3"
 )
 
+var MySigningKey = []byte("secretkey")
+
 func (d *dbServer) InboxData(w http.ResponseWriter, r *http.Request) {
-	var tmp User
 	var signer []Signer
 	var tmpContract Contract
 	i := 0
 
-	_ = json.NewDecoder(r.Body).Decode(&tmp)
-
 	signercollection := d.sess.Collection(SignerCollection)
 	contractCollection := d.sess.Collection(ContractCollection)
 
-	res := signercollection.Find(db.Cond{"userID": tmp.Userid, "Access": 1})
+	tokenstring := r.Header["Token"][0]
+	claims, cBool := GetClaims(tokenstring)
+	if !cBool {
+		RenderError(w, "Invalid user request")
+		return
+	}
+	uID := claims["userid"]
+
+	res := signercollection.Find(db.Cond{"userID": uID, "Access": 1})
 	total, _ := res.Count()
 	if total < 1 {
 		RenderResponse(w, "CAN NOT FIND ANY CONTRACT FOR THE USER", http.StatusOK)
@@ -44,4 +51,5 @@ func (d *dbServer) InboxData(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(w).Encode(contracts)
 	return
+
 }

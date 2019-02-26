@@ -9,6 +9,7 @@ import (
 	"strings"
 	"unicode"
 
+	jwt "github.com/dgrijalva/jwt-go"
 	db "upper.io/db.v3"
 )
 
@@ -164,6 +165,26 @@ func VerifyPassword(password string) (bool, string) {
 	// }
 
 	return true, ""
+}
+
+func GetClaims(tokenstring string) (jwt.MapClaims, bool) {
+
+	token, err := jwt.Parse(tokenstring, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("There was an error")
+		}
+		return MySigningKey, nil
+	})
+
+	if err != nil {
+		return nil, false
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims, true
+	} else {
+		return nil, false
+	}
 }
 
 // func (d *dbServer) GetimageName(userid string) (string, string, error) {

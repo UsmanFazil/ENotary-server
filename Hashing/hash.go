@@ -4,9 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 )
 
@@ -25,7 +23,7 @@ func hexString(filename []byte) (string, error) {
 func hasher(filename string) ([]byte, error) {
 	bs, err := ioutil.ReadFile(filename)
 	if err != nil {
-		fmt.Println("error here 1 ", filename)
+		return nil, err
 	}
 	h := sha256.New()
 	h.Write(bs)
@@ -53,7 +51,6 @@ func Servehash(w http.ResponseWriter, r *http.Request) {
 
 	var path Filepath
 	_ = json.NewDecoder(r.Body).Decode(&path)
-	log.Println(path)
 	filehash, err := Gethash(path.Path)
 
 	if err != nil {

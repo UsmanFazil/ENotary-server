@@ -8,12 +8,18 @@ import (
 )
 
 func (d dbServer) SentContract(w http.ResponseWriter, r *http.Request) {
-	var tmp User
 	var contracts []Contract
-	_ = json.NewDecoder(r.Body).Decode(&tmp)
+
+	tokenstring := r.Header["Token"][0]
+	claims, cBool := GetClaims(tokenstring)
+	if !cBool {
+		RenderError(w, "Invalid user request")
+		return
+	}
+	uID := claims["userid"]
 
 	contractCollection := d.sess.Collection(ContractCollection)
-	res := contractCollection.Find(db.Cond{"Creator": tmp.Userid})
+	res := contractCollection.Find(db.Cond{"Creator": uID})
 	total, _ := res.Count()
 	if total < 1 {
 		RenderResponse(w, "CAN NOT FIND ANY CONTRACT FOR THE USER", http.StatusOK)
