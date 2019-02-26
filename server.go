@@ -42,7 +42,7 @@ func main() {
 	r.Handle("/newContract", MW.IsAuthorized(db.NewContract)).Methods(http.MethodPost)
 	r.Handle("/addRecipients", MW.IsAuthorized(db.AddRecipients)).Methods(http.MethodPost)
 	r.Handle("/hashFile", MW.IsAuthorized(Hashing.Servehash)).Methods(http.MethodPost)
-	r.Handle("/logout",MW.IsAuthorized(DB.Logout)),Methods(http.MethodGet)
+	r.Handle("/logout", MW.IsAuthorized(db.Logout)).Methods(http.MethodGet)
 
 	r.PathPrefix("/Files/").Handler(http.StripPrefix("/Files/", http.FileServer(http.Dir(dir))))
 
