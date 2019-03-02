@@ -86,3 +86,9 @@ type Signerdata struct {
 	Email string `json:"email"`
 	Name  string `json:"name"`
 }
+
+type Passrecovery struct {
+	Email string `json:"email"`
+	Vcode string `json:"vcode"`
+	Pass  string `json:"password"`
+}

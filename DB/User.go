@@ -7,9 +7,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
-	"time"
 
 	db "upper.io/db.v3"
 )
@@ -109,40 +107,39 @@ func (d *dbServer) removeOldPic(userid string) bool {
 		}
 	}
 	return true
-
 }
 
-func (d *dbServer) ForgotPassword(w http.ResponseWriter, r *http.Request) {
-	var temp EmailVerf
-	var user User
-	var VU VerifUser
+func (d *dbServer) UpdatePassword(w http.ResponseWriter, r *http.Request) {
+	var passrec Passrecovery
+	_ = json.NewDecoder(r.Body).Decode(&passrec)
 
-	_ = json.NewDecoder(r.Body).Decode(&temp)
-	userCol := d.sess.Collection(UserCollection)
-	res := userCol.Find(db.Cond{"email": temp.Email})
-	err := res.One(&user)
-
-	if err != nil {
-		RenderError(w, "INVALID USER")
-		return
-	}
-	Collection := d.sess.Collection(VerifCollection)
-	res1 := Collection.Find(db.Cond{"userid": user.Userid, "VerificationCode": temp.VerificationCode})
-	errstring := res1.One(&VU)
-	if errstring != nil {
-		RenderError(w, "INVALID_CODE")
-		return
-	}
-	expTime, err := strconv.ParseInt(VU.ExpTime, 10, 64)
-	if err != nil {
-		RenderError(w, "INTERNAL ERROR TRY AGAIN")
-		return
-	}
-	if expTime < time.Now().Unix() {
-		RenderResponse(w, "VERIFICATION CODE HAS EXPIRED", http.StatusOK)
+	resBool, err := d.VerfUser(passrec.Email, passrec.Vcode, false)
+	if !resBool {
+		RenderError(w, err)
 		return
 	}
 
+	Collection := d.sess.Collection(UserCollection)
+	res := Collection.Find(db.Cond{"email": passrec.Email})
+	resCheck, _ := res.Count()
+
+	if resCheck != 1 {
+		RenderError(w, "INVALID USER TRY AGAIN")
+		return
+	}
+
+	pasres, err := VerifyPassword(passrec.Pass)
+	if !pasres {
+		RenderError(w, err)
+		return
+	}
+
+	res.Update(map[string]string{
+		"password": passrec.Pass,
+	})
+
+	RenderResponse(w, "PASSWORD UPDATED SUCCESSFULLY", http.StatusOK)
+	return
 }
 
 // picname, picpath, errstring := d.GetimageName(userid)

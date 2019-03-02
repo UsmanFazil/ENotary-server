@@ -1,7 +1,8 @@
-1- JWT token validation 
-2- User profile pic : get userid from the token 
-3- Create user struct and then insert in DB during signup
-
+TODO:
+1- COntract creation
+2- recipients
+3- draft
+4- templates
 
 
 DONE :
@@ -9,3 +10,6 @@ user verification with email instead of userid
 Sign up credential verification testing and update
 4- Contract : get userid from token
 5- Contract : default contract name
+1- JWT token validation 
+3- Create user struct and then insert in DB during signup
+2- User profile pic : get userid from the token 
