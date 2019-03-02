@@ -70,11 +70,7 @@ func (d *dbServer) SendCode(w http.ResponseWriter, r *http.Request) {
 		"VerificationCode": vcode,
 		"expTime":          strconv.FormatInt(time.Now().Add(2*time.Hour).Unix(), 10),
 	})
-	_, err = Email.SendMail(user.Email, vcode)
-	if err != nil {
-		RenderError(w, "CAN NOT SEND MAIL TRY AGAIN")
-		return
-	}
+	go Email.SendMail(user.Email, vcode)
 	RenderResponse(w, "NEW CODE SENT TO YOUR EMAIL", http.StatusOK)
 	return
 }

@@ -1,10 +1,12 @@
 package Email
 
 import (
+	"log"
+
 	gomail "gopkg.in/gomail.v2"
 )
 
-func SendMail(usermail string, vcode string) (bool, error) {
+func SendMail(usermail string, vcode string) {
 
 	m := gomail.NewMessage()
 	m.SetHeader("From", "eNotaryOfficial@gmail.com")
@@ -15,9 +17,11 @@ func SendMail(usermail string, vcode string) (bool, error) {
 	d := gomail.NewDialer("smtp.gmail.com", 587, "eNotaryOfficial@gmail.com", "Enotary360")
 
 	if err := d.DialAndSend(m); err != nil {
-		return false, err
+		log.Println("CAN NOT GENERATE EMAIL:", err)
+		return
 	}
-	return true, nil
+	log.Println("EMAIL SENT SUCCESSFULLY")
+
 }
 
 func signupMsg(vcode string) string {
