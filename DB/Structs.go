@@ -83,8 +83,9 @@ type LogCheck struct {
 }
 
 type Signerdata struct {
-	Email string `json:"email"`
-	Name  string `json:"name"`
+	ContractID string `json:"cid"`
+	Email      string `json:"email"`
+	Name       string `json:"name"`
 }
 
 type Passrecovery struct {

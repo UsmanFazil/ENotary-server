@@ -1,8 +1,10 @@
 TODO:
-1- COntract creation
-2- recipients
-3- draft
-4- templates
+
+12- upload user profile
+9- Sign contract
+10- decline sign
+11- Template
+8- draft
 
 
 DONE :
@@ -13,3 +15,5 @@ Sign up credential verification testing and update
 1- JWT token validation 
 3- Create user struct and then insert in DB during signup
 2- User profile pic : get userid from the token 
+6- COntract creation
+7- recipients

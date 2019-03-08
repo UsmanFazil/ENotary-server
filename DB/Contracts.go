@@ -16,16 +16,24 @@ import (
 
 // TODO new contract creation process here. with file upload
 func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
-	var s string
+
 	r.Body = http.MaxBytesReader(w, r.Body, MaxContractSize)
 	err := r.ParseMultipartForm(5000)
+
+	tokenstring := r.Header["Token"][0]
+	claims, cBool := GetClaims(tokenstring)
+	if !cBool {
+		RenderError(w, "Invalid user request")
+		return
+	}
+	uID := claims["userid"].(string)
+
 	if err != nil {
 		RenderError(w, "FILE SHOULD BE LESS THAN 10 MB")
 		return
 	}
 
 	f, header, err := r.FormFile("contractFile")
-	userid := r.FormValue("userid")
 	if err != nil {
 		RenderError(w, "INVALID_FILE")
 		return
@@ -58,7 +66,7 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	s = string(bs)
+	s := string(bs)
 	newpath := filepath.Join(Contractfilepath, filepathName+fileEndings[0])
 	file, err := os.Create(newpath)
 
@@ -69,7 +77,7 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 	defer file.Close()
 	file.WriteString(s)
 
-	cid := d.ContractInDB(upFileName, filepathName, userid, newpath)
+	cid := d.ContractInDB(upFileName, filepathName, uID, newpath)
 	if !cid {
 		RenderError(w, "CAN NOT ADD CONTRACT FILE TRY AGAIN")
 		return
@@ -82,7 +90,7 @@ func (d *dbServer) ContractInDB(cName string, cID string, userid string, filepat
 	contract.ContractID = cID
 	contract.Creator = userid
 	contract.Filepath = filepath
-	contract.Status = "in progress"
+	contract.Status = "DRAFT"
 	contract.ContractcreationTime = time.Now().Format(time.RFC850)
 	contract.DelStatus = 0
 	contract.Blockchain = 0
@@ -100,11 +108,33 @@ func (d *dbServer) ContractInDB(cName string, cID string, userid string, filepat
 
 func (d *dbServer) AddRecipients(w http.ResponseWriter, r *http.Request) {
 	var input []Signerdata
+	var signer Signer
+
 	_ = json.NewDecoder(r.Body).Decode(&input)
+	Collection := d.sess.Collection(SignerCollection)
 
-	//	signCollection := d.sess.Collection(SignerCollection)
-	//	userCollection := d.sess.Collection(UserCollection)
+	for _, s := range input {
+		user, _, err := d.GetUser(s.Email)
+		if err != nil {
+			RenderError(w, "INVALID RECIPIENT")
+			return
+		}
 
+		signer.ContractID = s.ContractID
+		signer.UserID = user.Userid
+		signer.Name = s.Name
+		signer.Access = 0
+		signer.SignStatus = "Not Signed"
+		signer.DeleteApprove = 0
+
+		_, err = Collection.Insert(signer)
+		if err != nil {
+			RenderError(w, "CAN NOT ADD SIGNER TRY AGAIN")
+			return
+		}
+	}
+	RenderResponse(w, "SIGNERS ADDED", http.StatusOK)
+	return
 }
 
 func (d *dbServer) WaitingforOther(userid string) (uint64, error) {
