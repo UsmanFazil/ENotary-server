@@ -30,7 +30,7 @@ func main() {
 
 	var dir = "./Files"
 
-	//API ENDPOINTS HERE
+	//API ENDPOINTS
 	r := mux.NewRouter()
 	r.HandleFunc("/login", db.Login).Methods(http.MethodPost)
 	r.HandleFunc("/signup", db.Signup).Methods(http.MethodPost)
@@ -43,7 +43,9 @@ func main() {
 	r.Handle("/newContract", MW.IsAuthorized(db.NewContract)).Methods(http.MethodPost)
 	r.Handle("/addRecipients", MW.IsAuthorized(db.AddRecipients)).Methods(http.MethodPost)
 	r.Handle("/hashFile", MW.IsAuthorized(Hashing.Servehash)).Methods(http.MethodPost)
-	r.Handle("/logout", MW.IsAuthorized(db.Logout)).Methods(http.MethodGet)
+	r.Handle("/newFolder", MW.IsAuthorized(db.NewFolder)).Methods(http.MethodPost)
+	r.Handle("/moveContract", MW.IsAuthorized(db.AddContract)).Methods(http.MethodPost)
+	r.Handle("/folderContractList", MW.IsAuthorized(db.FolderContractList)).Methods(http.MethodPost)
 
 	r.PathPrefix("/Files/").Handler(http.StripPrefix("/Files/", http.FileServer(http.Dir(dir))))
 

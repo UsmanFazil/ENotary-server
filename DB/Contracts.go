@@ -83,6 +83,7 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	RenderResponse(w, filepathName, http.StatusOK)
+
 }
 
 func (d *dbServer) ContractInDB(cName string, cID string, userid string, filepath string) bool {
@@ -90,7 +91,7 @@ func (d *dbServer) ContractInDB(cName string, cID string, userid string, filepat
 	contract.ContractID = cID
 	contract.Creator = userid
 	contract.Filepath = filepath
-	contract.Status = "DRAFT"
+	contract.Status = "Creation phase"
 	contract.ContractcreationTime = time.Now().Format(time.RFC850)
 	contract.DelStatus = 0
 	contract.Blockchain = 0

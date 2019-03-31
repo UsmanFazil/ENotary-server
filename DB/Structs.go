@@ -4,6 +4,8 @@ const UserCollection = "Users"
 const ContractCollection = "Contract"
 const SignerCollection = "Signer"
 const VerifCollection = "Verification"
+const FolderCollection = "Folder"
+const ContractFolderCollection = "ContractFolder"
 
 const Profilepicspath = "./Files/Profile_pics"
 const Contractfilepath = "./Files/Contracts"
@@ -92,4 +94,16 @@ type Passrecovery struct {
 	Email string `json:"email"`
 	Vcode string `json:"vcode"`
 	Pass  string `json:"password"`
+}
+
+type Folder struct {
+	FolderID     string `db:"folderID"`
+	FolderName   string `db:"folderName"`
+	FolderType   string `db:"folderType"`
+	UserID       string `db:"userID"`
+	ParentFolder string `db:"parentFolder"`
+}
+type ContractFolder struct {
+	FolderID   string `db:"folderID"`
+	ContractID string `db:"ContractID"`
 }

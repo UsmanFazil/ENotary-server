@@ -1,10 +1,13 @@
 TODO:
 
-12- upload user profile
+12- update user profile
 9- Sign contract
 10- decline sign
 11- Template
 8- draft
+15- create folders
+17- add contract in folder
+16- Search inbox/ sent (by status, date, sent, from)
 
 
 DONE :
@@ -17,3 +20,5 @@ Sign up credential verification testing and update
 2- User profile pic : get userid from the token 
 6- COntract creation
 7- recipients
+13- Forgot password
+14- do not send password with login struct

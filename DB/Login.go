@@ -40,9 +40,11 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 			RenderResponse(w, "Please verify your email first", http.StatusOK)
 			return
 		}
+
+		//create JW Token for the user
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 			"userid": user.Userid,
-			"exp":    time.Now().Add(time.Minute * 60).Unix(),
+			"exp":    time.Now().Add(time.Minute * 120).Unix(),
 			"iat":    time.Now().Unix(),
 			"iss":    "ENotary",
 		})
@@ -51,6 +53,8 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 			RenderError(w, "INTERNAL ERROR TRY AGAIN")
 			return
 		}
+
+		//total number of contracts (waiting for me & waiting for others)
 		waitingOther, err := d.WaitingforOther(user.Userid)
 		if err != nil {
 			RenderError(w, "INTERNAL ERROR TRY AGAIN")
@@ -61,9 +65,14 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 			RenderError(w, "INTERNAL ERROR TRY AGAIN")
 			return
 		}
+
+		//remove user password from data struct
+		user.Password = ""
 		data := LoginStruct{Userdata: user, WaitingME: waitingMe, WaitingOther: waitingOther, Token: tokenString}
 		json.NewEncoder(w).Encode(data)
 		return
 	}
+
 	RenderError(w, "INVALID PASSWORD")
+	return
 }

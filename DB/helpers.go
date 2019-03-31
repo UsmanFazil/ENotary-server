@@ -92,7 +92,7 @@ func verifyName(name string) (bool, string) {
 		return false, "Invalid name"
 	}
 	if splitter[1] == "" || splitter[0] == "" {
-		return false, "invalid name "
+		return false, "invalid name"
 	}
 
 	for _, ch := range splitter[0] {

@@ -12,10 +12,9 @@ import (
 	db "upper.io/db.v3"
 )
 
-//TODO HERE : get userid from the token
+//function to update user profile pic
 func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 
-	var s string
 	r.Body = http.MaxBytesReader(w, r.Body, MaxpicSize)
 	err := r.ParseMultipartForm(5000)
 	if err != nil {
@@ -23,6 +22,7 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//get user id from JWT
 	tokenstring := r.Header["Token"][0]
 	claims, cBool := GetClaims(tokenstring)
 	if !cBool {
@@ -31,6 +31,7 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 	}
 	uID := claims["userid"].(string)
 
+	//get file from form
 	f, _, err := r.FormFile("userfile")
 	if err != nil {
 		RenderError(w, "INVALID_FILE")
@@ -63,22 +64,24 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	s = string(bs)
+	picdata := string(bs)
 	newpath := filepath.Join(Profilepicspath, uID+fileEndings[0])
-
 	file, err := os.Create(newpath)
 
 	if err != nil {
 		RenderError(w, "INVALID_FILE ")
 		return
 	}
+
 	defer file.Close()
-	file.WriteString(s)
+	file.WriteString(picdata)
 	d.updatePicPath(uID, newpath)
 
 	RenderResponse(w, "FILE UPLOADED SUCCESSFULY", http.StatusOK)
+	return
 }
 
+//function to update user's profile pic path in DB
 func (d *dbServer) updatePicPath(userid string, picpath string) bool {
 	collection := d.sess.Collection(UserCollection)
 	res := collection.Find(db.Cond{"userid": userid})
@@ -88,6 +91,7 @@ func (d *dbServer) updatePicPath(userid string, picpath string) bool {
 	return true
 }
 
+// function to remove user's privious profile pic
 func (d *dbServer) removeOldPic(userid string) bool {
 	collection := d.sess.Collection(UserCollection)
 	res := collection.Find(db.Cond{"userid": userid})
@@ -109,6 +113,7 @@ func (d *dbServer) removeOldPic(userid string) bool {
 	return true
 }
 
+//func to update password when user forgets it
 func (d *dbServer) UpdatePassword(w http.ResponseWriter, r *http.Request) {
 	var passrec Passrecovery
 	_ = json.NewDecoder(r.Body).Decode(&passrec)
