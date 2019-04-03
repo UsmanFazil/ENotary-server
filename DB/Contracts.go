@@ -160,49 +160,6 @@ func (d *dbServer) WaitingforMe(userid string) (uint64, error) {
 	return total, nil
 }
 
-func (d *dbServer) GenericSearch(w http.ResponseWriter, r *http.Request) {
-	var searchInput SearchInput
-	var searchList []Contract
-	_ = json.NewDecoder(r.Body).Decode(&searchInput)
-
-	tokenstring := r.Header["Token"][0]
-	claims, cBool := GetClaims(tokenstring)
-	if !cBool {
-		RenderError(w, "Invalid user request")
-		return
-	}
-	uID := claims["userid"].(string)
-	resbool1, inboxList := d.InboxContractsList(uID)
-	resbool2, sentList := d.SentContractsList(uID, true)
-
-	if !resbool1 && !resbool2 {
-		RenderResponse(w, "NO CONTRACT FOUND FOR THE USER", http.StatusOK)
-		return
-	}
-	Allcontracts := append(inboxList, sentList...)
-
-	if searchInput.Status == "All" && searchInput.Date == "All" {
-		for _, index := range Allcontracts {
-			if index.ContractName == searchInput.ContractName {
-				searchList = append(searchList, index)
-			}
-		}
-	}
-	if searchInput.ContractName == "" && searchInput.Date == "All" {
-		for _, index := range Allcontracts {
-			if index.Status == searchInput.Status {
-				searchList = append(searchList, index)
-			}
-		}
-	}
-
-	if searchInput.ContractName == "" && searchInput.Status == "All" {
-		searchList = append(searchList, TimeSearch(Allcontracts, searchInput.Date)...)
-	}
-
-	json.NewEncoder(w).Encode(searchList)
-}
-
 func TimeSearch(Allcontracts []Contract, timeframe string) []Contract {
 
 	oneyear := time.Now().AddDate(-1, 0, 0)
@@ -258,7 +215,92 @@ func TimeSearch(Allcontracts []Contract, timeframe string) []Contract {
 		}
 	}
 	return searchList
+}
 
+func (d *dbServer) SearchAlgo(w http.ResponseWriter, r *http.Request) {
+	var searchInput SearchInput
+	var searchList []Contract
+
+	_ = json.NewDecoder(r.Body).Decode(&searchInput)
+
+	tokenstring := r.Header["Token"][0]
+	claims, cBool := GetClaims(tokenstring)
+	if !cBool {
+		RenderError(w, "Invalid user request")
+		return
+	}
+	uID := claims["userid"].(string)
+	resbool1, inboxList := d.InboxContractsList(uID)
+	resbool2, sentList := d.SentContractsList(uID, true)
+
+	if !resbool1 && !resbool2 {
+		RenderResponse(w, "NO CONTRACT FOUND FOR THE USER", http.StatusOK)
+		return
+	}
+	Allcontracts := append(inboxList, sentList...)
+
+	if searchInput.Status == "All" {
+		if searchInput.Date == "All" {
+			for _, index := range Allcontracts {
+				if index.ContractName == searchInput.ContractName {
+					searchList = append(searchList, index)
+				}
+			}
+		}
+		if searchInput.ContractName == "" {
+			searchList = append(searchList, TimeSearch(Allcontracts, searchInput.Date)...)
+
+		} else {
+			tmp := TimeSearch(Allcontracts, searchInput.Date)
+			for _, index := range tmp {
+				if index.ContractName == searchInput.ContractName {
+					searchList = append(searchList, index)
+				}
+			}
+		}
+	}
+
+	if searchInput.ContractName == "" {
+		if searchInput.Date == "All" {
+			for _, index := range Allcontracts {
+				if index.Status == searchInput.Status {
+					searchList = append(searchList, index)
+				}
+			}
+
+		} else {
+			tmp := TimeSearch(Allcontracts, searchInput.Date)
+			for _, index := range tmp {
+				if index.Status == searchInput.Status {
+					searchList = append(searchList, index)
+				}
+			}
+		}
+
+	}
+
+	if searchInput.Date == "All" && searchInput.ContractName != "" && searchInput.Status != "All" {
+		for _, index := range Allcontracts {
+			if searchInput.ContractName == index.ContractName {
+				if searchInput.Status == index.Status {
+					searchList = append(searchList, index)
+				}
+			}
+		}
+	}
+
+	if searchInput.ContractName != "" && searchInput.Date != "All" && searchInput.Status != "All" {
+		tmp := TimeSearch(Allcontracts, searchInput.Date)
+
+		for _, index := range tmp {
+			if searchInput.ContractName == index.ContractName {
+				if searchInput.Status == index.Status {
+					searchList = append(searchList, index)
+				}
+			}
+		}
+	}
+	json.NewEncoder(w).Encode(&searchList)
 }
 
 // func (d *dbServer) SearchContract(w http.ResponseWriter, r *http.Request) {

@@ -45,7 +45,7 @@ func main() {
 	r.Handle("/newFolder", db.IsAuthorized(db.NewFolder)).Methods(http.MethodPost)
 	r.Handle("/moveContract", db.IsAuthorized(db.AddContract)).Methods(http.MethodPost)
 	r.Handle("/folderContractList", db.IsAuthorized(db.FolderContractList)).Methods(http.MethodPost)
-	r.Handle("/searchContract", db.IsAuthorized(db.GenericSearch)).Methods(http.MethodPost)
+	r.Handle("/searchContract", db.IsAuthorized(db.SearchAlgo)).Methods(http.MethodPost)
 	r.Handle("/Logout", db.IsAuthorized(db.Logout)).Methods(http.MethodGet)
 
 	r.PathPrefix("/Files/").Handler(http.StripPrefix("/Files/", http.FileServer(http.Dir(dir))))
