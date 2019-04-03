@@ -159,3 +159,166 @@ func (d *dbServer) WaitingforMe(userid string) (uint64, error) {
 	}
 	return total, nil
 }
+
+func (d *dbServer) GenericSearch(w http.ResponseWriter, r *http.Request) {
+	var searchInput SearchInput
+	var searchList []Contract
+	_ = json.NewDecoder(r.Body).Decode(&searchInput)
+
+	tokenstring := r.Header["Token"][0]
+	claims, cBool := GetClaims(tokenstring)
+	if !cBool {
+		RenderError(w, "Invalid user request")
+		return
+	}
+	uID := claims["userid"].(string)
+	resbool1, inboxList := d.InboxContractsList(uID)
+	resbool2, sentList := d.SentContractsList(uID, true)
+
+	if !resbool1 && !resbool2 {
+		RenderResponse(w, "NO CONTRACT FOUND FOR THE USER", http.StatusOK)
+		return
+	}
+	Allcontracts := append(inboxList, sentList...)
+
+	if searchInput.Status == "All" && searchInput.Date == "All" {
+		for _, index := range Allcontracts {
+			if index.ContractName == searchInput.ContractName {
+				searchList = append(searchList, index)
+			}
+		}
+	}
+	if searchInput.ContractName == "" && searchInput.Date == "All" {
+		for _, index := range Allcontracts {
+			if index.Status == searchInput.Status {
+				searchList = append(searchList, index)
+			}
+		}
+	}
+
+	if searchInput.ContractName == "" && searchInput.Status == "All" {
+		searchList = append(searchList, TimeSearch(Allcontracts, searchInput.Date)...)
+	}
+
+	json.NewEncoder(w).Encode(searchList)
+}
+
+func TimeSearch(Allcontracts []Contract, timeframe string) []Contract {
+
+	oneyear := time.Now().AddDate(-1, 0, 0)
+	sixmonths := time.Now().AddDate(0, -6, 0)
+	onemonth := time.Now().AddDate(0, -1, 0)
+	oneweek := time.Now().AddDate(0, 0, -7)
+	oneday := time.Now().AddDate(0, 0, -1)
+	var searchList []Contract
+
+	if timeframe == "Last one year" {
+		for _, index := range Allcontracts {
+			t, _ := time.Parse(RFC850, index.ContractcreationTime)
+			diff := t.Sub(oneyear)
+			if diff > 0 {
+				searchList = append(searchList, index)
+			}
+		}
+	}
+	if timeframe == "Last six months" {
+		for _, index := range Allcontracts {
+			t, _ := time.Parse(RFC850, index.ContractcreationTime)
+			diff := t.Sub(sixmonths)
+			if diff > 0 {
+				searchList = append(searchList, index)
+			}
+		}
+	}
+	if timeframe == "Last one month" {
+		for _, index := range Allcontracts {
+			t, _ := time.Parse(RFC850, index.ContractcreationTime)
+			diff := t.Sub(onemonth)
+			if diff > 0 {
+				searchList = append(searchList, index)
+			}
+		}
+	}
+	if timeframe == "Last one week" {
+		for _, index := range Allcontracts {
+			t, _ := time.Parse(RFC850, index.ContractcreationTime)
+			diff := t.Sub(oneweek)
+			if diff > 0 {
+				searchList = append(searchList, index)
+			}
+		}
+	}
+	if timeframe == "Last one day" {
+		for _, index := range Allcontracts {
+			t, _ := time.Parse(RFC850, index.ContractcreationTime)
+			diff := t.Sub(oneday)
+			if diff > 0 {
+				searchList = append(searchList, index)
+			}
+		}
+	}
+	return searchList
+
+}
+
+// func (d *dbServer) SearchContract(w http.ResponseWriter, r *http.Request) {
+// 	var searchInput SearchInput
+// 	var contracts []Contract
+
+// 	_ = json.NewDecoder(r.Body).Decode(&searchInput)
+// 	Collection := d.sess.Collection(ContractCollection)
+
+// 	if searchInput.Status == "All" && searchInput.Date == "All" {
+// 		res := Collection.Find(db.Cond{"contractName": searchInput.ContractName})
+// 		total, _ := res.Count()
+// 		if total < 1 {
+// 			RenderResponse(w, "CAN NOT FIND ANY CONTRACT", http.StatusOK)
+// 			return
+// 		}
+// 		err := res.All(&contracts)
+// 		if err != nil {
+// 			RenderResponse(w, "CAN NOT FIND ANY CONTRACT", http.StatusOK)
+// 			return
+// 		}
+// 		json.NewEncoder(w).Encode(contracts)
+// 		return
+// 	}
+
+// 	if searchInput.ContractName == "" && searchInput.Date == "All" {
+// 		res1 := Collection.Find(db.Cond{"status": searchInput.Status})
+// 		total, _ := res1.Count()
+// 		if total < 1 {
+// 			RenderResponse(w, "CAN NOT FIND ANY CONTRACT", http.StatusOK)
+// 			return
+// 		}
+// 		err := res1.All(&contracts)
+// 		if err != nil {
+// 			RenderResponse(w, "CAN NOT FIND ANY CONTRACT", http.StatusOK)
+// 			return
+// 		}
+// 		json.NewEncoder(w).Encode(contracts)
+// 		return
+// 	}
+
+// 	res4 := Collection.Find(db.Cond{"contractName": searchInput.ContractName})
+// 	err := res4.All(&contracts)
+
+// 	if err != nil {
+// 		RenderError(w, "invalid")
+// 		return
+// 	}
+
+// to do: date search
+
+// t, _ := time.Parse(RFC850, contracts[0].ContractcreationTime)
+// a := time.Now().AddDate(-1, 0, 0)
+
+// diff := t.Sub(a)
+// fmt.Printf("Lifespan is %+v", diff)
+// if diff > 0 {
+// 	fmt.Println("yes print it")
+// } else {
+// 	fmt.Println("nop")
+// }
+
+// }

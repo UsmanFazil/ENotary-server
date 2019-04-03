@@ -2,8 +2,7 @@ package main
 
 import (
 	"ENOTARY-Server/DB"
-	"ENOTARY-Server/Hashing"
-	MW "ENOTARY-Server/Middleware"
+	"ENotary-server/Hashing"
 	"log"
 	"net/http"
 
@@ -37,15 +36,17 @@ func main() {
 	r.HandleFunc("/verifyEmail", db.EmailVerification).Methods(http.MethodPost)
 	r.HandleFunc("/sendCode", db.SendCode).Methods(http.MethodPost)
 	r.HandleFunc("/updatePass", db.UpdatePassword).Methods(http.MethodPost)
-	r.Handle("/inbox", MW.IsAuthorized(db.InboxData)).Methods(http.MethodGet)
-	r.Handle("/sent", MW.IsAuthorized(db.SentContract)).Methods(http.MethodGet)
-	r.Handle("/uploadProfilePic", MW.IsAuthorized(db.ProfilePic)).Methods(http.MethodPost)
-	r.Handle("/newContract", MW.IsAuthorized(db.NewContract)).Methods(http.MethodPost)
-	r.Handle("/addRecipients", MW.IsAuthorized(db.AddRecipients)).Methods(http.MethodPost)
-	r.Handle("/hashFile", MW.IsAuthorized(Hashing.Servehash)).Methods(http.MethodPost)
-	r.Handle("/newFolder", MW.IsAuthorized(db.NewFolder)).Methods(http.MethodPost)
-	r.Handle("/moveContract", MW.IsAuthorized(db.AddContract)).Methods(http.MethodPost)
-	r.Handle("/folderContractList", MW.IsAuthorized(db.FolderContractList)).Methods(http.MethodPost)
+	r.Handle("/inbox", db.IsAuthorized(db.InboxData)).Methods(http.MethodGet)
+	r.Handle("/sent", db.IsAuthorized(db.SentContract)).Methods(http.MethodGet)
+	r.Handle("/uploadProfilePic", db.IsAuthorized(db.ProfilePic)).Methods(http.MethodPost)
+	r.Handle("/newContract", db.IsAuthorized(db.NewContract)).Methods(http.MethodPost)
+	r.Handle("/addRecipients", db.IsAuthorized(db.AddRecipients)).Methods(http.MethodPost)
+	r.Handle("/hashFile", db.IsAuthorized(Hashing.Servehash)).Methods(http.MethodPost)
+	r.Handle("/newFolder", db.IsAuthorized(db.NewFolder)).Methods(http.MethodPost)
+	r.Handle("/moveContract", db.IsAuthorized(db.AddContract)).Methods(http.MethodPost)
+	r.Handle("/folderContractList", db.IsAuthorized(db.FolderContractList)).Methods(http.MethodPost)
+	r.Handle("/searchContract", db.IsAuthorized(db.GenericSearch)).Methods(http.MethodPost)
+	r.Handle("/Logout", db.IsAuthorized(db.Logout)).Methods(http.MethodGet)
 
 	r.PathPrefix("/Files/").Handler(http.StripPrefix("/Files/", http.FileServer(http.Dir(dir))))
 

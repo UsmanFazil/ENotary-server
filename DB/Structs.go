@@ -6,6 +6,7 @@ const SignerCollection = "Signer"
 const VerifCollection = "Verification"
 const FolderCollection = "Folder"
 const ContractFolderCollection = "ContractFolder"
+const BlackListCollection = "BlackList"
 
 const Profilepicspath = "./Files/Profile_pics"
 const Contractfilepath = "./Files/Contracts"
@@ -13,6 +14,9 @@ const def_pic_path = "Files/Profile_pics/default.jpeg"
 
 const MaxpicSize = 5 * 1024 * 1024
 const MaxContractSize = 10 * 1024 * 1024
+const RFC850 = "Monday, 02-Jan-06 15:04:05 MST"
+
+var MySigningKey = []byte("secretkey")
 
 type User struct {
 	Userid       string `db:"userid"`
@@ -106,4 +110,15 @@ type Folder struct {
 type ContractFolder struct {
 	FolderID   string `db:"folderID"`
 	ContractID string `db:"ContractID"`
+}
+
+type SearchInput struct {
+	ContractName string `json:"ContractName"`
+	Status       string `json:"Status"`
+	Date         string `json:"Date"`
+}
+
+type BlackList struct {
+	TokenString string `db:"token"`
+	ExpTime     string `db:"exptime"`
 }

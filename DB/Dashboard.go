@@ -7,15 +7,7 @@ import (
 	db "upper.io/db.v3"
 )
 
-var MySigningKey = []byte("secretkey")
-
 func (d *dbServer) InboxData(w http.ResponseWriter, r *http.Request) {
-	var signer []Signer
-	var tmpContract Contract
-	i := 0
-
-	signercollection := d.sess.Collection(SignerCollection)
-	contractCollection := d.sess.Collection(ContractCollection)
 
 	tokenstring := r.Header["Token"][0]
 	claims, cBool := GetClaims(tokenstring)
@@ -23,31 +15,12 @@ func (d *dbServer) InboxData(w http.ResponseWriter, r *http.Request) {
 		RenderError(w, "Invalid user request")
 		return
 	}
-	uID := claims["userid"]
+	userID := claims["userid"].(string)
+	resbool, contracts := d.InboxContractsList(userID)
 
-	res := signercollection.Find(db.Cond{"userID": uID, "Access": 1})
-	total, _ := res.Count()
-	if total < 1 {
-		RenderResponse(w, "CAN NOT FIND ANY CONTRACT FOR THE USER", http.StatusOK)
-		return
-	}
-
-	err := res.All(&signer)
-	if err != nil {
+	if !resbool {
 		RenderError(w, "CAN NOT FIND ANY CONTRACT FOR THE USER")
 		return
-	}
-
-	var contracts = make([]Contract, total)
-	for _, v := range signer {
-		res1 := contractCollection.Find(db.Cond{"ContractID": v.ContractID})
-		err := res1.One(&tmpContract)
-		if err != nil {
-			RenderError(w, "CAN NOT FIND ANY CONTRACT FOR THE USER")
-			return
-		}
-		contracts[i] = tmpContract
-		i++
 	}
 	json.NewEncoder(w).Encode(contracts)
 	return
@@ -55,7 +28,6 @@ func (d *dbServer) InboxData(w http.ResponseWriter, r *http.Request) {
 }
 
 func (d dbServer) SentContract(w http.ResponseWriter, r *http.Request) {
-	var contracts []Contract
 
 	tokenstring := r.Header["Token"][0]
 	claims, cBool := GetClaims(tokenstring)
@@ -63,20 +35,77 @@ func (d dbServer) SentContract(w http.ResponseWriter, r *http.Request) {
 		RenderError(w, "Invalid user request")
 		return
 	}
-	uID := claims["userid"]
+	userID := claims["userid"].(string)
+	resbool, contracts := d.SentContractsList(userID, false)
+	if !resbool {
+		RenderError(w, "CAN NOT FIND CONTRACT FOR THE USER")
+		return
+	}
 
+	json.NewEncoder(w).Encode(contracts)
+
+}
+
+func (d *dbServer) SentContractsList(userid string, drafts bool) (bool, []Contract) {
+	var contracts []Contract
 	contractCollection := d.sess.Collection(ContractCollection)
-	res := contractCollection.Find(db.Cond{"Creator": uID})
+
+	if drafts {
+		res := contractCollection.Find(db.Cond{"Creator": userid})
+		total, _ := res.Count()
+		if total < 1 {
+			return false, nil
+		}
+		err := res.All(&contracts)
+		if err != nil {
+			return false, nil
+		}
+		return true, contracts
+
+	} else {
+		res := contractCollection.Find(db.Cond{"Creator": userid, "status IS NOT": "DRAFT"})
+		total, _ := res.Count()
+		if total < 1 {
+			return false, nil
+		}
+		err := res.All(&contracts)
+		if err != nil {
+			return false, nil
+		}
+		return true, contracts
+	}
+}
+
+func (d *dbServer) InboxContractsList(userid string) (bool, []Contract) {
+	var signer []Signer
+	var tmpContract Contract
+	i := 0
+
+	signercollection := d.sess.Collection(SignerCollection)
+	contractCollection := d.sess.Collection(ContractCollection)
+
+	res := signercollection.Find(db.Cond{"userID": userid, "Access": 1})
 	total, _ := res.Count()
 	if total < 1 {
-		RenderResponse(w, "CAN NOT FIND ANY CONTRACT FOR THE USER", http.StatusOK)
-		return
+		return false, nil
 	}
-	err := res.All(&contracts)
+
+	err := res.All(&signer)
 	if err != nil {
-		RenderError(w, "CAN NOT FIND ANY CONTRACT FOR THE USER")
-		return
+		return false, nil
 	}
-	json.NewEncoder(w).Encode(contracts)
+
+	var contracts = make([]Contract, total)
+	for _, v := range signer {
+		res1 := contractCollection.Find(db.Cond{"ContractID": v.ContractID})
+		err := res1.One(&tmpContract)
+		if err != nil {
+			return false, nil
+		}
+		contracts[i] = tmpContract
+		i++
+	}
+
+	return true, contracts
 
 }
