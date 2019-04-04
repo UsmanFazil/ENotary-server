@@ -19,6 +19,7 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseMultipartForm(5000)
 	if err != nil {
 		RenderError(w, "FILE SHOULD BE LESS THAN 5 MB")
+		Logger("FILE SHOULD BE LESS THAN 5 MB")
 		return
 	}
 
@@ -27,6 +28,7 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 	claims, cBool := GetClaims(tokenstring)
 	if !cBool {
 		RenderError(w, "Invalid user request")
+		Logger("Invalid user request")
 		return
 	}
 	uID := claims["userid"].(string)
@@ -35,6 +37,7 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 	f, _, err := r.FormFile("userfile")
 	if err != nil {
 		RenderError(w, "INVALID_FILE")
+		Logger("Invalid file upload")
 		return
 	}
 	defer f.Close()
@@ -42,18 +45,21 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 	bs, err := ioutil.ReadAll(f)
 	if err != nil {
 		RenderError(w, "INVALID_FILE")
+		Logger("Invalid file upload")
 		return
 	}
 	filetype := http.DetectContentType(bs)
 	if filetype != "image/jpeg" && filetype != "image/jpg" &&
 		filetype != "image/gif" && filetype != "image/png" {
 		RenderError(w, "INVALID_FILE_TYPE_UPLOAD jpeg,jpg,png OR gif")
+		Logger("Invalid file upload")
 		return
 	}
 
 	fileEndings, err := mime.ExtensionsByType(filetype)
 	if err != nil {
 		RenderError(w, "INVALID_FILE")
+		Logger("Invalid file upload")
 		return
 	}
 
@@ -61,6 +67,7 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 	rop := d.removeOldPic(uID)
 	if !rop {
 		RenderError(w, "CAN NOT UPDATE PICTURE TRY AGAIN")
+		Logger("CAN NOT UPDATE PICTURE")
 		return
 	}
 
@@ -70,6 +77,7 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		RenderError(w, "INVALID_FILE ")
+		Logger("CAN NOT UPDATE PICTURE")
 		return
 	}
 
@@ -78,6 +86,7 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 	d.updatePicPath(uID, newpath)
 
 	RenderResponse(w, "FILE UPLOADED SUCCESSFULY", http.StatusOK)
+	Logger("Profile pic updated | userid = " + uID)
 	return
 }
 
@@ -121,6 +130,7 @@ func (d *dbServer) UpdatePassword(w http.ResponseWriter, r *http.Request) {
 	resBool, err := d.VerfUser(passrec.Email, passrec.Vcode, false)
 	if !resBool {
 		RenderError(w, err)
+		Logger(err)
 		return
 	}
 
@@ -130,12 +140,14 @@ func (d *dbServer) UpdatePassword(w http.ResponseWriter, r *http.Request) {
 
 	if resCheck != 1 {
 		RenderError(w, "INVALID USER TRY AGAIN")
+		Logger("INVALID USER " + passrec.Email)
 		return
 	}
 
 	pasres, err := VerifyPassword(passrec.Pass)
 	if !pasres {
 		RenderError(w, err)
+		Logger(err)
 		return
 	}
 
@@ -144,6 +156,7 @@ func (d *dbServer) UpdatePassword(w http.ResponseWriter, r *http.Request) {
 	})
 
 	RenderResponse(w, "PASSWORD UPDATED SUCCESSFULLY", http.StatusOK)
+	Logger("PASSWORD UPDATED " + passrec.Email)
 	return
 }
 

@@ -24,18 +24,21 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 	claims, cBool := GetClaims(tokenstring)
 	if !cBool {
 		RenderError(w, "Invalid user request")
+		Logger("Invalid user request")
 		return
 	}
 	uID := claims["userid"].(string)
 
 	if err != nil {
 		RenderError(w, "FILE SHOULD BE LESS THAN 10 MB")
+		Logger("CONTRACT FILE SHOULD BE LESS THAN 10 MB")
 		return
 	}
 
 	f, header, err := r.FormFile("contractFile")
 	if err != nil {
 		RenderError(w, "INVALID_FILE")
+		Logger("INVALID CONTRACT FILE")
 		return
 	}
 	defer f.Close()
@@ -45,17 +48,20 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 	bs, err := ioutil.ReadAll(f)
 	if err != nil {
 		RenderError(w, "INVALID_FILE")
+		Logger("INVALID CONTRACT FILE")
 		return
 	}
 	filetype := http.DetectContentType(bs)
 	if filetype != "image/jpeg" && filetype != "image/jpg" &&
 		filetype != "image/png" && filetype != "application/pdf" {
 		RenderError(w, "INVALID_FILE_TYPE_UPLOAD jpeg,jpg,png OR pdf")
+		Logger("INVALID CONTRACT FILE")
 		return
 	}
 	contractID, err := uuid.NewV4()
 	if err != nil {
 		RenderError(w, "CAN_NOT_GENERATE_CONTRACT_ID")
+		Logger("UUID ERROR")
 		return
 	}
 
@@ -63,6 +69,7 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 	fileEndings, err := mime.ExtensionsByType(filetype)
 	if err != nil {
 		RenderError(w, "INVALID_FILE")
+		Logger("INVALID CONTRACT FILE")
 		return
 	}
 
@@ -72,6 +79,7 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		RenderError(w, "INVALID_FILE ")
+		Logger("INVALID CONTRACT FILE")
 		return
 	}
 	defer file.Close()
@@ -80,9 +88,11 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 	cid := d.ContractInDB(upFileName, filepathName, uID, newpath)
 	if !cid {
 		RenderError(w, "CAN NOT ADD CONTRACT FILE TRY AGAIN")
+		Logger("CAN NOT SAVE CONTRACT FILE ON SERVER")
 		return
 	}
 	RenderResponse(w, filepathName, http.StatusOK)
+	Logger("NEW CONTRACT ADDED" + filepathName)
 
 }
 
@@ -118,6 +128,7 @@ func (d *dbServer) AddRecipients(w http.ResponseWriter, r *http.Request) {
 		user, _, err := d.GetUser(s.Email)
 		if err != nil {
 			RenderError(w, "INVALID RECIPIENT")
+			Logger("INVALID RECIPIENT")
 			return
 		}
 
@@ -131,10 +142,12 @@ func (d *dbServer) AddRecipients(w http.ResponseWriter, r *http.Request) {
 		_, err = Collection.Insert(signer)
 		if err != nil {
 			RenderError(w, "CAN NOT ADD SIGNER TRY AGAIN")
+			Logger("DB INSERTION ERROR AT RECIPIENTS")
 			return
 		}
 	}
 	RenderResponse(w, "SIGNERS ADDED", http.StatusOK)
+	Logger("RECIPIENTS ADDED" + signer.ContractID)
 	return
 }
 
@@ -227,6 +240,7 @@ func (d *dbServer) SearchAlgo(w http.ResponseWriter, r *http.Request) {
 	claims, cBool := GetClaims(tokenstring)
 	if !cBool {
 		RenderError(w, "Invalid user request")
+		Logger("Invalid user request")
 		return
 	}
 	uID := claims["userid"].(string)
@@ -235,6 +249,7 @@ func (d *dbServer) SearchAlgo(w http.ResponseWriter, r *http.Request) {
 
 	if !resbool1 && !resbool2 {
 		RenderResponse(w, "NO CONTRACT FOUND FOR THE USER", http.StatusOK)
+		Logger("No contracts found in search")
 		return
 	}
 	Allcontracts := append(inboxList, sentList...)
@@ -301,6 +316,8 @@ func (d *dbServer) SearchAlgo(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	json.NewEncoder(w).Encode(&searchList)
+	Logger("Contract Search successful | userID: " + uID)
+	return
 }
 
 // func (d *dbServer) SearchContract(w http.ResponseWriter, r *http.Request) {

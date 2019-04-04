@@ -17,8 +17,10 @@ func (d *dbServer) Logout(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		RenderError(w, "CAN NOT LOGOUT USER! TRY AGAIN")
+		Logger("User logout failed")
 		return
 	}
 	RenderResponse(w, "LOGGED OUT ", http.StatusOK)
+	Logger("User logged out | tokenstring :" + blackList.TokenString)
 	return
 }

@@ -1,6 +1,7 @@
 package Hashing
 
 import (
+	DB "ENOTARY-Server/DB"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -54,7 +55,11 @@ func Servehash(w http.ResponseWriter, r *http.Request) {
 	filehash, err := Gethash(path.Path)
 
 	if err != nil {
-		json.NewEncoder(w).Encode("error here 2")
+		DB.RenderError(w, "CAN NOT GENERATE HASH")
+		DB.Logger("CAN NOT GENERATE HASH")
+		return
 	}
 	json.NewEncoder(w).Encode(filehash)
+	DB.Logger("FILE HASH CALCULATED" + path.Path)
+	return
 }

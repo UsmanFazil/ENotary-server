@@ -20,10 +20,12 @@ func (d *dbServer) EmailVerification(w http.ResponseWriter, r *http.Request) {
 
 	if !resBool {
 		RenderError(w, err)
+		Logger(err)
 		return
 	}
 
 	RenderResponse(w, "USER EMAIL VERIFIED SUCCESSFULLY ", http.StatusOK)
+	Logger("USER EMAIL VERIFIED SUCCESSFULLY " + temp.Email)
 	return
 }
 
@@ -37,7 +39,8 @@ func (d *dbServer) SendCode(w http.ResponseWriter, r *http.Request) {
 	res1 := UColletion.Find(db.Cond{"email": temp.Email})
 	err := res1.One(&user)
 	if err != nil {
-		RenderError(w, "INTERNAL ERROR (USER NOT FOUND")
+		RenderError(w, "USER NOT FOUND")
+		Logger("User not found" + user.Email)
 		return
 	}
 	// update user verification code and exp using his userid
@@ -50,6 +53,7 @@ func (d *dbServer) SendCode(w http.ResponseWriter, r *http.Request) {
 	})
 	go Email.SendMail(user.Email, vcode)
 	RenderResponse(w, "NEW CODE SENT TO YOUR EMAIL", http.StatusOK)
+	Logger("New verf. code sent " + user.Email)
 	return
 }
 

@@ -18,6 +18,7 @@ func (d *dbServer) NewFolder(w http.ResponseWriter, r *http.Request) {
 
 	if len(folderName) < 1 {
 		RenderError(w, "INVALID NAME")
+		Logger("INVALID FOLDER NAME")
 		return
 	}
 
@@ -25,6 +26,7 @@ func (d *dbServer) NewFolder(w http.ResponseWriter, r *http.Request) {
 	claims, cBool := GetClaims(tokenstring)
 	if !cBool {
 		RenderError(w, "Invalid user request")
+		Logger("Invalid user request")
 		return
 	}
 	userID := claims["userid"].(string)
@@ -32,6 +34,7 @@ func (d *dbServer) NewFolder(w http.ResponseWriter, r *http.Request) {
 	folderID, err := uuid.NewV4()
 	if err != nil {
 		RenderError(w, "CAN_NOT_GENERATE_FOLDER_ID")
+		Logger("UUID ERROR")
 		return
 	}
 
@@ -46,9 +49,11 @@ func (d *dbServer) NewFolder(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		RenderError(w, "Can not create new folder, try again")
+		Logger("DB ERROR (FOLDER CREATION)")
 		return
 	}
 	RenderResponse(w, "NEW FOLDER CREATED", http.StatusOK)
+	Logger("NEW FOLDER CREATED " + newFolder.FolderID)
 	return
 }
 
@@ -63,9 +68,11 @@ func (d *dbServer) AddContract(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		RenderError(w, "CAN NOT ADD CONTRACT IN FOLDER, TRY AGAIN")
+		Logger("CAN NOT ADD CONTRACT IN FOLDER, TRY AGAIN | ContractID :" + CF.ContractID)
 		return
 	}
 	RenderResponse(w, "CONTRACT ADDED SUCCESSFULLY", http.StatusOK)
+	Logger("CONTRACT ADDED TO FOLDER | Folderid: " + CF.FolderID + " Contractdid: " + CF.ContractID)
 	return
 }
 
@@ -83,11 +90,13 @@ func (d *dbServer) FolderContractList(w http.ResponseWriter, r *http.Request) {
 	total, _ := res.Count()
 	if total < 1 {
 		RenderResponse(w, "NO CONTRACTS IN THIS FOLDER", http.StatusOK)
+		Logger("NO CONTRACTS FOUND | FolderID :" + folder.FolderID)
 		return
 	}
 	err := res.All(&CFs)
 	if err != nil {
 		RenderError(w, "NO CONTRACTS IN THIS FOLDER")
+		Logger("NO CONTRACTS FOUND | FolderID :" + folder.FolderID)
 		return
 	}
 
@@ -97,7 +106,8 @@ func (d *dbServer) FolderContractList(w http.ResponseWriter, r *http.Request) {
 		res1 := contractCollection.Find(db.Cond{"ContractID": v.ContractID})
 		err := res1.One(&tmpContract)
 		if err != nil {
-			RenderError(w, "CAN NOT FIND ANY CONTRACT FOR THE USER")
+			RenderError(w, "NO CONTRACTS IN THIS FOLDER")
+			Logger("NO CONTRACTS FOUND | FolderID :" + folder.FolderID)
 			return
 		}
 		contracts[i] = tmpContract

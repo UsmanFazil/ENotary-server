@@ -24,6 +24,7 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 	pswdvalid, _ := VerifyPassword(logcheck.Password)
 	if !pswdvalid {
 		RenderError(w, "INVALID PASSWORD")
+		Logger("INVALID PASSWORD")
 		return
 	}
 	Collection := d.sess.Collection(UserCollection)
@@ -32,12 +33,14 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 	err := res.One(&user)
 	if err != nil {
 		RenderError(w, "INVALID EMAIL")
+		Logger("INVALID EMAIL")
 		return
 	}
 
 	if logcheck.Password == user.Password {
 		if user.Verified == 0 {
 			RenderResponse(w, "Please verify your email first", http.StatusOK)
+			Logger("Verify email first")
 			return
 		}
 
@@ -51,6 +54,7 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 		tokenString, error := token.SignedString([]byte("secretkey"))
 		if error != nil {
 			RenderError(w, "INTERNAL ERROR TRY AGAIN")
+			Logger("INTERNAL DB ERROR")
 			return
 		}
 
@@ -58,21 +62,27 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 		waitingOther, err := d.WaitingforOther(user.Userid)
 		if err != nil {
 			RenderError(w, "INTERNAL ERROR TRY AGAIN")
+			Logger("INTERNAL DB ERROR")
 			return
 		}
 		waitingMe, err := d.WaitingforMe(user.Userid)
 		if err != nil {
 			RenderError(w, "INTERNAL ERROR TRY AGAIN")
+			Logger("INTERNAL DB ERROR")
 			return
 		}
 
 		//remove user password from data struct
 		user.Password = ""
 		data := LoginStruct{Userdata: user, WaitingME: waitingMe, WaitingOther: waitingOther, Token: tokenString}
+
+		Logger("New Login" + user.Userid)
+
 		json.NewEncoder(w).Encode(data)
 		return
 	}
 
 	RenderError(w, "INVALID PASSWORD")
+	Logger("INVALID PASSWORD" + logcheck.Email)
 	return
 }

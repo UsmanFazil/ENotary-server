@@ -13,6 +13,7 @@ func (d *dbServer) InboxData(w http.ResponseWriter, r *http.Request) {
 	claims, cBool := GetClaims(tokenstring)
 	if !cBool {
 		RenderError(w, "Invalid user request")
+		Logger("Invalid user request")
 		return
 	}
 	userID := claims["userid"].(string)
@@ -20,6 +21,7 @@ func (d *dbServer) InboxData(w http.ResponseWriter, r *http.Request) {
 
 	if !resbool {
 		RenderError(w, "CAN NOT FIND ANY CONTRACT FOR THE USER")
+		Logger("CAN NOT FIND ANY CONTRACT " + userID)
 		return
 	}
 	json.NewEncoder(w).Encode(contracts)
@@ -33,12 +35,14 @@ func (d dbServer) SentContract(w http.ResponseWriter, r *http.Request) {
 	claims, cBool := GetClaims(tokenstring)
 	if !cBool {
 		RenderError(w, "Invalid user request")
+		Logger("Invalid user request")
 		return
 	}
 	userID := claims["userid"].(string)
 	resbool, contracts := d.SentContractsList(userID, false)
 	if !resbool {
 		RenderError(w, "CAN NOT FIND CONTRACT FOR THE USER")
+		Logger("CAN NOT FIND ANY CONTRACT " + userID)
 		return
 	}
 

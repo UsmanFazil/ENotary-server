@@ -4,9 +4,11 @@ TODO:
 9- Sign contract
 10- decline sign
 11- Template
-8- draft
-15- create folders
-17- add contract in folder
+18- L0gging module 
+20- Generic Search
+
+
+
 16- Search inbox/ sent (by status, date, sent, from)
 
 
@@ -22,3 +24,7 @@ Sign up credential verification testing and update
 7- recipients
 13- Forgot password
 14- do not send password with login struct
+15- create folders
+17- add contract in folder
+19- Logout user 
+8- draft

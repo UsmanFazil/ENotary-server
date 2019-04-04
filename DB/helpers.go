@@ -3,7 +3,9 @@ package DB
 import (
 	"crypto/rand"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -35,7 +37,6 @@ func RenderError(w http.ResponseWriter, message string) {
 func RenderResponse(w http.ResponseWriter, message string, statusCode int) {
 	w.WriteHeader(statusCode)
 	w.Write([]byte(message))
-
 }
 
 func GenerateToken(len int) string {
@@ -186,6 +187,18 @@ func GetClaims(tokenstring string) (jwt.MapClaims, bool) {
 	} else {
 		return nil, false
 	}
+}
+
+func Logger(logstring string) {
+	f, err := os.OpenFile("ENotary-logs.log",
+		os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Println(err)
+	}
+	defer f.Close()
+
+	logger := log.New(f, "ENotary-log ", log.LstdFlags)
+	logger.Println(logstring)
 }
 
 // func (d *dbServer) GetimageName(userid string) (string, string, error) {
