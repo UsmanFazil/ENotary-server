@@ -54,7 +54,7 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 		tokenString, error := token.SignedString([]byte("secretkey"))
 		if error != nil {
 			RenderError(w, "INTERNAL ERROR TRY AGAIN")
-			Logger("INTERNAL DB ERROR")
+			Logger("INTERNAL ERROR")
 			return
 		}
 
@@ -65,6 +65,7 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 			Logger("INTERNAL DB ERROR")
 			return
 		}
+
 		waitingMe, err := d.WaitingforMe(user.Userid)
 		if err != nil {
 			RenderError(w, "INTERNAL ERROR TRY AGAIN")
@@ -72,12 +73,18 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		Expiring, errbool := d.ExpiringSoon(user.Userid)
+		if errbool != nil {
+			RenderError(w, "INTERNAL ERROR TRY AGAIN")
+			Logger("INTERNAL DB ERROR")
+			return
+		}
+
 		//remove user password from data struct
 		user.Password = ""
-		data := LoginStruct{Userdata: user, WaitingME: waitingMe, WaitingOther: waitingOther, Token: tokenString}
+		data := LoginStruct{Userdata: user, WaitingME: waitingMe, WaitingOther: waitingOther, ExpiringSoon: Expiring, Token: tokenString}
 
 		Logger("New Login" + user.Userid)
-
 		json.NewEncoder(w).Encode(data)
 		return
 	}

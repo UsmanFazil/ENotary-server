@@ -55,6 +55,7 @@ func (d *dbServer) SentContractsList(userid string, drafts bool) (bool, []Contra
 	contractCollection := d.sess.Collection(ContractCollection)
 
 	if drafts {
+
 		res := contractCollection.Find(db.Cond{"Creator": userid})
 		total, _ := res.Count()
 		if total < 1 {
@@ -67,7 +68,7 @@ func (d *dbServer) SentContractsList(userid string, drafts bool) (bool, []Contra
 		return true, contracts
 
 	} else {
-		res := contractCollection.Find(db.Cond{"Creator": userid, "status IS NOT": "DRAFT"})
+		res := contractCollection.Find(db.Cond{"Creator": userid, "status !=": "DRAFT"})
 		total, _ := res.Count()
 		if total < 1 {
 			return false, nil

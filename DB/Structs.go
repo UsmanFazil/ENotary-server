@@ -55,6 +55,7 @@ type Signer struct {
 	DeleteApprove int    `db:"DeleteApprove"`
 	Message       string `db:"Message"`
 	Access        int    `db:"Access"`
+	CC            int    `db:"CC"`
 }
 
 type VerifUser struct {
@@ -80,6 +81,7 @@ type LoginStruct struct {
 	Userdata     User
 	WaitingME    uint64
 	WaitingOther uint64
+	ExpiringSoon int
 	Token        string
 }
 
@@ -122,3 +124,10 @@ type BlackList struct {
 	TokenString string `db:"token"`
 	ExpTime     string `db:"exptime"`
 }
+
+//CONTRACT STATUS TYPES
+// DRAFT
+// In Progress
+// Completed
+// Declined
+// Voided

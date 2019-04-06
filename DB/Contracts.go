@@ -2,12 +2,12 @@ package DB
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"mime"
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 	"time"
 
 	uuid "github.com/satori/go.uuid"
@@ -106,8 +106,7 @@ func (d *dbServer) ContractInDB(cName string, cID string, userid string, filepat
 	contract.DelStatus = 0
 	contract.Blockchain = 0
 	contract.ContractName = cName
-
-	contract.ExpirationTime = strconv.FormatInt(time.Now().Add(1440*time.Hour).Unix(), 10) // 1440 = 60 days
+	contract.ExpirationTime = time.Now().AddDate(0, 0, 60).Format(time.RFC850)
 
 	Collection := d.sess.Collection(ContractCollection)
 	_, err := Collection.Insert(contract)
@@ -153,7 +152,7 @@ func (d *dbServer) AddRecipients(w http.ResponseWriter, r *http.Request) {
 
 func (d *dbServer) WaitingforOther(userid string) (uint64, error) {
 	Collection := d.sess.Collection(ContractCollection)
-	res := Collection.Find(db.Cond{"Creator": userid, "delStatus": 0, "status": "in progress"})
+	res := Collection.Find(db.Cond{"Creator": userid, "delStatus": 0, "status": "In Progress"})
 	total, err := res.Count()
 
 	if err != nil {
@@ -171,6 +170,34 @@ func (d *dbServer) WaitingforMe(userid string) (uint64, error) {
 		return 0, err
 	}
 	return total, nil
+}
+
+func (d *dbServer) ExpiringSoon(userid string) (int, error) {
+	resbool, contractList := d.InboxContractsList(userid)
+
+	count := 0
+	if !resbool {
+		return 0, nil
+	}
+
+	for _, index := range contractList {
+		if index.Status != "Completed" {
+			t, _ := time.Parse(RFC850, index.ExpirationTime)
+			timeNow := time.Now()
+			diff := t.Sub(timeNow)
+			exptime := timeNow.AddDate(0, 0, 7)
+			diffexp := exptime.Sub(timeNow)
+
+			fmt.Println(diffexp)
+			fmt.Println(diff)
+
+			if diff > 0 && diff < diffexp {
+				count++
+			}
+		}
+	}
+	return count, nil
+
 }
 
 func TimeSearch(Allcontracts []Contract, timeframe string) []Contract {
