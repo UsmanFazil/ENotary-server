@@ -84,12 +84,12 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 		user.Password = ""
 		data := LoginStruct{Userdata: user, WaitingME: waitingMe, WaitingOther: waitingOther, ExpiringSoon: Expiring, Token: tokenString}
 
-		Logger("New Login" + user.Userid)
+		Logger("New Login " + user.Userid)
 		json.NewEncoder(w).Encode(data)
 		return
 	}
 
 	RenderError(w, "INVALID PASSWORD")
-	Logger("INVALID PASSWORD" + logcheck.Email)
+	Logger("INVALID PASSWORD " + logcheck.Email)
 	return
 }

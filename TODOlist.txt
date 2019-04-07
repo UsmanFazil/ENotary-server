@@ -4,8 +4,9 @@ TODO:
 9- Sign contract
 10- decline sign
 11- Template
-18- L0gging module 
-20- Generic Search
+21- Dynamic routes for folders
+
+
 
 
 
@@ -28,3 +29,5 @@ Sign up credential verification testing and update
 17- add contract in folder
 19- Logout user 
 8- draft
+18- L0gging module 
+20- Generic Search
