@@ -2,7 +2,6 @@ package DB
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"mime"
 	"net/http"
@@ -187,9 +186,6 @@ func (d *dbServer) ExpiringSoon(userid string) (int, error) {
 			diff := t.Sub(timeNow)
 			exptime := timeNow.AddDate(0, 0, 7)
 			diffexp := exptime.Sub(timeNow)
-
-			fmt.Println(diffexp)
-			fmt.Println(diff)
 
 			if diff > 0 && diff < diffexp {
 				count++

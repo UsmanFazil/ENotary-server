@@ -2,7 +2,7 @@ package main
 
 import (
 	"ENOTARY-Server/DB"
-	"ENotary-server/Hashing"
+	//	"ENotary-server/Hashing"
 	"log"
 	"net/http"
 
@@ -41,7 +41,7 @@ func main() {
 	r.Handle("/uploadProfilePic", db.IsAuthorized(db.ProfilePic)).Methods(http.MethodPost)
 	r.Handle("/newContract", db.IsAuthorized(db.NewContract)).Methods(http.MethodPost)
 	r.Handle("/addRecipients", db.IsAuthorized(db.AddRecipients)).Methods(http.MethodPost)
-	r.Handle("/hashFile", db.IsAuthorized(Hashing.Servehash)).Methods(http.MethodPost)
+	//r.Handle("/hashFile", db.IsAuthorized(Hashing.Servehash)).Methods(http.MethodPost)
 	r.Handle("/newFolder", db.IsAuthorized(db.NewFolder)).Methods(http.MethodPost)
 	r.Handle("/moveContract", db.IsAuthorized(db.AddContract)).Methods(http.MethodPost)
 	r.Handle("/folderContractList", db.IsAuthorized(db.FolderContractList)).Methods(http.MethodPost)
@@ -51,5 +51,5 @@ func main() {
 	r.PathPrefix("/Files/").Handler(http.StripPrefix("/Files/", http.FileServer(http.Dir(dir))))
 
 	log.Println("Go-lang server started at port 8000 ....")
-	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(r)))
+	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization", "Token"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(r)))
 }

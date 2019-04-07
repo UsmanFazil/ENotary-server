@@ -20,7 +20,7 @@ func (d *dbServer) InboxData(w http.ResponseWriter, r *http.Request) {
 	resbool, contracts := d.InboxContractsList(userID)
 
 	if !resbool {
-		RenderError(w, "CAN NOT FIND ANY CONTRACT FOR THE USER")
+		RenderResponse(w, "CAN NOT FIND CONTRACT FOR THE USER", http.StatusOK)
 		Logger("CAN NOT FIND ANY CONTRACT " + userID)
 		return
 	}
@@ -41,7 +41,7 @@ func (d dbServer) SentContract(w http.ResponseWriter, r *http.Request) {
 	userID := claims["userid"].(string)
 	resbool, contracts := d.SentContractsList(userID, false)
 	if !resbool {
-		RenderError(w, "CAN NOT FIND CONTRACT FOR THE USER")
+		RenderResponse(w, "CAN NOT FIND CONTRACT FOR THE USER", http.StatusOK)
 		Logger("CAN NOT FIND ANY CONTRACT " + userID)
 		return
 	}
