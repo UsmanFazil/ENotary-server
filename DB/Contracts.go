@@ -171,13 +171,20 @@ func (d *dbServer) WaitingforMe(userid string) (uint64, error) {
 	return total, nil
 }
 
-func (d *dbServer) ExpiringSoon(userid string) (int, error) {
-	resbool, contractList := d.InboxContractsList(userid)
-
+func (d *dbServer) ExpiringSoon(userid string) (int, error, []Contract) {
+	resbool, inboxList := d.InboxContractsList(userid, false)
+	res2bool, sentList := d.SentContractsList(userid, false, false)
+	var expContractsList []Contract
 	count := 0
 	if !resbool {
-		return 0, nil
+		return 0, nil, nil
 	}
+	if !res2bool {
+		return 0, nil, nil
+	}
+
+	contractList := inboxList
+	contractList = append(contractList, sentList...)
 
 	for _, index := range contractList {
 		if index.Status != "Completed" {
@@ -188,11 +195,12 @@ func (d *dbServer) ExpiringSoon(userid string) (int, error) {
 			diffexp := exptime.Sub(timeNow)
 
 			if diff > 0 && diff < diffexp {
+				expContractsList = append(expContractsList, index)
 				count++
 			}
 		}
 	}
-	return count, nil
+	return count, nil, expContractsList
 
 }
 
@@ -267,15 +275,17 @@ func (d *dbServer) SearchAlgo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	uID := claims["userid"].(string)
-	resbool1, inboxList := d.InboxContractsList(uID)
-	resbool2, sentList := d.SentContractsList(uID, true)
+	resbool1, inboxList := d.InboxContractsList(uID, false)
+	resbool2, sentList := d.SentContractsList(uID, false, false)
+	resbool3, draftlist := d.SentContractsList(uID, true, false)
 
-	if !resbool1 && !resbool2 {
+	if !resbool1 && !resbool2 && !resbool3 {
 		RenderResponse(w, "NO CONTRACT FOUND FOR THE USER", http.StatusOK)
 		Logger("No contracts found in search")
 		return
 	}
 	Allcontracts := append(inboxList, sentList...)
+	Allcontracts = append(Allcontracts, draftlist...)
 
 	if searchInput.Status == "All" {
 		if searchInput.Date == "All" {

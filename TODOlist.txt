@@ -5,12 +5,11 @@ TODO:
 10- decline sign
 11- Template
 21- Dynamic routes for folders
-
-
-
-
-
-16- Search inbox/ sent (by status, date, sent, from)
+22- Delete contracts
+23- Action req.
+24- waiting for other 
+25- Completed
+26- Expiring soon
 
 
 DONE :
@@ -24,6 +23,7 @@ Sign up credential verification testing and update
 6- COntract creation
 7- recipients
 13- Forgot password
+16- Search inbox/ sent (by status, date, sent, from)
 14- do not send password with login struct
 15- create folders
 17- add contract in folder

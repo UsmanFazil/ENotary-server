@@ -131,3 +131,7 @@ type BlackList struct {
 // Completed
 // Declined
 // Voided
+
+//Signer Status
+// default pending
+// S	igned

@@ -73,8 +73,8 @@ func (d *dbServer) Login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		Expiring, errbool := d.ExpiringSoon(user.Userid)
-		if errbool != nil {
+		Expiring, err, _ := d.ExpiringSoon(user.Userid)
+		if err != nil {
 			RenderError(w, "INTERNAL ERROR TRY AGAIN")
 			Logger("INTERNAL DB ERROR")
 			return

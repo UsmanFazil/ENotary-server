@@ -36,10 +36,16 @@ func main() {
 	r.HandleFunc("/verifyEmail", db.EmailVerification).Methods(http.MethodPost)
 	r.HandleFunc("/sendCode", db.SendCode).Methods(http.MethodPost)
 	r.HandleFunc("/updatePass", db.UpdatePassword).Methods(http.MethodPost)
+	r.Handle("/uploadProfilePic", db.IsAuthorized(db.ProfilePic)).Methods(http.MethodPost)
+	r.Handle("/Logout", db.IsAuthorized(db.Logout)).Methods(http.MethodGet)
+
 	r.Handle("/inbox", db.IsAuthorized(db.InboxData)).Methods(http.MethodGet)
 	r.Handle("/sent", db.IsAuthorized(db.SentContract)).Methods(http.MethodGet)
 	r.Handle("/drafts", db.IsAuthorized(db.DraftContracts)).Methods(http.MethodGet)
-	r.Handle("/uploadProfilePic", db.IsAuthorized(db.ProfilePic)).Methods(http.MethodPost)
+	r.Handle("/actionReq", db.IsAuthorized(db.ActionRequired)).Methods(http.MethodGet)
+	r.Handle("/expSoon", db.IsAuthorized(db.ExpiringsoonContracts)).Methods(http.MethodGet)
+	r.Handle("/waitingForOther", db.IsAuthorized(db.WaitingForOthers)).Methods(http.MethodGet)
+
 	r.Handle("/newContract", db.IsAuthorized(db.NewContract)).Methods(http.MethodPost)
 	r.Handle("/addRecipients", db.IsAuthorized(db.AddRecipients)).Methods(http.MethodPost)
 	r.Handle("/hashFile", db.IsAuthorized(Hashing.Servehash)).Methods(http.MethodPost)
@@ -47,7 +53,6 @@ func main() {
 	r.Handle("/moveContract", db.IsAuthorized(db.AddContract)).Methods(http.MethodPost)
 	r.Handle("/folderContractList", db.IsAuthorized(db.FolderContractList)).Methods(http.MethodPost)
 	r.Handle("/searchContract", db.IsAuthorized(db.SearchAlgo)).Methods(http.MethodPost)
-	r.Handle("/Logout", db.IsAuthorized(db.Logout)).Methods(http.MethodGet)
 
 	r.PathPrefix("/Files/").Handler(http.StripPrefix("/Files/", http.FileServer(http.Dir(dir))))
 
