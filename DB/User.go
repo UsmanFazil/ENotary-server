@@ -90,6 +90,33 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func (d *dbServer) RemovePic(w http.ResponseWriter, r *http.Request) {
+	tokenstring := r.Header["Token"][0]
+	claims, cBool := GetClaims(tokenstring)
+	if !cBool {
+		RenderError(w, "Invalid user request")
+		Logger("Invalid user request")
+		return
+	}
+	uID := claims["userid"].(string)
+
+	resbool := d.removeOldPic(uID)
+
+	if !resbool {
+		RenderResponse(w, "INTERNAL ERROR TRY AGAIN", http.StatusOK)
+		Logger("Remove old pic error " + uID)
+		return
+	}
+	picbool := d.updatePicPath(uID, Def_pic_path)
+	if !picbool {
+		RenderResponse(w, "INTERNAL ERROR TRY AGAIN", http.StatusOK)
+		Logger("Remove old pic error " + uID)
+		return
+	}
+	RenderResponse(w, "Picture removed successfully", http.StatusOK)
+	return
+}
+
 //function to update user's profile pic path in DB
 func (d *dbServer) updatePicPath(userid string, picpath string) bool {
 	collection := d.sess.Collection(UserCollection)

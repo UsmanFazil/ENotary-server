@@ -10,7 +10,7 @@ const BlackListCollection = "BlackList"
 
 const Profilepicspath = "./Files/Profile_pics"
 const Contractfilepath = "./Files/Contracts"
-const def_pic_path = "Files/Profile_pics/default.jpeg"
+const Def_pic_path = "Files/Profile_pics/default.jpeg"
 
 const MaxpicSize = 5 * 1024 * 1024
 const MaxContractSize = 10 * 1024 * 1024

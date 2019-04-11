@@ -39,7 +39,7 @@ func (d *dbServer) Signup(w http.ResponseWriter, r *http.Request) {
 	// TODO : create user struct and use "collection.Insert(user)"
 
 	user.Userid = id.String()
-	user.Picture = def_pic_path
+	user.Picture = Def_pic_path
 	user.CreationTime = time.Now().Format(time.RFC850)
 	user.Verified = 0
 

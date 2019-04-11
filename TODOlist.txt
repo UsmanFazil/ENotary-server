@@ -4,12 +4,8 @@ TODO:
 9- Sign contract
 10- decline sign
 11- Template
-21- Dynamic routes for folders
 22- Delete contracts
-23- Action req.
-24- waiting for other 
-25- Completed
-26- Expiring soon
+
 
 
 DONE :
@@ -31,3 +27,4 @@ Sign up credential verification testing and update
 8- draft
 18- L0gging module 
 20- Generic Search
+21- Dynamic routes for folders

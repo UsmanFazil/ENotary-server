@@ -21,6 +21,7 @@ func SendMail(usermail string, vcode string) {
 		return
 	}
 	log.Println("EMAIL SENT SUCCESSFULLY")
+	return
 
 }
 

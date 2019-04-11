@@ -129,6 +129,36 @@ func (d *dbServer) WaitingForOthers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(contracts)
 	return
 }
+func (d *dbServer) Completed(w http.ResponseWriter, r *http.Request) {
+	var contracts []Contract
+	tokenstring := r.Header["Token"][0]
+	claims, cBool := GetClaims(tokenstring)
+	if !cBool {
+		RenderError(w, "Invalid user request")
+		Logger("Invalid user request")
+		return
+	}
+	uID := claims["userid"].(string)
+
+	resbool1, inboxList := d.InboxContractsList(uID, false)
+	resbool2, sentList := d.SentContractsList(uID, false, false)
+	resbool3, draftlist := d.SentContractsList(uID, true, false)
+
+	if !resbool1 && !resbool2 && !resbool3 {
+		RenderResponse(w, "NO CONTRACT FOUND FOR THE USER", http.StatusOK)
+		Logger("No contracts found in search")
+		return
+	}
+	Allcontracts := append(inboxList, sentList...)
+	Allcontracts = append(Allcontracts, draftlist...)
+
+	for _, index := range Allcontracts {
+		if index.Status == "Completed" {
+			contracts = append(contracts, index)
+		}
+	}
+	json.NewEncoder(w).Encode(&contracts)
+}
 
 func (d *dbServer) SentContractsList(userid string, drafts bool, completed bool) (bool, []Contract) {
 	var contracts []Contract

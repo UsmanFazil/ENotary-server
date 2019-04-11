@@ -37,6 +37,7 @@ func main() {
 	r.HandleFunc("/sendCode", db.SendCode).Methods(http.MethodPost)
 	r.HandleFunc("/updatePass", db.UpdatePassword).Methods(http.MethodPost)
 	r.Handle("/uploadProfilePic", db.IsAuthorized(db.ProfilePic)).Methods(http.MethodPost)
+	r.Handle("/removeProfilePic", db.IsAuthorized(db.RemovePic)).Methods(http.MethodGet)
 	r.Handle("/Logout", db.IsAuthorized(db.Logout)).Methods(http.MethodGet)
 
 	r.Handle("/inbox", db.IsAuthorized(db.InboxData)).Methods(http.MethodGet)
@@ -45,6 +46,7 @@ func main() {
 	r.Handle("/actionReq", db.IsAuthorized(db.ActionRequired)).Methods(http.MethodGet)
 	r.Handle("/expSoon", db.IsAuthorized(db.ExpiringsoonContracts)).Methods(http.MethodGet)
 	r.Handle("/waitingForOther", db.IsAuthorized(db.WaitingForOthers)).Methods(http.MethodGet)
+	r.Handle("/completed", db.IsAuthorized(db.Completed)).Methods(http.MethodGet)
 
 	r.Handle("/newContract", db.IsAuthorized(db.NewContract)).Methods(http.MethodPost)
 	r.Handle("/addRecipients", db.IsAuthorized(db.AddRecipients)).Methods(http.MethodPost)
