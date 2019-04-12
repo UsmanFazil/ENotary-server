@@ -12,6 +12,69 @@ import (
 	db "upper.io/db.v3"
 )
 
+func (d *dbServer) UploadSign(w http.ResponseWriter, r *http.Request) {
+	r.Body = http.MaxBytesReader(w, r.Body, MaxpicSize)
+	err := r.ParseMultipartForm(5000)
+	if err != nil {
+		RenderError(w, "FILE SHOULD BE LESS THAN 5 MB")
+		Logger("FILE SHOULD BE LESS THAN 5 MB")
+		return
+	}
+
+	//get user id from JWT
+	tokenstring := r.Header["Token"][0]
+	claims, cBool := GetClaims(tokenstring)
+	if !cBool {
+		RenderError(w, "Invalid user request")
+		Logger("Invalid user request")
+		return
+	}
+	uID := claims["userid"].(string)
+
+	f, _, err := r.FormFile("userSign")
+	if err != nil {
+		RenderError(w, "INVALID_FILE")
+		Logger("Invalid file upload")
+		return
+	}
+	defer f.Close()
+
+	bs, err := ioutil.ReadAll(f)
+	if err != nil {
+		RenderError(w, "INVALID_FILE")
+		Logger("Invalid file upload")
+		return
+	}
+	filetype := http.DetectContentType(bs)
+	if filetype != "image/jpeg" && filetype != "image/jpg" && filetype != "image/bmp" &&
+		filetype != "image/gif" && filetype != "image/png" {
+		RenderError(w, "INVALID_FILE_TYPE_UPLOAD jpeg,jpg,png OR gif")
+		Logger("Invalid file upload")
+		return
+	}
+
+	fileEndings, err := mime.ExtensionsByType(filetype)
+	if err != nil {
+		RenderError(w, "INVALID_FILE")
+		Logger("Invalid file upload")
+		return
+	}
+
+	signdata := string(bs)
+	newpath := filepath.Join(Signpath, uID+fileEndings[0])
+	file, err := os.Create(newpath)
+
+	if err != nil {
+		RenderError(w, "INVALID_FILE ")
+		Logger("CAN NOT UPDATE PICTURE")
+		return
+	}
+
+	defer file.Close()
+	file.WriteString(signdata)
+
+}
+
 //function to update user profile pic
 func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 
@@ -49,7 +112,7 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	filetype := http.DetectContentType(bs)
-	if filetype != "image/jpeg" && filetype != "image/jpg" &&
+	if filetype != "image/jpeg" && filetype != "image/jpg" && filetype != "image/bmp" &&
 		filetype != "image/gif" && filetype != "image/png" {
 		RenderError(w, "INVALID_FILE_TYPE_UPLOAD jpeg,jpg,png OR gif")
 		Logger("Invalid file upload")
@@ -138,6 +201,26 @@ func (d *dbServer) removeOldPic(userid string) bool {
 	}
 
 	spliter := strings.Split(user.Picture, "/")
+	picName := spliter[2]
+
+	if picName != "default.jpeg" {
+		err = os.Remove(user.Picture)
+		if err != nil {
+			return false
+		}
+	}
+	return true
+}
+func (d *dbServer) removeOldSign(userid string) bool {
+	collection := d.sess.Collection(UserCollection)
+	res := collection.Find(db.Cond{"userid": userid})
+	var user User
+	err := res.One(&user)
+	if err != nil {
+		return false
+	}
+
+	spliter := strings.Split(user.Sign, "/")
 	picName := spliter[2]
 
 	if picName != "default.jpeg" {

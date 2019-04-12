@@ -20,7 +20,7 @@ func (d *dbServer) InboxData(w http.ResponseWriter, r *http.Request) {
 	resbool, contracts := d.InboxContractsList(userID, false)
 
 	if !resbool {
-		RenderResponse(w, "CAN NOT FIND CONTRACT FOR THE USER", http.StatusOK)
+		json.NewEncoder(w).Encode(contracts)
 		Logger("CAN NOT FIND ANY CONTRACT " + userID)
 		return
 	}
@@ -41,7 +41,7 @@ func (d *dbServer) SentContract(w http.ResponseWriter, r *http.Request) {
 	userID := claims["userid"].(string)
 	resbool, contracts := d.SentContractsList(userID, false, false)
 	if !resbool {
-		RenderResponse(w, "CAN NOT FIND CONTRACT FOR THE USER", http.StatusOK)
+		json.NewEncoder(w).Encode(contracts)
 		Logger("CAN NOT FIND ANY CONTRACT " + userID)
 		return
 	}
@@ -61,7 +61,7 @@ func (d *dbServer) DraftContracts(w http.ResponseWriter, r *http.Request) {
 	userID := claims["userid"].(string)
 	resbool, contracts := d.SentContractsList(userID, true, false)
 	if !resbool {
-		RenderResponse(w, "CAN NOT FIND CONTRACT FOR THE USER", http.StatusOK)
+		json.NewEncoder(w).Encode(contracts)
 		Logger("CAN NOT FIND ANY CONTRACT " + userID)
 		return
 	}
@@ -82,10 +82,10 @@ func (d *dbServer) ExpiringsoonContracts(w http.ResponseWriter, r *http.Request)
 	_, errbool, contractsList := d.ExpiringSoon(userID)
 
 	if errbool != nil {
-		RenderResponse(w, "CAN NOT FIND ANY CONTRACT ", http.StatusOK)
+		json.NewEncoder(w).Encode(contractsList)
 		return
 	}
-	json.NewEncoder(w).Encode(&contractsList)
+	json.NewEncoder(w).Encode(contractsList)
 	return
 }
 
@@ -102,7 +102,7 @@ func (d *dbServer) ActionRequired(w http.ResponseWriter, r *http.Request) {
 	resbool, contracts := d.InboxContractsList(userID, true)
 
 	if !resbool {
-		RenderResponse(w, "CAN NOT FIND CONTRACT FOR THE USER", http.StatusOK)
+		json.NewEncoder(w).Encode(contracts)
 		Logger("CAN NOT FIND ANY CONTRACT " + userID)
 		return
 	}

@@ -92,6 +92,7 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 	}
 	RenderResponse(w, filepathName, http.StatusOK)
 	Logger("NEW CONTRACT ADDED" + filepathName)
+	return
 
 }
 
@@ -100,7 +101,7 @@ func (d *dbServer) ContractInDB(cName string, cID string, userid string, filepat
 	contract.ContractID = cID
 	contract.Creator = userid
 	contract.Filepath = filepath
-	contract.Status = "Creation phase"
+	contract.Status = "DRAFT"
 	contract.ContractcreationTime = time.Now().Format(time.RFC850)
 	contract.DelStatus = 0
 	contract.Blockchain = 0
