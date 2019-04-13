@@ -122,7 +122,7 @@ func (d *dbServer) WaitingForOthers(w http.ResponseWriter, r *http.Request) {
 
 	resbool, contracts := d.SentContractsList(userID, false, true)
 	if !resbool {
-		RenderResponse(w, "CAN NOT FIND CONTRACT FOR THE USER", http.StatusOK)
+		json.NewEncoder(w).Encode(contracts)
 		Logger("CAN NOT FIND ANY CONTRACT " + userID)
 		return
 	}
@@ -145,7 +145,7 @@ func (d *dbServer) Completed(w http.ResponseWriter, r *http.Request) {
 	resbool3, draftlist := d.SentContractsList(uID, true, false)
 
 	if !resbool1 && !resbool2 && !resbool3 {
-		RenderResponse(w, "NO CONTRACT FOUND FOR THE USER", http.StatusOK)
+		json.NewEncoder(w).Encode(&contracts)
 		Logger("No contracts found in search")
 		return
 	}
