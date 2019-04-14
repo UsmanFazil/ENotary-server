@@ -8,10 +8,10 @@ const FolderCollection = "Folder"
 const ContractFolderCollection = "ContractFolder"
 const BlackListCollection = "BlackList"
 
-const Profilepicspath = "./Files/Profile_pics"
-const Signpath = "./Files/User_signs/Signs"
-const InitialsPath = "./Files/User_signs/Initials"
-const Contractfilepath = "./Files/Contracts"
+const Profilepicspath = "Files/Profile_pics"
+const Signpath = "Files/User_signs/Signs"
+const InitialsPath = "Files/User_signs/Initials"
+const Contractfilepath = "Files/Contracts"
 const Def_pic_path = "Files/Profile_pics/default.jpeg"
 
 const MaxpicSize = 5 * 1024 * 1024
@@ -136,4 +136,4 @@ type BlackList struct {
 
 //Signer Status
 // default pending
-// S	igned
+// Signed

@@ -148,7 +148,7 @@ func (d *dbServer) ProfilePic(w http.ResponseWriter, r *http.Request) {
 	file.WriteString(picdata)
 	d.updatePicPath(uID, newpath)
 
-	RenderResponse(w, "FILE UPLOADED SUCCESSFULY", http.StatusOK)
+	RenderResponse(w, newpath, http.StatusOK)
 	Logger("Profile pic updated | userid = " + uID)
 	return
 }
