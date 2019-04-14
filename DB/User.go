@@ -176,7 +176,7 @@ func (d *dbServer) RemovePic(w http.ResponseWriter, r *http.Request) {
 		Logger("Remove old pic error " + uID)
 		return
 	}
-	RenderResponse(w, "Picture removed successfully", http.StatusOK)
+	RenderResponse(w, Def_pic_path, http.StatusOK)
 	return
 }
 
