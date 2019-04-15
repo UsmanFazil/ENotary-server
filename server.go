@@ -39,7 +39,8 @@ func main() {
 	r.Handle("/uploadProfilePic", db.IsAuthorized(db.ProfilePic)).Methods(http.MethodPost)
 	r.Handle("/removeProfilePic", db.IsAuthorized(db.RemovePic)).Methods(http.MethodGet)
 	r.Handle("/Logout", db.IsAuthorized(db.Logout)).Methods(http.MethodGet)
-	r.Handle("/uploadSign", db.IsAuthorized(db.UploadSign)).Methods(http.MethodGet)
+	r.Handle("/uploadSign", db.IsAuthorized(db.UploadSign)).Methods(http.MethodPost)
+	r.Handle("/userprefs", db.IsAuthorized(db.Userpreferences)).Methods(http.MethodPost)
 
 	r.Handle("/inbox", db.IsAuthorized(db.InboxData)).Methods(http.MethodGet)
 	r.Handle("/sent", db.IsAuthorized(db.SentContract)).Methods(http.MethodGet)

@@ -270,6 +270,46 @@ func (d *dbServer) UpdatePassword(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func (d *dbServer) Userpreferences(w http.ResponseWriter, r *http.Request) {
+	tokenstring := r.Header["Token"][0]
+	claims, cBool := GetClaims(tokenstring)
+	if !cBool {
+		RenderError(w, "Invalid user request")
+		Logger("Invalid user request")
+		return
+	}
+	uID := claims["userid"].(string)
+
+	var prefs Preferences
+	var user User
+	_ = json.NewDecoder(r.Body).Decode(&prefs)
+
+	Collection := d.sess.Collection(UserCollection)
+	res := Collection.Find(db.Cond{"userid": uID})
+	err := res.One(&user)
+
+	if err != nil {
+		RenderResponse(w, "Data not saved try again", http.StatusOK)
+		return
+	}
+
+	user.Name = prefs.UserName
+	user.Company = prefs.Company
+	user.Phone = prefs.Phone
+
+	resbool, errstring := CredentialValidation(user)
+	if !resbool {
+		RenderError(w, errstring)
+		return
+	}
+
+	res.Update(user)
+
+	RenderResponse(w, "Updated successfully", http.StatusOK)
+	Logger("user data updated :" + uID)
+	return
+}
+
 // picname, picpath, errstring := d.GetimageName(userid)
 // if errstring != nil {
 // 	RenderError(w, "CAN NOT REPLACE PICTURE TRY LATER")

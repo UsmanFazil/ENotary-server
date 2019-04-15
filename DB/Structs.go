@@ -127,6 +127,12 @@ type BlackList struct {
 	ExpTime     string `db:"exptime"`
 }
 
+type Preferences struct {
+	UserName string `json:"username"`
+	Company  string `json:"company"`
+	Phone    string `json:"phone"`
+}
+
 //CONTRACT STATUS TYPES
 // DRAFT
 // In Progress
