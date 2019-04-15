@@ -34,7 +34,9 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	f, header, err := r.FormFile("contractFile")
+	// f, header, err := r.FormFile("contractFile")
+	f, _, err := r.FormFile("contractFile")
+	contractName := r.FormValue("contractName")
 	if err != nil {
 		RenderError(w, "INVALID_FILE")
 		Logger("INVALID CONTRACT FILE")
@@ -42,7 +44,7 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 	}
 	defer f.Close()
 
-	upFileName := header.Filename
+	// upFileName := header.Filename
 
 	bs, err := ioutil.ReadAll(f)
 	if err != nil {
@@ -84,7 +86,7 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 	defer file.Close()
 	file.WriteString(s)
 
-	cid := d.ContractInDB(upFileName, filepathName, uID, newpath)
+	cid := d.ContractInDB(contractName, filepathName, uID, newpath)
 	if !cid {
 		RenderError(w, "CAN NOT ADD CONTRACT FILE TRY AGAIN")
 		Logger("CAN NOT SAVE CONTRACT FILE ON SERVER")
@@ -297,7 +299,7 @@ func (d *dbServer) SearchAlgo(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		if searchInput.ContractName == "" {
-			searchList = append(searchList, TimeSearch(Allcontracts, searchInput.Date)...)
+			searchList = Allcontracts
 
 		} else {
 			tmp := TimeSearch(Allcontracts, searchInput.Date)
@@ -352,6 +354,39 @@ func (d *dbServer) SearchAlgo(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&searchList)
 	Logger("Contract Search successful | userID: " + uID)
 	return
+}
+
+func (d *dbServer) DeleteDraft(w http.ResponseWriter, r *http.Request) {
+	tokenstring := r.Header["Token"][0]
+	claims, cBool := GetClaims(tokenstring)
+	if !cBool {
+		RenderError(w, "Invalid user request")
+		Logger("Invalid user request")
+		return
+	}
+	uID := claims["userid"].(string)
+
+	var contract Contract
+	_ = json.NewDecoder(r.Body).Decode(&contract)
+
+	Collection := d.sess.Collection(ContractCollection)
+	res := Collection.Find(db.Cond{"ContractID": contract.ContractID, "Creator": uID, "status": "DRAFT"})
+
+	total, _ := res.Count()
+
+	if total != 1 {
+		RenderError(w, "Can not delete contract, TRY AGAIN")
+		return
+	}
+	err := res.Delete()
+	if err != nil {
+		RenderError(w, "Can not delete contract, TRY AGAIN")
+		return
+	}
+
+	RenderResponse(w, "CONTRACT DELETED", http.StatusOK)
+	return
+
 }
 
 // func (d *dbServer) SearchContract(w http.ResponseWriter, r *http.Request) {

@@ -56,10 +56,15 @@ func (d *dbServer) UploadSign(w http.ResponseWriter, r *http.Request) {
 	fileEndings, err := mime.ExtensionsByType(filetype)
 	if err != nil {
 		RenderError(w, "INVALID_FILE")
-		Logger("Invalid file upload")
+		Logger("Invalid file upload " + uID)
 		return
 	}
-
+	// resbool := d.removeOldSign(uID)
+	// if !resbool {
+	// 	RenderError(w, "CAN NOT UPDATE SIGN")
+	// 	Logger("Not not removed " + uID)
+	// 	return
+	// }
 	signdata := string(bs)
 	newpath := filepath.Join(Signpath, uID+fileEndings[0])
 	file, err := os.Create(newpath)
@@ -72,7 +77,17 @@ func (d *dbServer) UploadSign(w http.ResponseWriter, r *http.Request) {
 
 	defer file.Close()
 	file.WriteString(signdata)
+	d.updateSignpath(uID, newpath)
 
+}
+
+func (d *dbServer) updateSignpath(userid string, path string) bool {
+	collection := d.sess.Collection(UserCollection)
+	res := collection.Find(db.Cond{"userid": userid})
+	res.Update(map[string]string{
+		"sign": path,
+	})
+	return true
 }
 
 //function to update user profile pic
@@ -190,6 +205,23 @@ func (d *dbServer) updatePicPath(userid string, picpath string) bool {
 	return true
 }
 
+// func (d *dbServer) removeOldSign(userid string) bool {
+// 	collection := d.sess.Collection(UserCollection)
+// 	res := collection.Find(db.Cond{"userid": userid})
+// 	var user User
+// 	err := res.One(&user)
+// 	if err != nil {
+// 		return false
+// 	}
+// 	spliter := strings.Split(user.Picture, "/")
+// 	picName := spliter[3]
+// 	err = os.Remove(user.Picture)
+// 	if err != nil {
+// 		return false
+// 	}
+// 	return true
+// }
+
 // function to remove user's privious profile pic
 func (d *dbServer) removeOldPic(userid string) bool {
 	collection := d.sess.Collection(UserCollection)
@@ -201,26 +233,6 @@ func (d *dbServer) removeOldPic(userid string) bool {
 	}
 
 	spliter := strings.Split(user.Picture, "/")
-	picName := spliter[2]
-
-	if picName != "default.jpeg" {
-		err = os.Remove(user.Picture)
-		if err != nil {
-			return false
-		}
-	}
-	return true
-}
-func (d *dbServer) removeOldSign(userid string) bool {
-	collection := d.sess.Collection(UserCollection)
-	res := collection.Find(db.Cond{"userid": userid})
-	var user User
-	err := res.One(&user)
-	if err != nil {
-		return false
-	}
-
-	spliter := strings.Split(user.Sign, "/")
 	picName := spliter[2]
 
 	if picName != "default.jpeg" {
