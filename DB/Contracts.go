@@ -139,6 +139,7 @@ func (d *dbServer) AddRecipients(w http.ResponseWriter, r *http.Request) {
 		signer.Access = 0
 		signer.SignStatus = "Not Signed"
 		signer.DeleteApprove = 0
+		signer.CC = s.CC
 
 		_, err = Collection.Insert(signer)
 		if err != nil {

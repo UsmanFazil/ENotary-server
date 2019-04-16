@@ -96,6 +96,7 @@ type Signerdata struct {
 	ContractID string `json:"cid"`
 	Email      string `json:"email"`
 	Name       string `json:"name"`
+	CC         int    `json:"cc"`
 }
 
 type Passrecovery struct {
