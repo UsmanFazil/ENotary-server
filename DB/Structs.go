@@ -135,6 +135,11 @@ type Preferences struct {
 	Phone    string `json:"phone"`
 }
 
+type ContractDetail struct {
+	ContractData Contract
+	Signers      []Signer
+}
+
 //CONTRACT STATUS TYPES
 // DRAFT
 // In Progress

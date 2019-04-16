@@ -147,11 +147,12 @@ func (d *dbServer) AddRecipients(w http.ResponseWriter, r *http.Request) {
 
 		_, err = Collection.Insert(signer)
 		if err != nil {
-			RenderError(w, "CAN NOT ADD SIGNER TRY AGAIN")
+			RenderError(w, "User does not exist on the platform")
 			Logger("DB INSERTION ERROR AT RECIPIENTS")
 			return
 		}
 	}
+
 	RenderResponse(w, "SIGNERS ADDED", http.StatusOK)
 	Logger("RECIPIENTS ADDED" + signer.ContractID)
 	return
@@ -390,6 +391,41 @@ func (d *dbServer) DeleteDraft(w http.ResponseWriter, r *http.Request) {
 	}
 
 	RenderResponse(w, "CONTRACT DELETED", http.StatusOK)
+	return
+
+}
+
+func (d *dbServer) ContractDetails(w http.ResponseWriter, r *http.Request) {
+	var contract Contract
+	var tmp Contract
+	var signers []Signer
+	var CD ContractDetail
+	_ = json.NewDecoder(r.Body).Decode(&contract)
+
+	Collection := d.sess.Collection(ContractCollection)
+	Signercollection := d.sess.Collection(SignerCollection)
+	res := Collection.Find(db.Cond{"ContractID": contract.ContractID})
+	err := res.One(&tmp)
+
+	if err != nil {
+		RenderError(w, "CAN NOT FIND CONTRACT TRY AGAIN!")
+		Logger("cannot find contract " + contract.ContractID)
+		return
+	}
+
+	res1 := Signercollection.Find(db.Cond{"ContractID": tmp.ContractID})
+	errstring := res1.All(&signers)
+
+	if errstring != nil {
+		RenderError(w, "CAN NOT FIND RECEPIENTS TRY AGAIN!")
+		Logger("cannot find Signers " + contract.ContractID)
+		return
+	}
+
+	CD.ContractData = tmp
+	CD.Signers = signers
+
+	json.NewEncoder(w).Encode(CD)
 	return
 
 }
