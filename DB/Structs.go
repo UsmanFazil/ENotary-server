@@ -93,10 +93,11 @@ type LogCheck struct {
 }
 
 type Signerdata struct {
-	ContractID string `json:"cid"`
-	Email      string `json:"email"`
-	Name       string `json:"name"`
-	CC         int    `json:"cc"`
+	ContractID  string `json:"cid"`
+	Email       string `json:"email"`
+	Name        string `json:"name"`
+	NeedtoSign  bool   `json:"NeedtoSign"`
+	ReceiveCopy bool   `json:"Receiveacopy"`
 }
 
 type Passrecovery struct {
