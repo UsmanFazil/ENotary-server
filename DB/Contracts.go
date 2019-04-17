@@ -119,44 +119,88 @@ func (d *dbServer) ContractInDB(cName string, cID string, userid string, filepat
 }
 
 func (d *dbServer) AddRecipients(w http.ResponseWriter, r *http.Request) {
+
 	var input []Signerdata
 	var signer Signer
 
 	_ = json.NewDecoder(r.Body).Decode(&input)
-	Collection := d.sess.Collection(SignerCollection)
+	signerCollection := d.sess.Collection(SignerCollection)
 
 	for _, s := range input {
 		user, _, err := d.GetUser(s.Email)
 		if err != nil {
-			RenderError(w, "INVALID RECIPIENT")
+			RenderError(w, "INVALID RECIPIENT! DOES NOT EXIST ON PLATFORM")
 			Logger("INVALID RECIPIENT")
 			return
 		}
 
-		signer.ContractID = s.ContractID
 		signer.UserID = user.Userid
+		signer.ContractID = s.ContractID
 		signer.Name = s.Name
+		signer.SignStatus = "pending"
 		signer.Access = 0
-		signer.SignStatus = "Not Signed"
 		signer.DeleteApprove = 0
-		if s.ReceiveCopy == true {
+		signer.Message = ""
+		signer.SignDate = ""
+
+		if s.ReceiveCopy {
 			signer.CC = 1
 		} else {
 			signer.CC = 0
 		}
+		_, errstring := signerCollection.Insert(signer)
 
-		_, err = Collection.Insert(signer)
-		if err != nil {
-			RenderError(w, "User does not exist on the platform")
-			Logger("DB INSERTION ERROR AT RECIPIENTS")
+		if errstring != nil {
+			RenderError(w, "Internal error try again")
+			Logger("cannot add signer")
 			return
 		}
+
 	}
 
-	RenderResponse(w, "SIGNERS ADDED", http.StatusOK)
-	Logger("RECIPIENTS ADDED" + signer.ContractID)
+	RenderResponse(w, "Added Recipients", http.StatusOK)
 	return
+
 }
+
+// var input []Signerdata
+// var signer Signer
+
+// _ = json.NewDecoder(r.Body).Decode(&input)
+// Collection := d.sess.Collection(SignerCollection)
+
+// for _, s := range input {
+// 	user, _, err := d.GetUser(s.Email)
+// 	if err != nil {
+// 		RenderError(w, "INVALID RECIPIENT")
+// 		Logger("INVALID RECIPIENT")
+// 		return
+// 	}
+
+// 	signer.ContractID = s.ContractID
+// 	signer.UserID = user.Userid
+// 	signer.Name = s.Name
+// 	signer.Access = 0
+// 	signer.SignStatus = "Not Signed"
+// 	signer.DeleteApprove = 0
+// 	if s.ReceiveCopy == true {
+// 		signer.CC = 1
+// 	} else {
+// 		signer.CC = 0
+// 	}
+
+// 	_, errstring := Collection.Insert(signer)
+
+// 	if errstring != nil {
+// 		RenderError(w, "User does not exist on the platform")
+// 		Logger("DB INSERTION ERROR AT RECIPIENTS",)
+// 		return
+// 	}
+// }
+
+// RenderResponse(w, "SIGNERS ADDED", http.StatusOK)
+// Logger("RECIPIENTS ADDED" + signer.ContractID)
+// return
 
 func (d *dbServer) WaitingforOther(userid string) (uint64, error) {
 	Collection := d.sess.Collection(ContractCollection)
