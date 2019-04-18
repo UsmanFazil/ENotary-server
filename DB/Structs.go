@@ -150,6 +150,11 @@ type ManageScreen struct {
 	FolderList     []Folder
 }
 
+type SignRes struct {
+	Signpath     string
+	InitialsPath string
+}
+
 //CONTRACT STATUS TYPES
 // DRAFT
 // In Progress

@@ -33,7 +33,7 @@ func (d *dbServer) UploadSign(w http.ResponseWriter, r *http.Request) {
 
 	f, _, err := r.FormFile("userSign")
 	if err != nil {
-		RenderError(w, "INVALID_FILE")
+		RenderError(w, "INVALID_SIGN_FILE")
 		Logger("Invalid file upload")
 		return
 	}
@@ -41,7 +41,7 @@ func (d *dbServer) UploadSign(w http.ResponseWriter, r *http.Request) {
 
 	bs, err := ioutil.ReadAll(f)
 	if err != nil {
-		RenderError(w, "INVALID_FILE")
+		RenderError(w, "INVALID_SIGN_FILE")
 		Logger("Invalid file upload")
 		return
 	}
@@ -55,29 +55,72 @@ func (d *dbServer) UploadSign(w http.ResponseWriter, r *http.Request) {
 
 	fileEndings, err := mime.ExtensionsByType(filetype)
 	if err != nil {
-		RenderError(w, "INVALID_FILE")
+		RenderError(w, "INVALID_SIGN_FILE_TYPE")
 		Logger("Invalid file upload " + uID)
 		return
 	}
-	// resbool := d.removeOldSign(uID)
-	// if !resbool {
-	// 	RenderError(w, "CAN NOT UPDATE SIGN")
-	// 	Logger("Not not removed " + uID)
-	// 	return
-	// }
+	_ = d.removeOldSign(uID)
+
+	f1, _, err := r.FormFile("userInitail")
+	if err != nil {
+		RenderError(w, "INVALID_INITAILS_FILE")
+		Logger("Invalid file upload")
+		return
+	}
+	bs1, err := ioutil.ReadAll(f1)
+	if err != nil {
+		RenderError(w, "INVALID_INITAILS_FILE")
+		Logger("Invalid file upload")
+		return
+	}
+	filetype1 := http.DetectContentType(bs1)
+	if filetype1 != "image/jpeg" && filetype1 != "image/jpg" && filetype1 != "image/bmp" &&
+		filetype1 != "image/gif" && filetype1 != "image/png" {
+		RenderError(w, "INVALID_FILE_TYPE_UPLOAD jpeg,jpg,png OR gif")
+		Logger("Invalid file upload")
+		return
+	}
+	fileEndings1, err := mime.ExtensionsByType(filetype1)
+	if err != nil {
+		RenderError(w, "INVALID_INITAILS_FILE_TYPE")
+		Logger("Invalid file upload " + uID)
+		return
+	}
+	_ = d.removeOldInitial(uID)
+
 	signdata := string(bs)
-	newpath := filepath.Join(Signpath, uID+fileEndings[0])
-	file, err := os.Create(newpath)
+	initaildata := string(bs1)
+	signpath := filepath.Join(Signpath, uID+fileEndings[0])
+	initialspath := filepath.Join(InitialsPath, uID+fileEndings1[0])
+	file, err := os.Create(signpath)
+	file1, err1 := os.Create(initialspath)
 
 	if err != nil {
-		RenderError(w, "INVALID_FILE ")
-		Logger("CAN NOT UPDATE PICTURE")
+		RenderError(w, "CAN NOT CREATE NEW SIGN ")
+		Logger("CAN NOT CREATE NEW SIGN " + uID)
+		return
+	}
+	if err1 != nil {
+		RenderError(w, "CAN NOT CREATE NEW INITAILS")
+		Logger("CAN NOT UPDATE INITAILS " + uID)
 		return
 	}
 
 	defer file.Close()
+	defer file1.Close()
 	file.WriteString(signdata)
-	d.updateSignpath(uID, newpath)
+	file1.WriteString(initaildata)
+
+	d.updateInitialpath(uID, initialspath)
+	d.updateSignpath(uID, signpath)
+
+	var signRes SignRes
+	signRes.InitialsPath = initialspath
+	signRes.Signpath = signpath
+
+	json.NewEncoder(w).Encode(signRes)
+	Logger("Sign updated user: " + uID)
+	return
 
 }
 
@@ -86,6 +129,15 @@ func (d *dbServer) updateSignpath(userid string, path string) bool {
 	res := collection.Find(db.Cond{"userid": userid})
 	res.Update(map[string]string{
 		"sign": path,
+	})
+	return true
+}
+
+func (d *dbServer) updateInitialpath(userid string, path string) bool {
+	collection := d.sess.Collection(UserCollection)
+	res := collection.Find(db.Cond{"userid": userid})
+	res.Update(map[string]string{
+		"initials": path,
 	})
 	return true
 }
@@ -241,6 +293,39 @@ func (d *dbServer) removeOldPic(userid string) bool {
 			return false
 		}
 	}
+	return true
+}
+
+func (d *dbServer) removeOldSign(userid string) bool {
+	collection := d.sess.Collection(UserCollection)
+	res := collection.Find(db.Cond{"userid": userid})
+	var user User
+	err := res.One(&user)
+	if err != nil {
+		return false
+	}
+
+	err = os.Remove(user.Sign)
+	if err != nil {
+		return false
+	}
+
+	return true
+}
+func (d *dbServer) removeOldInitial(userid string) bool {
+	collection := d.sess.Collection(UserCollection)
+	res := collection.Find(db.Cond{"userid": userid})
+	var user User
+	err := res.One(&user)
+	if err != nil {
+		return false
+	}
+
+	err = os.Remove(user.Initials)
+	if err != nil {
+		return false
+	}
+
 	return true
 }
 
