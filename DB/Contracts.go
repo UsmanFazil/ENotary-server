@@ -122,10 +122,11 @@ func (d *dbServer) AddRecipients(w http.ResponseWriter, r *http.Request) {
 
 	var input []Signerdata
 	var signer Signer
-	var result []Signer
 
 	_ = json.NewDecoder(r.Body).Decode(&input)
 	signerCollection := d.sess.Collection(SignerCollection)
+
+	var result = make([]Signer, len(input))
 
 	for i := 0; i < len(input); i++ {
 		user, _, err := d.GetUser(input[i].Email)
@@ -151,14 +152,14 @@ func (d *dbServer) AddRecipients(w http.ResponseWriter, r *http.Request) {
 		_, errstring := signerCollection.Insert(signer)
 
 		if errstring != nil {
-			RenderError(w, "Internal error try again")
+			RenderError(w, "User not exists on platform")
 			Logger("cannot add signer")
 			return
 		}
 		result[i] = signer
 	}
 
-	json.NewEncoder(w).Encode(input)
+	json.NewEncoder(w).Encode(result)
 	return
 
 }
