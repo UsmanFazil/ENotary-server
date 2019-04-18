@@ -26,7 +26,7 @@ func SendMail(usermail string, vcode string) {
 }
 
 func signupMsg(vcode string) string {
-	return "Hello! <br/> Please use following verification code to verify your email, Thanks. <br/> 	This Code will expire in two Hour. <br/> Verification Code = " + "<b>" + vcode + "<b>"
+	return "Hello! <br/> Please use following verification code to verify your email, Thanks. <br/> 	This Code will expire in two Hour. <br/> Verification Code : " + "<b>" + vcode + "<b>"
 }
 
 func ContractEmail(useremail string, subj string, message string) {
@@ -47,6 +47,6 @@ func ContractEmail(useremail string, subj string, message string) {
 }
 
 func ContractMsg(msg string) string {
-	return "Hello! <br/> A new Contract has been sent to your ENOTARY account inbox. <br/> Message by the Sender  = " + "<b>" + msg + "<b>"
+	return "Hello! <br/> A new Contract has been sent to your ENOTARY account inbox. <br/> Message by the Sender  : " + "<b>" + msg + "<b>"
 
 }
