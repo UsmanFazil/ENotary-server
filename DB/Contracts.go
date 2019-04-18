@@ -15,7 +15,7 @@ import (
 
 // TODO new contract creation process here. with file upload
 func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
-
+	var returndata ContractBasic
 	r.Body = http.MaxBytesReader(w, r.Body, MaxContractSize)
 	err := r.ParseMultipartForm(5000)
 
@@ -92,7 +92,9 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 		Logger("CAN NOT SAVE CONTRACT FILE ON SERVER")
 		return
 	}
-	RenderResponse(w, filepathName, http.StatusOK)
+	returndata.ContractID = filepathName
+	returndata.Path = newpath
+	json.NewEncoder(w).Encode(returndata)
 	Logger("NEW CONTRACT ADDED" + filepathName)
 	return
 

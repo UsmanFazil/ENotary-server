@@ -140,6 +140,11 @@ type ContractDetail struct {
 	Signers      []Signer
 }
 
+type ContractBasic struct {
+	ContractID string
+	Path       string
+}
+
 //CONTRACT STATUS TYPES
 // DRAFT
 // In Progress
