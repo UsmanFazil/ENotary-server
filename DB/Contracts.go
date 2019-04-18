@@ -122,28 +122,28 @@ func (d *dbServer) AddRecipients(w http.ResponseWriter, r *http.Request) {
 
 	var input []Signerdata
 	var signer Signer
+	var result []Signer
 
 	_ = json.NewDecoder(r.Body).Decode(&input)
 	signerCollection := d.sess.Collection(SignerCollection)
 
-	for _, s := range input {
-		user, _, err := d.GetUser(s.Email)
+	for i := 0; i < len(input); i++ {
+		user, _, err := d.GetUser(input[i].Email)
 		if err != nil {
 			RenderError(w, "INVALID RECIPIENT! DOES NOT EXIST ON PLATFORM")
 			Logger("INVALID RECIPIENT")
 			return
 		}
-
 		signer.UserID = user.Userid
-		signer.ContractID = s.ContractID
-		signer.Name = s.Name
+		signer.ContractID = input[i].ContractID
+		signer.Name = input[i].Name
 		signer.SignStatus = "pending"
 		signer.Access = 0
 		signer.DeleteApprove = 0
 		signer.Message = ""
 		signer.SignDate = ""
 
-		if s.ReceiveCopy {
+		if input[i].ReceiveCopy {
 			signer.CC = 1
 		} else {
 			signer.CC = 0
@@ -155,10 +155,10 @@ func (d *dbServer) AddRecipients(w http.ResponseWriter, r *http.Request) {
 			Logger("cannot add signer")
 			return
 		}
-
+		result[i] = signer
 	}
 
-	RenderResponse(w, "Added Recipients", http.StatusOK)
+	json.NewEncoder(w).Encode(input)
 	return
 
 }

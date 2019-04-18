@@ -2,7 +2,7 @@ package main
 
 import (
 	"ENOTARY-Server/DB"
-	//	"ENotary-server/Hashing"
+	"ENotary-server/Hashing"
 	"log"
 	"net/http"
 
@@ -55,7 +55,7 @@ func main() {
 	r.Handle("/addRecipients", db.IsAuthorized(db.AddRecipients)).Methods(http.MethodPost)
 	r.Handle("/delDraft", db.IsAuthorized(db.DeleteDraft)).Methods(http.MethodDelete)
 	r.Handle("/ContractDetails", db.IsAuthorized(db.ContractDetails)).Methods(http.MethodPost)
-	//	r.Handle("/hashFile", db.IsAuthorized(Hashing.Servehash)).Methods(http.MethodPost)
+	r.Handle("/hashFile", db.IsAuthorized(Hashing.Servehash)).Methods(http.MethodPost)
 
 	r.Handle("/newFolder", db.IsAuthorized(db.NewFolder)).Methods(http.MethodPost)
 	r.Handle("/moveContract", db.IsAuthorized(db.AddContract)).Methods(http.MethodPost)
