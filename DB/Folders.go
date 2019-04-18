@@ -88,25 +88,25 @@ func (d *dbServer) FolderContractList(w http.ResponseWriter, r *http.Request) {
 
 	res := cfCollection.Find(db.Cond{"folderID": folder.FolderID})
 	total, _ := res.Count()
+	var contracts = make([]Contract, total)
 	if total < 1 {
-		RenderResponse(w, "NO CONTRACTS IN THIS FOLDER", http.StatusOK)
+		json.NewEncoder(w).Encode(contracts)
 		Logger("NO CONTRACTS FOUND | FolderID :" + folder.FolderID)
 		return
 	}
 	err := res.All(&CFs)
 	if err != nil {
-		RenderError(w, "NO CONTRACTS IN THIS FOLDER")
+		json.NewEncoder(w).Encode(contracts)
 		Logger("NO CONTRACTS FOUND | FolderID :" + folder.FolderID)
 		return
 	}
 
-	var contracts = make([]Contract, total)
 	i := 0
 	for _, v := range CFs {
 		res1 := contractCollection.Find(db.Cond{"ContractID": v.ContractID})
 		err := res1.One(&tmpContract)
 		if err != nil {
-			RenderError(w, "NO CONTRACTS IN THIS FOLDER")
+			json.NewEncoder(w).Encode(contracts)
 			Logger("NO CONTRACTS FOUND | FolderID :" + folder.FolderID)
 			return
 		}

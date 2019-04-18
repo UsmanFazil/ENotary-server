@@ -155,6 +155,12 @@ type SignRes struct {
 	InitialsPath string
 }
 
+type SendContract struct {
+	ContractID string `json:"ContractID"`
+	EmailSubj  string `json:"EmailSubj"`
+	EmailMsg   string `json:"EmailMsg"`
+}
+
 //CONTRACT STATUS TYPES
 // DRAFT
 // In Progress
