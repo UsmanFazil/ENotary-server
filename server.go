@@ -42,6 +42,7 @@ func main() {
 	r.Handle("/uploadSign", db.IsAuthorized(db.UploadSign)).Methods(http.MethodPost)
 	r.Handle("/userprefs", db.IsAuthorized(db.Userpreferences)).Methods(http.MethodPost)
 
+	r.Handle("/manage", db.IsAuthorized(db.Manage)).Methods(http.MethodGet)
 	r.Handle("/inbox", db.IsAuthorized(db.InboxData)).Methods(http.MethodGet)
 	r.Handle("/sent", db.IsAuthorized(db.SentContract)).Methods(http.MethodGet)
 	r.Handle("/drafts", db.IsAuthorized(db.DraftContracts)).Methods(http.MethodGet)

@@ -145,6 +145,11 @@ type ContractBasic struct {
 	Path       string
 }
 
+type ManageScreen struct {
+	InboxContracts []Contract
+	FolderList     []Folder
+}
+
 //CONTRACT STATUS TYPES
 // DRAFT
 // In Progress

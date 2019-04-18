@@ -250,3 +250,36 @@ func (d *dbServer) InboxContractsList(userid string, unsigned bool) (bool, []Con
 
 	return true, contracts
 }
+
+func (d *dbServer) Manage(w http.ResponseWriter, r *http.Request) {
+
+	var folderlist []Folder
+	tokenstring := r.Header["Token"][0]
+	claims, cBool := GetClaims(tokenstring)
+	if !cBool {
+		RenderError(w, "Invalid user request")
+		Logger("Invalid user request")
+		return
+	}
+	uID := claims["userid"].(string)
+	_, contracts := d.InboxContractsList(uID, false)
+
+	// if !resbool {
+	// 	json.NewEncoder(w).Encode(contracts)
+	// 	Logger("CAN NOT FIND ANY CONTRACT " + uID)
+	// 	return
+	// }
+
+	Collection := d.sess.Collection(FolderCollection)
+	res := Collection.Find(db.Cond{"userID": uID})
+	_ = res.All(&folderlist)
+
+	var manageobj ManageScreen
+
+	manageobj.InboxContracts = contracts
+	manageobj.FolderList = folderlist
+
+	json.NewEncoder(w).Encode(manageobj)
+	return
+
+}
