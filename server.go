@@ -26,7 +26,7 @@ func main() {
 	log.Print("Maria DB server started ....")
 	defer db.CloseSession()
 
-	var dir = "./Files"
+	var dir = "../Files"
 
 	//API ENDPOINTS
 	r := mux.NewRouter()
