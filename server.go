@@ -2,7 +2,7 @@ package main
 
 import (
 	"ENOTARY-Server/DB"
-	"ENotary-server/Hashing"
+	"ENOTARY-Server/Hashing"
 	"log"
 	"net/http"
 
