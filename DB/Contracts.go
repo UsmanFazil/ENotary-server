@@ -455,7 +455,7 @@ func (d *dbServer) ContractDetails(w http.ResponseWriter, r *http.Request) {
 	err := res.One(&tmp)
 
 	if err != nil {
-		RenderError(w, "CAN NOT FIND CONTRACT TRY AGAIN!")
+		json.NewEncoder(w).Encode(CD)
 		Logger("cannot find contract " + contract.ContractID)
 		return
 	}
@@ -464,7 +464,7 @@ func (d *dbServer) ContractDetails(w http.ResponseWriter, r *http.Request) {
 	errstring := res1.All(&signers)
 
 	if errstring != nil {
-		RenderError(w, "CAN NOT FIND RECEPIENTS TRY AGAIN!")
+		json.NewEncoder(w).Encode(CD)
 		Logger("cannot find Signers " + contract.ContractID)
 		return
 	}

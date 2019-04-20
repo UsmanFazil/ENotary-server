@@ -211,3 +211,80 @@ ENotary-log 2019/04/18 14:08:53 Sign updated user: 1062b055-2f5b-4776-8f15-374ec
 ENotary-log 2019/04/18 16:48:08 New Login 1062b055-2f5b-4776-8f15-374ec4532107
 ENotary-log 2019/04/18 17:13:46 New Login 1062b055-2f5b-4776-8f15-374ec4532107
 ENotary-log 2019/04/18 21:18:06 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/18 21:31:51 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/18 23:57:46 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 00:00:14 user data updated :1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 00:56:18 user data updated :1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 08:09:02 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 08:31:22 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTU2NTA1NDIsImlhdCI6MTU1NTY0MzM0MiwiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjEwNjJiMDU1LTJmNWItNDc3Ni04ZjE1LTM3NGVjNDUzMjEwNyJ9.stla32wUmbEPbPzd5IR2XP0N6uvRJhGQm1Ma1xJZxR8
+ENotary-log 2019/04/19 08:31:44 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 08:31:52 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTU2NTE5MDQsImlhdCI6MTU1NTY0NDcwNCwiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjEwNjJiMDU1LTJmNWItNDc3Ni04ZjE1LTM3NGVjNDUzMjEwNyJ9.dieVHKDEkeB9bRlmhMmV7pH20Y-YX8avqDQG1zIlnVk
+ENotary-log 2019/04/19 08:32:37 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:09:51 INVALID EMAIL
+ENotary-log 2019/04/19 09:09:55 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:10:20 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:10:31 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:10:41 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:11:04 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:11:07 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:11:14 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:11:29 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:11:33 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:11:36 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:11:40 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:11:48 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:11:51 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:11:57 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:12:01 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 09:12:17 cannot find contract 22ead4d1-ae73-4b25-a4b3-84b176f4fc8c
+ENotary-log 2019/04/19 09:12:19 cannot find contract 22ead4d1-ae73-4b25-a4b3-84b176f4fc8c
+ENotary-log 2019/04/19 09:12:20 cannot find contract 38b2d0bc-3540-4b6b-b21f-b2e234d28e6b
+ENotary-log 2019/04/19 09:13:13 NEW CONTRACT ADDED8c9e1dee-bcba-463b-a5ac-cdb320159b01
+ENotary-log 2019/04/19 09:18:42 NEW CONTRACT ADDED23c09582-b2ce-483f-8057-3d2be459a63d
+ENotary-log 2019/04/19 09:19:04 INVALID RECIPIENT
+ENotary-log 2019/04/19 09:21:10 INVALID CONTRACT FILE
+ENotary-log 2019/04/19 09:21:48 NEW CONTRACT ADDED9da0f3dc-92dd-44f2-897d-417b7ba552e5
+ENotary-log 2019/04/19 10:09:05 INVALID CONTRACT FILE
+ENotary-log 2019/04/19 10:09:08 INVALID CONTRACT FILE
+ENotary-log 2019/04/19 10:09:15 INVALID CONTRACT FILE
+ENotary-log 2019/04/19 11:01:59 INVALID EMAIL
+ENotary-log 2019/04/19 11:02:04 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 11:02:12 NEW CONTRACT ADDED11c3d548-e651-4363-99b4-4c110547f64e
+ENotary-log 2019/04/19 14:00:19 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:00:28 NEW CONTRACT ADDEDdf536eb4-13e6-49bf-8a87-b449be8f54ab
+ENotary-log 2019/04/19 14:02:42 NEW CONTRACT ADDED52a438a2-07aa-4c87-b344-10cd33fd3eb6
+ENotary-log 2019/04/19 14:28:57 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:37:21 cannot find contract 22ead4d1-ae73-4b25-a4b3-84b176f4fc8c
+ENotary-log 2019/04/19 14:37:23 cannot find contract 38b2d0bc-3540-4b6b-b21f-b2e234d28e6b
+ENotary-log 2019/04/19 14:37:23 cannot find contract 38b2d0bc-3540-4b6b-b21f-b2e234d28e6b
+ENotary-log 2019/04/19 14:37:24 cannot find contract 38b2d0bc-3540-4b6b-b21f-b2e234d28e6b
+ENotary-log 2019/04/19 14:37:25 cannot find contract 22ead4d1-ae73-4b25-a4b3-84b176f4fc8c
+ENotary-log 2019/04/19 14:37:25 cannot find contract 38b2d0bc-3540-4b6b-b21f-b2e234d28e6b
+ENotary-log 2019/04/19 14:42:28 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:42:40 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:42:44 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:42:48 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:42:52 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:43:05 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:43:25 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:43:38 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:43:42 Contract Search successful | userID: 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:44:12 cannot find contract 22ead4d1-ae73-4b25-a4b3-84b176f4fc8c
+ENotary-log 2019/04/19 14:44:24 cannot find contract 22ead4d1-ae73-4b25-a4b3-84b176f4fc8c
+ENotary-log 2019/04/19 14:44:24 cannot find contract 38b2d0bc-3540-4b6b-b21f-b2e234d28e6b
+ENotary-log 2019/04/19 14:44:25 cannot find contract 22ead4d1-ae73-4b25-a4b3-84b176f4fc8c
+ENotary-log 2019/04/19 14:47:49 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:51:48 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:52:01 FILE HASH CALCULATEDFiles/Contracts/5239d4be-3e36-481d-9d3e-4c689f0e5ab7.jpg
+ENotary-log 2019/04/19 14:56:20 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:56:37 Profile pic updated | userid = 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:56:52 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTU2NzQ5ODAsImlhdCI6MTU1NTY2Nzc4MCwiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjEwNjJiMDU1LTJmNWItNDc3Ni04ZjE1LTM3NGVjNDUzMjEwNyJ9.yXcBzffFz4OBZ4-wits1XzmtVyrFHiG9pZrzyNvipCo
+ENotary-log 2019/04/19 14:57:04 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 14:57:48 NEW CONTRACT ADDEDb92f35eb-66e5-446b-8b6c-cf44257700f7
+ENotary-log 2019/04/19 15:04:51 INVALID PASSWORD usmanework99@gmail.com
+ENotary-log 2019/04/19 15:04:55 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 15:05:03 NEW CONTRACT ADDEDf8feedd3-21c9-49b9-8811-6885f2e39b96
+ENotary-log 2019/04/19 16:47:52 INVALID EMAIL
+ENotary-log 2019/04/19 16:47:53 New Login 1062b055-2f5b-4776-8f15-374ec4532107
+ENotary-log 2019/04/19 16:48:06 NEW CONTRACT ADDEDa82adc57-a0d8-49d2-9f57-d5d9cb006e6e
+ENotary-log 2019/04/19 16:57:25 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTU2ODE2NzMsImlhdCI6MTU1NTY3NDQ3MywiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjEwNjJiMDU1LTJmNWItNDc3Ni04ZjE1LTM3NGVjNDUzMjEwNyJ9.7y79AQVxhO3jQlCFGSROqnXAU0dxZ9bMiBWUZ4b3BO0
