@@ -140,6 +140,12 @@ type ContractDetail struct {
 	Signers      []Signer
 }
 
+type ContractDetailHash struct {
+	ContractData Contract
+	Signers      []Signer
+	ContractHash string
+}
+
 type ContractBasic struct {
 	ContractID string
 	Path       string

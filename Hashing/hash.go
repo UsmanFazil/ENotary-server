@@ -1,12 +1,11 @@
 package Hashing
 
 import (
-	DB "ENOTARY-Server/DB"
+	// "ENotary-server/DB"
+
 	"crypto/sha256"
 	"encoding/hex"
-	"encoding/json"
 	"io/ioutil"
-	"net/http"
 )
 
 // Filepath : struct to store path of the file on server
@@ -47,19 +46,28 @@ func Gethash(filename string) (string, error) {
 }
 
 // Servehash : function to serve file hash to the user
-func Servehash(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+// func Servehash(w http.ResponseWriter, r *http.Request) {
+// 	w.Header().Set("Content-Type", "application/json")
 
-	var path Filepath
-	_ = json.NewDecoder(r.Body).Decode(&path)
-	filehash, err := Gethash(path.Path)
+// 	var path Filepath
+// 	_ = json.NewDecoder(r.Body).Decode(&path)
+// 	filehash, err := Gethash(path.Path)
 
+// 	if err != nil {
+// 		DB.RenderError(w, "CAN NOT GENERATE HASH")
+// 		// DB.Logger("CAN NOT GENERATE HASH")
+// 		return
+// 	}
+// 	json.NewEncoder(w).Encode(filehash)
+// 	// DB.Logger("FILE HASH CALCULATED" + path.Path)
+// 	return
+// }
+func FindHash(filepath string) string {
+	filehash, err := Gethash(filepath)
 	if err != nil {
-		DB.RenderError(w, "CAN NOT GENERATE HASH")
-		DB.Logger("CAN NOT GENERATE HASH")
-		return
+		// DB.Logger("CAN NOT GENERATE HASH " + filepath)
+		return ""
 	}
-	json.NewEncoder(w).Encode(filehash)
-	DB.Logger("FILE HASH CALCULATED" + path.Path)
-	return
+	// DB.Logger("FILE HASH CALCULATED" + filepath)
+	return filehash
 }

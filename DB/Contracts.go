@@ -1,6 +1,7 @@
 package DB
 
 import (
+	"ENOTARY-Server/Hashing"
 	"encoding/json"
 	"io/ioutil"
 	"mime"
@@ -473,6 +474,42 @@ func (d *dbServer) ContractDetails(w http.ResponseWriter, r *http.Request) {
 	CD.Signers = signers
 
 	json.NewEncoder(w).Encode(CD)
+	return
+
+}
+
+func (d *dbServer) ContractHashDetails(w http.ResponseWriter, r *http.Request) {
+	var contract Contract
+	var tmp Contract
+	var signers []Signer
+	var CH ContractDetailHash
+	_ = json.NewDecoder(r.Body).Decode(&contract)
+
+	Collection := d.sess.Collection(ContractCollection)
+	Signercollection := d.sess.Collection(SignerCollection)
+	res := Collection.Find(db.Cond{"ContractID": contract.ContractID})
+	err := res.One(&tmp)
+
+	if err != nil {
+		json.NewEncoder(w).Encode(CH)
+		Logger("cannot find contract " + contract.ContractID)
+		return
+	}
+
+	res1 := Signercollection.Find(db.Cond{"ContractID": tmp.ContractID})
+	errstring := res1.All(&signers)
+
+	if errstring != nil {
+		json.NewEncoder(w).Encode(CH)
+		Logger("cannot find Signers " + contract.ContractID)
+		return
+	}
+
+	CH.ContractData = tmp
+	CH.Signers = signers
+	CH.ContractHash = Hashing.FindHash(tmp.Filepath)
+
+	json.NewEncoder(w).Encode(CH)
 	return
 
 }

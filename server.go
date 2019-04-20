@@ -2,7 +2,6 @@ package main
 
 import (
 	"ENOTARY-Server/DB"
-	"ENOTARY-Server/Hashing"
 	"log"
 	"net/http"
 
@@ -57,7 +56,7 @@ func main() {
 	r.Handle("/delDraft", db.IsAuthorized(db.DeleteDraft)).Methods(http.MethodDelete)
 	r.Handle("/ContractDetails", db.IsAuthorized(db.ContractDetails)).Methods(http.MethodPost)
 	r.Handle("/SendContract", db.IsAuthorized(db.SendContract)).Methods(http.MethodPost)
-	r.Handle("/hashFile", db.IsAuthorized(Hashing.Servehash)).Methods(http.MethodPost)
+	r.Handle("/SaveinBlockchain", db.IsAuthorized(db.ContractHashDetails)).Methods(http.MethodPost)
 
 	r.Handle("/newFolder", db.IsAuthorized(db.NewFolder)).Methods(http.MethodPost)
 	r.Handle("/moveContract", db.IsAuthorized(db.AddContract)).Methods(http.MethodPost)
