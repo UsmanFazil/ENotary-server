@@ -467,3 +467,29 @@ ENotary-log 2019/04/21 22:11:07 CAN NOT FIND ANY CONTRACT 9265ec4c-7d59-4d3b-b79
 ENotary-log 2019/04/21 22:11:24 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTU4NzMxMzYsImlhdCI6MTU1NTg2NTkzNiwiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjkyNjVlYzRjLTdkNTktNGQzYi1iNzkzLTIxMmQxMTBmMzkwNCJ9.4QFrf4sTcvoionPL805GemhqS4z_JprcI3vm_0-eTaE
 ENotary-log 2019/04/21 22:14:07 New Login e7ed3e30-aacd-4456-b10b-5d87549cf6ab
 ENotary-log 2019/04/21 22:32:39 NEW CONTRACT ADDED4081b361-0b77-470b-aca7-17049a9442ae
+ENotary-log 2019/04/21 23:17:09 INVALID EMAIL
+ENotary-log 2019/04/21 23:17:16 New Login e7ed3e30-aacd-4456-b10b-5d87549cf6ab
+ENotary-log 2019/04/21 23:17:29 NEW FOLDER CREATED 546f437b-61ac-4605-bd1d-c0e03924d204
+ENotary-log 2019/04/21 23:17:58 cannot find contract 546f437b-61ac-4605-bd1d-c0e03924d204
+ENotary-log 2019/04/21 23:18:14 cannot find contract 546f437b-61ac-4605-bd1d-c0e03924d204
+ENotary-log 2019/04/21 23:18:29 cannot find contract 546f437b-61ac-4605-bd1d-c0e03924d204
+ENotary-log 2019/04/21 23:18:29 NEW FOLDER CREATED ed52c637-2f40-4222-9b7b-92d8af1fc1bd
+ENotary-log 2019/04/21 23:18:34 cannot find contract 546f437b-61ac-4605-bd1d-c0e03924d204
+ENotary-log 2019/04/21 23:18:37 cannot find contract 546f437b-61ac-4605-bd1d-c0e03924d204
+ENotary-log 2019/04/21 23:18:38 cannot find contract 546f437b-61ac-4605-bd1d-c0e03924d204
+ENotary-log 2019/04/21 23:18:38 NEW FOLDER CREATED fe033b93-bde8-4dc6-9784-a6ed8bd9161f
+ENotary-log 2019/04/21 23:19:00 cannot find contract 546f437b-61ac-4605-bd1d-c0e03924d204
+ENotary-log 2019/04/21 23:19:05 cannot find contract 546f437b-61ac-4605-bd1d-c0e03924d204
+ENotary-log 2019/04/21 23:19:05 NEW FOLDER CREATED f2b5db35-bb2f-456f-9e83-4c2ae2546a9c
+ENotary-log 2019/04/21 23:19:18 cannot find contract ed52c637-2f40-4222-9b7b-92d8af1fc1bd
+ENotary-log 2019/04/21 23:19:19 cannot find contract f2b5db35-bb2f-456f-9e83-4c2ae2546a9c
+ENotary-log 2019/04/21 23:19:20 cannot find contract fe033b93-bde8-4dc6-9784-a6ed8bd9161f
+ENotary-log 2019/04/21 23:19:21 cannot find contract 546f437b-61ac-4605-bd1d-c0e03924d204
+ENotary-log 2019/04/21 23:19:21 cannot find contract ed52c637-2f40-4222-9b7b-92d8af1fc1bd
+ENotary-log 2019/04/21 23:19:22 cannot find contract f2b5db35-bb2f-456f-9e83-4c2ae2546a9c
+ENotary-log 2019/04/21 23:22:06 cannot find contract 546f437b-61ac-4605-bd1d-c0e03924d204
+ENotary-log 2019/04/21 23:22:07 cannot find contract 546f437b-61ac-4605-bd1d-c0e03924d204
+ENotary-log 2019/04/21 23:22:07 NEW FOLDER CREATED 66cc7d27-98c6-4fc4-a889-4b8035fa36ca
+ENotary-log 2019/04/21 23:24:02 cannot find contract 546f437b-61ac-4605-bd1d-c0e03924d204
+ENotary-log 2019/04/21 23:24:07 cannot find contract 546f437b-61ac-4605-bd1d-c0e03924d204
+ENotary-log 2019/04/21 23:24:07 NEW FOLDER CREATED ee21edf7-8e9a-4041-b9fa-5a1c2a65bf1b

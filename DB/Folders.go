@@ -52,7 +52,7 @@ func (d *dbServer) NewFolder(w http.ResponseWriter, r *http.Request) {
 		Logger("DB ERROR (FOLDER CREATION)")
 		return
 	}
-	RenderResponse(w, "NEW FOLDER CREATED", http.StatusOK)
+	json.NewEncoder(w).Encode(newFolder)
 	Logger("NEW FOLDER CREATED " + newFolder.FolderID)
 	return
 }
