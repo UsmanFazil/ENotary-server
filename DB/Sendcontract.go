@@ -44,5 +44,4 @@ func (d *dbServer) SendContract(w http.ResponseWriter, r *http.Request) {
 	}
 	RenderResponse(w, "EMAIL SENT TO ALL RECEPIENTS", http.StatusOK)
 	return
-
 }

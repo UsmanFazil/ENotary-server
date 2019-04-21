@@ -7,12 +7,13 @@ const VerifCollection = "Verification"
 const FolderCollection = "Folder"
 const ContractFolderCollection = "ContractFolder"
 const BlackListCollection = "BlackList"
+const WalletsCollection = "Wallets"
 
-const Profilepicspath = "../Files/Profile_pics"
-const Signpath = "../Files/User_signs/Signs"
-const InitialsPath = "../Files/User_signs/Initials"
-const Contractfilepath = "../Files/Contracts"
-const Def_pic_path = "../Files/Profile_pics/default.jpeg"
+const Profilepicspath = "Files/Profile_pics"
+const Signpath = "Files/User_signs/Signs"
+const InitialsPath = "Files/User_signs/Initials"
+const Contractfilepath = "Files/Contracts"
+const Def_pic_path = "Files/Profile_pics/default.jpeg"
 
 const MaxpicSize = 5 * 1024 * 1024
 const MaxContractSize = 10 * 1024 * 1024
@@ -165,6 +166,17 @@ type SendContract struct {
 	ContractID string `json:"ContractID"`
 	EmailSubj  string `json:"EmailSubj"`
 	EmailMsg   string `json:"EmailMsg"`
+}
+
+type WalletInfo struct {
+	Userid        string `db:"userid"`
+	PublicAddress string `db: "walletaddress"`
+}
+
+type SaveWalletinput struct {
+	ContractID    string `json: "ContractID"`
+	UserID        string `json:"userid"`
+	PublicAddress string `json:"publicAddress"`
 }
 
 //CONTRACT STATUS TYPES

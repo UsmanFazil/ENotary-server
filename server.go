@@ -26,7 +26,7 @@ func main() {
 	log.Print("Maria DB server started ....")
 	defer db.CloseSession()
 
-	var dir = "../Files"
+	var dir = "./Files"
 
 	//API ENDPOINTS
 	r := mux.NewRouter()
@@ -57,6 +57,7 @@ func main() {
 	r.Handle("/ContractDetails", db.IsAuthorized(db.ContractDetails)).Methods(http.MethodPost)
 	r.Handle("/SendContract", db.IsAuthorized(db.SendContract)).Methods(http.MethodPost)
 	r.Handle("/SaveinBlockchain", db.IsAuthorized(db.ContractHashDetails)).Methods(http.MethodPost)
+	r.Handle("/updateBlockchainstatus", db.IsAuthorized(db.UpdateBlockchainstatus)).Methods(http.MethodPost)
 
 	r.Handle("/newFolder", db.IsAuthorized(db.NewFolder)).Methods(http.MethodPost)
 	r.Handle("/moveContract", db.IsAuthorized(db.AddContract)).Methods(http.MethodPost)

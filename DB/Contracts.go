@@ -3,6 +3,7 @@ package DB
 import (
 	"ENOTARY-Server/Hashing"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"mime"
 	"net/http"
@@ -512,6 +513,41 @@ func (d *dbServer) ContractHashDetails(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(CH)
 	return
 
+}
+func (d *dbServer) UpdateBlockchainstatus(w http.ResponseWriter, r *http.Request) {
+
+	var swi SaveWalletinput
+	var contract Contract
+	var walletInfo WalletInfo
+	_ = json.NewDecoder(r.Body).Decode(&swi)
+	Collection := d.sess.Collection(ContractCollection)
+	//WalletCollection := d.sess.Collection(WalletsCollection)
+
+	res := Collection.Find(db.Cond{"ContractID": swi.ContractID})
+	err := res.One(&contract)
+	if err != nil {
+		RenderError(w, "CAN NOT UPDATE CONTRACT STATUS, Please contact at enotary99@gmail.com")
+		Logger("CAN NOT UPDATE CONTRACT STATUS " + swi.ContractID)
+		return
+	}
+	res.Update(map[string]int{
+		"Blockchain": 1,
+	})
+	walletInfo.Userid = swi.UserID
+	walletInfo.PublicAddress = swi.PublicAddress
+
+	fmt.Println(walletInfo)
+
+	q := d.sess.InsertInto("Wallets").Columns("userid", "walletaddress").Values(swi.UserID, swi.PublicAddress)
+	_, err = q.Exec()
+
+	if err != nil {
+		RenderError(w, "CONTRACT SAVED IN BLOCKCHAIN, WALLET INFO NOT UPDATED, PLEASE CONTACT US @ enotary99@gmail.com")
+		return
+	}
+
+	json.NewEncoder(w).Encode(contract)
+	return
 }
 
 // func (d *dbServer) SearchContract(w http.ResponseWriter, r *http.Request) {
