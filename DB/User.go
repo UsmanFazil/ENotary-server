@@ -1,8 +1,14 @@
 package DB
 
 import (
+	"bytes"
+	"encoding/base64"
 	"encoding/json"
+	"image/gif"
+	"image/jpeg"
+	"image/png"
 	"io/ioutil"
+	"log"
 	"mime"
 	"net/http"
 	"os"
@@ -405,6 +411,138 @@ func (d *dbServer) Userpreferences(w http.ResponseWriter, r *http.Request) {
 	RenderResponse(w, "Updated successfully", http.StatusOK)
 	Logger("user data updated :" + uID)
 	return
+}
+
+// func (d *dbServer) SignBase64(w http.ResponseWriter, r *http.Request) {
+
+// 	var input Base64
+// 	_ = json.NewDecoder(r.Body).Decode(&input)
+
+// 	_ = d.removeOldSign(uID)
+// 	_ = d.removeOldInitial(uID)
+
+// 	signpath := filepath.Join(Signpath, uID)
+// 	initialspath := filepath.Join(InitialsPath, uID)
+
+// 	_, resbool1 := saveSigns(input.SignBase64, signpath)
+// 	_, resbool2 := saveSigns(input.InitialsBase64, initialspath)
+
+// 	fmt.Println(resbool1, resbool2)
+// }
+
+func (d *dbServer) SignBase64(w http.ResponseWriter, r *http.Request) {
+	var input Base64
+	_ = json.NewDecoder(r.Body).Decode(&input)
+
+	if input.InitialsBase64 == "" || input.SignBase64 == "" {
+		RenderError(w, "Sign or Initials field missing")
+		return
+	}
+
+	tokenstring := r.Header["Token"][0]
+	claims, cBool := GetClaims(tokenstring)
+	if !cBool {
+		RenderError(w, "Invalid user request")
+		Logger("Invalid user request")
+		return
+	}
+	uID := claims["userid"].(string)
+
+	_ = d.removeOldSign(uID)
+	_ = d.removeOldInitial(uID)
+
+	usersignpath := filepath.Join(Signpath, uID)
+	userinitialspath := filepath.Join(InitialsPath, uID)
+
+	resbool, signExt := saveSigns(input.SignBase64, usersignpath)
+	if resbool {
+		d.updateSignpath(uID, usersignpath+signExt)
+	}
+
+	resbool1, initialExt := saveSigns(input.InitialsBase64, userinitialspath)
+	if resbool1 {
+		d.updateInitialpath(uID, userinitialspath+initialExt)
+	}
+	var signRes SignRes
+	signRes.InitialsPath = userinitialspath + initialExt
+	signRes.Signpath = usersignpath + signExt
+
+	json.NewEncoder(w).Encode(signRes)
+	Logger("Sign updated user: " + uID)
+	return
+
+}
+
+func saveSigns(data string, path string) (bool, string) {
+	idx := strings.Index(data, ";base64,")
+	if idx < 0 {
+		panic("InvalidImage")
+	}
+	ImageType := data[11:idx]
+	log.Println(ImageType)
+
+	unbased, err := base64.StdEncoding.DecodeString(data[idx+8:])
+	if err != nil {
+		return false, ""
+	}
+	r := bytes.NewReader(unbased)
+	switch ImageType {
+	case "png":
+		im, err := png.Decode(r)
+		if err != nil {
+			return false, ""
+		}
+
+		f, err := os.OpenFile(path+".png", os.O_WRONLY|os.O_CREATE, 0777)
+		if err != nil {
+			return false, ""
+		}
+
+		png.Encode(f, im)
+		return true, ".png"
+	case "jpeg":
+		im, err := jpeg.Decode(r)
+		if err != nil {
+			return false, ""
+		}
+
+		f, err := os.OpenFile(path+".jpeg", os.O_WRONLY|os.O_CREATE, 0777)
+		if err != nil {
+			return false, ""
+		}
+
+		jpeg.Encode(f, im, nil)
+		return true, ".jpeg"
+
+	case "jpg":
+		im, err := jpeg.Decode(r)
+		if err != nil {
+			return false, ""
+		}
+
+		f, err := os.OpenFile(path+".jpg", os.O_WRONLY|os.O_CREATE, 0777)
+		if err != nil {
+			return false, ""
+		}
+
+		jpeg.Encode(f, im, nil)
+		return true, ".jpg"
+	case "gif":
+		im, err := gif.Decode(r)
+		if err != nil {
+			return false, ""
+		}
+
+		f, err := os.OpenFile(path+".gif", os.O_WRONLY|os.O_CREATE, 0777)
+		if err != nil {
+			return false, ""
+		}
+
+		gif.Encode(f, im, nil)
+		return true, ".gif"
+	}
+	return false, ""
+
 }
 
 // picname, picpath, errstring := d.GetimageName(userid)

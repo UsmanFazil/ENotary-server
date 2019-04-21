@@ -179,6 +179,11 @@ type SaveWalletinput struct {
 	PublicAddress string `json:"publicAddress"`
 }
 
+type Base64 struct {
+	SignBase64     string
+	InitialsBase64 string
+}
+
 //CONTRACT STATUS TYPES
 // DRAFT
 // In Progress

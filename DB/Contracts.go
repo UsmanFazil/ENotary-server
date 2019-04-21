@@ -1,9 +1,9 @@
 package DB
 
 import (
+	"ENOTARY-Server/Email"
 	"ENOTARY-Server/Hashing"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"mime"
 	"net/http"
@@ -56,7 +56,7 @@ func (d *dbServer) NewContract(w http.ResponseWriter, r *http.Request) {
 	}
 	filetype := http.DetectContentType(bs)
 	if filetype != "image/jpeg" && filetype != "image/jpg" &&
-		filetype != "image/png" && filetype != "application/pdf" {
+		filetype != "image/png" {
 		RenderError(w, "INVALID_FILE_TYPE_UPLOAD jpeg,jpg,png OR pdf")
 		Logger("INVALID CONTRACT FILE")
 		return
@@ -519,8 +519,13 @@ func (d *dbServer) UpdateBlockchainstatus(w http.ResponseWriter, r *http.Request
 	var swi SaveWalletinput
 	var contract Contract
 	var walletInfo WalletInfo
+	var signers []Signer
+	var user User
+
 	_ = json.NewDecoder(r.Body).Decode(&swi)
 	Collection := d.sess.Collection(ContractCollection)
+	signerCollection := d.sess.Collection(SignerCollection)
+	userCollection := d.sess.Collection(UserCollection)
 	//WalletCollection := d.sess.Collection(WalletsCollection)
 
 	res := Collection.Find(db.Cond{"ContractID": swi.ContractID})
@@ -536,8 +541,6 @@ func (d *dbServer) UpdateBlockchainstatus(w http.ResponseWriter, r *http.Request
 	walletInfo.Userid = swi.UserID
 	walletInfo.PublicAddress = swi.PublicAddress
 
-	fmt.Println(walletInfo)
-
 	q := d.sess.InsertInto("Wallets").Columns("userid", "walletaddress").Values(swi.UserID, swi.PublicAddress)
 	_, err = q.Exec()
 
@@ -546,7 +549,18 @@ func (d *dbServer) UpdateBlockchainstatus(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	res1 := signerCollection.Find(db.Cond{"ContractID": swi.ContractID})
+	_ = res1.All(&signers)
+
+	for i := 0; i < len(signers); i++ {
+		res := userCollection.Find(db.Cond{"userid": signers[i].UserID})
+		_ = res.One(&user)
+
+		go Email.BlockchainEmail(user.Email, "CONTRACT SAVED IN BLOCKCHAIN", "YOUR CONTRACT "+swi.ContractID+" is saved in blockchain.")
+	}
+
 	json.NewEncoder(w).Encode(contract)
+	Logger("CONTRACT SAVED IN BLOCKCHAIN " + swi.ContractID)
 	return
 }
 
