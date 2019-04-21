@@ -42,6 +42,8 @@ func (d *dbServer) Signup(w http.ResponseWriter, r *http.Request) {
 	user.Picture = Def_pic_path
 	user.CreationTime = time.Now().Format(time.RFC850)
 	user.Verified = 0
+	user.Sign = "default"
+	user.Initials = "default"
 
 	Collection := d.sess.Collection(UserCollection)
 	_, errstrng := Collection.Insert(user)

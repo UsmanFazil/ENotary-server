@@ -413,23 +413,6 @@ func (d *dbServer) Userpreferences(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// func (d *dbServer) SignBase64(w http.ResponseWriter, r *http.Request) {
-
-// 	var input Base64
-// 	_ = json.NewDecoder(r.Body).Decode(&input)
-
-// 	_ = d.removeOldSign(uID)
-// 	_ = d.removeOldInitial(uID)
-
-// 	signpath := filepath.Join(Signpath, uID)
-// 	initialspath := filepath.Join(InitialsPath, uID)
-
-// 	_, resbool1 := saveSigns(input.SignBase64, signpath)
-// 	_, resbool2 := saveSigns(input.InitialsBase64, initialspath)
-
-// 	fmt.Println(resbool1, resbool2)
-// }
-
 func (d *dbServer) SignBase64(w http.ResponseWriter, r *http.Request) {
 	var input Base64
 	_ = json.NewDecoder(r.Body).Decode(&input)
