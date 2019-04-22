@@ -60,7 +60,7 @@ import (
 
 func (d *dbServer) SaveCoordinates(w http.ResponseWriter, r *http.Request) {
 	var pi []PlaygroundInput
-	var signerCords []Coordinates
+	//var signerCords []Coordinates
 	_ = json.NewDecoder(r.Body).Decode(&pi)
 	json.NewEncoder(w).Encode(pi)
 
