@@ -176,7 +176,7 @@ type WalletInfo struct {
 type SaveWalletinput struct {
 	ContractID    string `json: "ContractID"`
 	UserID        string `json:"userid"`
-	PublicAddress string `json:"publicAddress"`
+	PublicAddress string `json:"walletaddress"`
 }
 
 type Base64 struct {
