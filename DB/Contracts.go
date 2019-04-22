@@ -518,7 +518,7 @@ func (d *dbServer) UpdateBlockchainstatus(w http.ResponseWriter, r *http.Request
 
 	var swi SaveWalletinput
 	var contract Contract
-	var walletInfo WalletInfo
+	var wallet WalletInfo
 	var signers []Signer
 	var user User
 
@@ -538,16 +538,12 @@ func (d *dbServer) UpdateBlockchainstatus(w http.ResponseWriter, r *http.Request
 	res.Update(map[string]int{
 		"Blockchain": 1,
 	})
-	walletInfo.Userid = swi.UserID
-	walletInfo.PublicAddress = swi.PublicAddress
 
-	q := d.sess.InsertInto("Wallets").Columns("userid", "walletaddress").Values(swi.UserID, swi.PublicAddress)
-	_, err = q.Exec()
+	wallet.Userid = swi.UserID
+	wallet.PublicAddress = swi.PublicAddress
 
-	if err != nil {
-		RenderError(w, "CONTRACT SAVED IN BLOCKCHAIN, WALLET INFO NOT UPDATED, PLEASE CONTACT US @ enotary99@gmail.com")
-		return
-	}
+	q := d.sess.InsertInto("Wallets").Columns("userid", "walletaddress").Values(wallet.Userid, wallet.PublicAddress)
+	_, _ = q.Exec()
 
 	res1 := signerCollection.Find(db.Cond{"ContractID": swi.ContractID})
 	_ = res1.All(&signers)
