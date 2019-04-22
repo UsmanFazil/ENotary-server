@@ -12,7 +12,6 @@ func (d *dbServer) SendContract(w http.ResponseWriter, r *http.Request) {
 	var contractinfo SendContract
 	var signers []Signer
 	var user User
-
 	_ = json.NewDecoder(r.Body).Decode(&contractinfo)
 
 	contractCollection := d.sess.Collection(ContractCollection)

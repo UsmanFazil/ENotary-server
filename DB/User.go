@@ -437,12 +437,12 @@ func (d *dbServer) SignBase64(w http.ResponseWriter, r *http.Request) {
 	usersignpath := filepath.Join(Signpath, uID)
 	userinitialspath := filepath.Join(InitialsPath, uID)
 
-	resbool, signExt := saveSigns(input.SignBase64, usersignpath)
+	resbool, signExt := saveFile(input.SignBase64, usersignpath)
 	if resbool {
 		d.updateSignpath(uID, usersignpath+signExt)
 	}
 
-	resbool1, initialExt := saveSigns(input.InitialsBase64, userinitialspath)
+	resbool1, initialExt := saveFile(input.InitialsBase64, userinitialspath)
 	if resbool1 {
 		d.updateInitialpath(uID, userinitialspath+initialExt)
 	}
@@ -456,7 +456,7 @@ func (d *dbServer) SignBase64(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func saveSigns(data string, path string) (bool, string) {
+func saveFile(data string, path string) (bool, string) {
 	idx := strings.Index(data, ";base64,")
 	if idx < 0 {
 		panic("InvalidImage")

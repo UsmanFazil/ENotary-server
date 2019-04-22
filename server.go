@@ -60,6 +60,7 @@ func main() {
 	r.Handle("/SaveinBlockchain", db.IsAuthorized(db.ContractHashDetails)).Methods(http.MethodPost)
 	r.Handle("/updateBlockchainstatus", db.IsAuthorized(db.UpdateBlockchainstatus)).Methods(http.MethodPost)
 	r.Handle("/verifyContract", db.IsAuthorized(db.VerifyContract)).Methods(http.MethodPost)
+	r.Handle("/playgroundinput", db.IsAuthorized(db.SaveCoordinates)).Methods(http.MethodPost)
 
 	r.Handle("/newFolder", db.IsAuthorized(db.NewFolder)).Methods(http.MethodPost)
 	r.Handle("/moveContract", db.IsAuthorized(db.AddContract)).Methods(http.MethodPost)
