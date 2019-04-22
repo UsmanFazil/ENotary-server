@@ -2,6 +2,7 @@ package DB
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -60,15 +61,32 @@ import (
 
 func (d *dbServer) SaveCoordinates(w http.ResponseWriter, r *http.Request) {
 	var pi []PlaygroundInput
-	//var signerCords []Coordinates
 	_ = json.NewDecoder(r.Body).Decode(&pi)
-	json.NewEncoder(w).Encode(pi)
 
+	//Collection := d.sess.Collection(CoordinatesCol)
+
+	var sc = make([]Coordinates, len(pi))
+
+	for i := 0; i < len(pi); i++ {
+		sc[i].ContractID = pi[i].Contractid
+		sc[i].UserID = pi[i].Recipient
+		sc[i].Name = pi[i].Text
+		sc[i].Topcord = pi[i].Top
+		sc[i].Leftcord = pi[i].Left
+
+		q := d.sess.InsertInto("Coordinates").Columns("ContractID", "userID", "name", "topcord", "leftcord").Values(sc[i].ContractID, sc[i].UserID, sc[i].Name, sc[i].Topcord, sc[i].Leftcord)
+		_, err := q.Exec()
+
+		if err != nil {
+			RenderError(w, "CAN NOT UPDATE SIGNERS COORDINATES")
+			Logger("Can't add coordinates, ContractID :" + sc[0].ContractID)
+			fmt.Println(err)
+			return
+		}
+
+	}
+
+	json.NewEncoder(w).Encode(sc)
+	Logger("Signer cordinates added ContractID :" + sc[0].ContractID)
+	return
 }
-
-// [ { "width": 50, "height": 50, "top": 10, "left": 10, "draggable": true, "resizable": false, "minw": 10, "minh": 10, "axis": "both", "parentLim": true, "snapToGrid": false, "aspectRatio": false, "zIndex": 1, "color": "lightblue url('http://localhost:8000/Files/User_signs/Signs/997c679b-7f54-4908-b254-2925c51d8889.png') no-repeat fixed center", "active": false, "userid": "", "text": "Signature", "recipient": "", "recipientname": "" },
-//  { "width": 50, "height": 50, "top": 10, "left": 10, "draggable": true, "resizable": false, "minw": 10, "minh": 10, "axis": "both", "parentLim": true, "snapToGrid": false, "aspectRatio": false, "zIndex": 1, "color": "lightblue url('http://localhost:8000/Files/User_signs/Signs/997c679b-7f54-4908-b254-2925c51d8889.png') no-repeat fixed center", "active": false, "userid": "", "text": "Initial", "recipient": "", "recipientname": "" },
-//  { "width": 50, "height": 50, "top": 10, "left": 10, "draggable": true, "resizable": false, "minw": 10, "minh": 10, "axis": "both", "parentLim": true, "snapToGrid": false, "aspectRatio": false, "zIndex": 1, "color": "lightblue url('http://localhost:8000/Files/User_signs/Signs/997c679b-7f54-4908-b254-2925c51d8889.png') no-repeat fixed center", "active": false, "userid": "", "text": "Calender", "recipient": "", "recipientname": "" },
-//  { "width": 50, "height": 50, "top": 10, "left": 10, "draggable": true, "resizable": false, "minw": 10, "minh": 10, "axis": "both", "parentLim": true, "snapToGrid": false, "aspectRatio": false, "zIndex": 1, "color": "lightblue url('http://localhost:8000/Files/User_signs/Signs/997c679b-7f54-4908-b254-2925c51d8889.png') no-repeat fixed center", "active": false, "userid": "", "text": "Email", "recipient": "", "recipientname": "" },
-//  { "width": 50, "height": 50, "top": 10, "left": 10, "draggable": true, "resizable": false, "minw": 10, "minh": 10, "axis": "both", "parentLim": true, "snapToGrid": false, "aspectRatio": false, "zIndex": 1, "color": "lightblue url('http://localhost:8000/Files/User_signs/Signs/997c679b-7f54-4908-b254-2925c51d8889.png') no-repeat fixed center", "active": false, "userid": "", "text": "Company", "recipient": "", "recipientname": "" },
-//  { "width": 50, "height": 50, "top": 10, "left": 10, "draggable": true, "resizable": false, "minw": 10, "minh": 10, "axis": "both", "parentLim": true, "snapToGrid": false, "aspectRatio": false, "zIndex": 1, "color": "lightblue url('http://localhost:8000/Files/User_signs/Signs/997c679b-7f54-4908-b254-2925c51d8889.png') no-repeat fixed center", "active": false, "userid": "", "text": "Text", "recipient": "", "recipientname": "" } ]

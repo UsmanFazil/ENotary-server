@@ -8,7 +8,7 @@ const FolderCollection = "Folder"
 const ContractFolderCollection = "ContractFolder"
 const BlackListCollection = "BlackList"
 const WalletsCollection = "Wallets"
-const CoordinatesCollection = "SignerCoordinates"
+const CoordinatesCol = "Coordinates"
 
 const Profilepicspath = "Files/Profile_pics"
 const Signpath = "Files/User_signs/Signs"
@@ -60,18 +60,6 @@ type Signer struct {
 	Message       string `db:"Message"`
 	Access        int    `db:"Access"`
 	CC            int    `db:"CC"`
-}
-type Coordinates struct {
-	ContractID string `db:"ContractID"`
-	UserID     string `db:"userID"`
-	Name       string `db:"name"`
-	Email      string `db:"email"`
-	Sign       string `db:"sign"`
-	Date       string `db:"date"`
-	Company    string `db:"company"`
-	Text       string `db:"text"`
-	Initals    string `db:"initals"`
-	CheckBox   string `db:"checkBox"`
 }
 
 type VerifUser struct {
@@ -202,11 +190,20 @@ type SignContract struct {
 	ContractID string
 }
 
+type Coordinates struct {
+	ContractID string `db:"ContractID"`
+	UserID     string `db: "UserID"`
+	Name       string `db:"name"`
+	Topcord    int    `db: "topcord"`
+	Leftcord   int    `db:"leftcord"`
+}
+
 type PlaygroundInput struct {
-	Top       int    `json :"top"`
-	Left      int    `json :"left"`
-	Recipient string `json :"recipient"`
-	Text      string `json: "text"`
+	Contractid string `json:"contractid"`
+	Top        int    `json :"top"`
+	Left       int    `json :"left"`
+	Recipient  string `json :"recipient"`
+	Text       string `json: "text"`
 }
 
 //CONTRACT STATUS TYPES
