@@ -188,7 +188,7 @@ type Base64 struct {
 }
 
 type SignContract struct {
-	Html       string `json: "Html"`
+	FileBase64 string `json: "FileBase64"`
 	ContractID string `json: "ContractID"`
 }
 
