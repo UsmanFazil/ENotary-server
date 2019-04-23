@@ -200,46 +200,46 @@ func (d *dbServer) SignContract(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(signers)
 	return
 
-	// err = res1.One(signer)
-	// if err != nil {
-	// 	RenderError(w, "Internal error")
-	// 	return
-	// }
-	// fmt.Println(signer)
-
-	// signer.SignStatus = "Signed"
-	// signer.SignDate = time.Now().Format(time.RFC850)
-
-	// err = res1.Update(signer)
-
-	// if err != nil {
-	// 	RenderError(w, "Signer status not updated")
-	// 	return
-	// }
-
-	// res2 := signerCol.Find(db.Cond{"ContractID": contract.ContractID})
-	// err = res2.All(&signers)
-
-	// if err != nil {
-	// 	RenderError(w, "Other Signer not found")
-	// 	return
-	// }
-	// count := 0
-
-	// for i := 0; i < len(signers); i++ {
-	// 	if signers[i].SignStatus == "Signed" {
-	// 		count = count + 1
-	// 	}
-	// }
-	// if count == len(signers) {
-	// 	contract.Status = "Completed"
-	// 	res.Update(contract)
-	// }
-
-	// RenderResponse(w, "Contract Signed Successfully", http.StatusOK)
-	// return
-
 }
+
+// err = res1.One(signer)
+// if err != nil {
+// 	RenderError(w, "Internal error")
+// 	return
+// }
+// fmt.Println(signer)
+
+// signer.SignStatus = "Signed"
+// signer.SignDate = time.Now().Format(time.RFC850)
+
+// err = res1.Update(signer)
+
+// if err != nil {
+// 	RenderError(w, "Signer status not updated")
+// 	return
+// }
+
+// res2 := signerCol.Find(db.Cond{"ContractID": contract.ContractID})
+// err = res2.All(&signers)
+
+// if err != nil {
+// 	RenderError(w, "Other Signer not found")
+// 	return
+// }
+// count := 0
+
+// for i := 0; i < len(signers); i++ {
+// 	if signers[i].SignStatus == "Signed" {
+// 		count = count + 1
+// 	}
+// }
+// if count == len(signers) {
+// 	contract.Status = "Completed"
+// 	res.Update(contract)
+// }
+
+// RenderResponse(w, "Contract Signed Successfully", http.StatusOK)
+// return
 
 func Save(data string, path string) {
 	idx := strings.Index(data, ";base64,")

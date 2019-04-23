@@ -738,3 +738,13 @@ ENotary-log 2019/04/23 17:20:14 Sign updated user: 24043f5d-9897-4341-adb2-681bd
 ENotary-log 2019/04/23 17:20:32 Sign updated user: 24043f5d-9897-4341-adb2-681bd626d96b
 ENotary-log 2019/04/23 17:20:40 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwMjkxMTYsImlhdCI6MTU1NjAyMTkxNiwiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjI0MDQzZjVkLTk4OTctNDM0MS1hZGIyLTY4MWJkNjI2ZDk2YiJ9.MVk7N-QUV75qNJ5sRZtWS7Vk1NRFJUCeLLSEQ0cuLME
 ENotary-log 2019/04/23 17:20:49 New Login 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/23 18:16:33 New Login 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/23 18:16:43 Sign updated user: 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/23 18:17:01 Sign updated user: 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/23 18:25:11 NEW CONTRACT ADDED7846aa0d-ac0e-4fa9-8f2d-e7c9d0143627
+ENotary-log 2019/04/23 18:25:43 Signer cordinates added ContractID :7846aa0d-ac0e-4fa9-8f2d-e7c9d0143627
+ENotary-log 2019/04/23 18:56:14 INVALID EMAIL
+ENotary-log 2019/04/23 18:56:25 New Login 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/23 19:20:02 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwMzQ5ODUsImlhdCI6MTU1NjAyNzc4NSwiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjI0MDQzZjVkLTk4OTctNDM0MS1hZGIyLTY4MWJkNjI2ZDk2YiJ9.FBCe2WoIziFnWR0DL9K80SEP5r2fr_xSJoUpLEtl27Y
+ENotary-log 2019/04/23 19:20:25 lowercase letter missing in password okokok@gmail.com
+ENotary-log 2019/04/23 19:24:02 NEW USER SIGNUP okokok@gmail.com

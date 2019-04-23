@@ -9,6 +9,7 @@ const ContractFolderCollection = "ContractFolder"
 const BlackListCollection = "BlackList"
 const WalletsCollection = "Wallets"
 const CoordinatesCol = "Coordinates"
+const ContractHtmlCol = "ContractHtml"
 
 const Profilepicspath = "Files/Profile_pics"
 const Signpath = "Files/User_signs/Signs"
@@ -187,7 +188,7 @@ type Base64 struct {
 }
 
 type SignContract struct {
-	FileBase64 string `json: "FileBase64"`
+	Html       string `json: "Html"`
 	ContractID string `json: "ContractID"`
 }
 

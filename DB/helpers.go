@@ -129,7 +129,7 @@ func VerifyEmail(mail string) (bool, string) {
 
 func VerifyPassword(password string) (bool, string) {
 	//var uppercasePresent bool
-	var lowercasePresent bool
+	//var lowercasePresent bool
 	//	var numberPresent bool
 	var space bool
 	const minPassLength = 8
@@ -143,8 +143,8 @@ func VerifyPassword(password string) (bool, string) {
 		// 	numberPresent = true
 		// case unicode.IsUpper(ch):
 		// 	uppercasePresent = true
-		case unicode.IsLower(ch):
-			lowercasePresent = true
+		// case unicode.IsLower(ch):
+		// 	lowercasePresent = true
 		case ch == ' ':
 			space = true
 		}
@@ -156,9 +156,7 @@ func VerifyPassword(password string) (bool, string) {
 	if !(minPassLength <= passLen && passLen <= maxPassLength) {
 		return false, "password length must be between 8 to 24 characters long"
 	}
-	if !lowercasePresent {
-		return false, "lowercase letter missing in password"
-	}
+
 	// if !uppercasePresent {
 	// 	return false, "uppercase letter missing in password"
 	// }
