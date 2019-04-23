@@ -72,3 +72,25 @@ func Msg(msg string) string {
 	return "Hello! <br/>  Message by the Sender  : " + "<b>" + msg + "<b>"
 
 }
+
+func DeclinedEmail(useremail string, subj string, message string) {
+	m := gomail.NewMessage()
+	m.SetHeader("From", "eNotaryOfficial@gmail.com")
+	m.SetHeader("To", useremail)
+	m.SetHeader("Subject", subj)
+	m.SetBody("text/html", Declinemsg(message))
+
+	d := gomail.NewDialer("smtp.gmail.com", 587, "eNotaryOfficial@gmail.com", "Enotary360")
+
+	if err := d.DialAndSend(m); err != nil {
+		log.Println("CAN NOT GENERATE EMAIL:", err)
+		return
+	}
+	log.Println("EMAIL SENT SUCCESSFULLY")
+	return
+}
+
+func Declinemsg(msg string) string {
+	return "Hello! <br/>  Recepient has declined to sign the contract " + "<b>" + msg + "<b>"
+
+}

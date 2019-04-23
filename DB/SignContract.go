@@ -8,10 +8,10 @@ import (
 	"image/gif"
 	"image/jpeg"
 	"image/png"
-	"log"
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"upper.io/db.v3"
 )
@@ -74,14 +74,78 @@ func (d *dbServer) ServeCoordinates(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (d *dbServer) DeclineContract(w http.ResponseWriter, r *http.Request) {
+	tokenstring := r.Header["Token"][0]
+	claims, cBool := GetClaims(tokenstring)
+	if !cBool {
+		RenderError(w, "Invalid user request")
+		Logger("Invalid user request")
+		return
+	}
+	uID := claims["userid"].(string)
+
+	var contract Contract
+	var signer Signer
+
+	_ = json.NewDecoder(r.Body).Decode(&contract)
+
+	signerCol := d.sess.Collection(SignerCollection)
+	Collection := d.sess.Collection(ContractCollection)
+	res := Collection.Find(db.Cond{"ContractID": contract.ContractID})
+	err := res.One(&contract)
+
+	if err != nil {
+		fmt.Println("contract not found")
+		return
+	}
+
+	res1 := signerCol.Find(db.Cond{"ContractID": contract.ContractID, "userID": uID})
+	errstring := res1.One(&signer)
+
+	if errstring != nil {
+		RenderError(w, "User Not found")
+		return
+	}
+	signer.SignStatus = "Declined"
+	contract.Status = "Declined"
+
+	err = res1.Update(signer)
+	if err != nil {
+		RenderError(w, "Signer status not updated")
+		return
+	}
+	err = res.Update(contract)
+	if err != nil {
+		RenderError(w, "Signer status not updated")
+		return
+	}
+
+	json.NewEncoder(w).Encode(contract)
+	return
+
+}
+
 func (d *dbServer) SignContract(w http.ResponseWriter, r *http.Request) {
+
+	tokenstring := r.Header["Token"][0]
+	claims, cBool := GetClaims(tokenstring)
+	if !cBool {
+		RenderError(w, "Invalid user request")
+		Logger("Invalid user request")
+		return
+	}
+	uID := claims["userid"].(string)
 
 	var sc SignContract
 	var contract Contract
+	var signer Signer
+	var signers []Signer
 
 	_ = json.NewDecoder(r.Body).Decode(&sc)
 
 	Collection := d.sess.Collection(ContractCollection)
+	Signercollection := d.sess.Collection(SignerCollection)
+
 	res := Collection.Find(db.Cond{"ContractID": sc.ContractID})
 	err := res.One(&contract)
 
@@ -95,7 +159,85 @@ func (d *dbServer) SignContract(w http.ResponseWriter, r *http.Request) {
 
 	contract.Filepath = path
 
+	signerCol := d.sess.Collection(SignerCollection)
+	res1 := signerCol.Find(db.Cond{"ContractID": contract.ContractID, "userID": uID})
+	errstring := res1.One(&signer)
+
+	if errstring != nil {
+		RenderError(w, "User Not found")
+		return
+	}
+	signer.SignStatus = "Signed"
+	signer.SignDate = time.Now().Format(time.RFC850)
+
+	err = res1.Update(signer)
+	if err != nil {
+		RenderError(w, "Signer status not updated")
+		return
+	}
+
+	res2 := Signercollection.Find(db.Cond{"ContractID": contract.ContractID, "CC": 0})
+	err = res2.All(&signers)
+
+	if err != nil {
+		fmt.Println("Can not find signers")
+		return
+	}
 	res.Update(contract)
+
+	count := 0
+
+	for i := 0; i < len(signers); i++ {
+		if signers[i].SignStatus == "Signed" {
+			count++
+		}
+	}
+	if count == len(signers) {
+		contract.Status = "Completed"
+		res.Update(contract)
+	}
+
+	json.NewEncoder(w).Encode(signers)
+	return
+
+	// err = res1.One(signer)
+	// if err != nil {
+	// 	RenderError(w, "Internal error")
+	// 	return
+	// }
+	// fmt.Println(signer)
+
+	// signer.SignStatus = "Signed"
+	// signer.SignDate = time.Now().Format(time.RFC850)
+
+	// err = res1.Update(signer)
+
+	// if err != nil {
+	// 	RenderError(w, "Signer status not updated")
+	// 	return
+	// }
+
+	// res2 := signerCol.Find(db.Cond{"ContractID": contract.ContractID})
+	// err = res2.All(&signers)
+
+	// if err != nil {
+	// 	RenderError(w, "Other Signer not found")
+	// 	return
+	// }
+	// count := 0
+
+	// for i := 0; i < len(signers); i++ {
+	// 	if signers[i].SignStatus == "Signed" {
+	// 		count = count + 1
+	// 	}
+	// }
+	// if count == len(signers) {
+	// 	contract.Status = "Completed"
+	// 	res.Update(contract)
+	// }
+
+	// RenderResponse(w, "Contract Signed Successfully", http.StatusOK)
+	// return
 
 }
 
@@ -105,7 +247,6 @@ func Save(data string, path string) {
 		panic("InvalidImage")
 	}
 	ImageType := data[11:idx]
-	log.Println(ImageType)
 
 	unbased, err := base64.StdEncoding.DecodeString(data[idx+8:])
 	if err != nil {

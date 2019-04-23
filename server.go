@@ -2,6 +2,7 @@ package main
 
 import (
 	"ENOTARY-Server/DB"
+	"encoding/json"
 	"log"
 	"net/http"
 
@@ -63,13 +64,29 @@ func main() {
 	r.Handle("/playgroundinput", db.IsAuthorized(db.SaveCoordinates)).Methods(http.MethodPost)
 	r.Handle("/serveCoordinates", db.IsAuthorized(db.ServeCoordinates)).Methods(http.MethodPost)
 	r.Handle("/signContract", db.IsAuthorized(db.SignContract)).Methods(http.MethodPost)
+	r.Handle("/DeclineContract", db.IsAuthorized(db.DeclineContract)).Methods(http.MethodPost)
+	r.Handle("/ExportCSV", db.IsAuthorized(db.ExportCSV)).Methods(http.MethodPost)
 
 	r.Handle("/newFolder", db.IsAuthorized(db.NewFolder)).Methods(http.MethodPost)
 	r.Handle("/moveContract", db.IsAuthorized(db.AddContract)).Methods(http.MethodPost)
 	r.Handle("/folderContractList", db.IsAuthorized(db.FolderContractList)).Methods(http.MethodPost)
 
+	r.HandleFunc("/test", Test).Methods(http.MethodPost)
+
 	r.PathPrefix("/Files/").Handler(http.StripPrefix("/Files/", http.FileServer(http.Dir(dir))))
 
 	log.Println("Go-lang server started at port 8000 ....")
 	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization", "Token"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(r)))
+}
+
+type TestHtml struct {
+	Html string `json: "html"`
+}
+
+func Test(w http.ResponseWriter, r *http.Request) {
+	var html TestHtml
+	_ = json.NewDecoder(r.Body).Decode(&html)
+
+	w.Write([]byte(html.Html))
+
 }

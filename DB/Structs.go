@@ -14,6 +14,7 @@ const Profilepicspath = "Files/Profile_pics"
 const Signpath = "Files/User_signs/Signs"
 const InitialsPath = "Files/User_signs/Initials"
 const Contractfilepath = "Files/Contracts"
+const CSVpath = "Files/CSV"
 const Def_pic_path = "Files/Profile_pics/default.jpeg"
 
 const MaxpicSize = 5 * 1024 * 1024
@@ -204,6 +205,10 @@ type PlaygroundInput struct {
 	Left       int    `json :"left"`
 	Recipient  string `json :"recipient"`
 	Text       string `json: "text"`
+}
+
+type TestHtml struct {
+	html string
 }
 
 //CONTRACT STATUS TYPES
