@@ -642,3 +642,47 @@ ENotary-log 2019/04/23 01:01:15 Sign updated user: afcbc152-bf51-46ad-bc16-416bb
 ENotary-log 2019/04/23 01:01:26 NEW CONTRACT ADDED49c7ec7f-e8e0-4619-8714-93e60c817e04
 ENotary-log 2019/04/23 01:02:22 Can't add coordinates, ContractID :49c7ec7f-e8e0-4619-8714-93e60c817e04
 ENotary-log 2019/04/23 01:03:04 Signer cordinates added ContractID :49c7ec7f-e8e0-4619-8714-93e60c817e04
+ENotary-log 2019/04/23 08:42:47 New Login afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 08:52:11 New Login afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 08:56:41 New Login afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 08:57:39 New Login afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 08:58:03 Sign updated user: afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 08:58:32 NEW CONTRACT ADDED35b28f70-7c71-4800-8443-fd78a9f87cd6
+ENotary-log 2019/04/23 09:16:21 NEW USER SIGNUP usmanfazil99@gmail.com
+ENotary-log 2019/04/23 09:16:52 USER EMAIL VERIFIED SUCCESSFULLY usmanfazil99@gmail.com
+ENotary-log 2019/04/23 09:17:48 NEW CONTRACT ADDEDc4d30b01-b48d-44eb-a414-ef42b2060085
+ENotary-log 2019/04/23 09:20:22 New Login afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 09:20:34 Signer cordinates added ContractID :49c7ec7f-e8e0-4619-8714-93e60c817e04
+ENotary-log 2019/04/23 09:20:53 Signer cordinates added ContractID :49c7ec7f-e8e0-4619-8714-93e60c817e04
+ENotary-log 2019/04/23 10:34:15 Sign updated user: afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 10:35:52 Sign updated user: afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 10:44:05 New Login afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 11:19:14 EMAIL_ALREADY_EXISTSusmanfazil99@gmail.com
+ENotary-log 2019/04/23 11:20:39 New verf. code sent usmanfazil99@gmail.com
+ENotary-log 2019/04/23 11:21:11 USER EMAIL VERIFIED SUCCESSFULLY usmanfazil99@gmail.com
+ENotary-log 2019/04/23 11:21:20 PASSWORD UPDATED usmanfazil99@gmail.com
+ENotary-log 2019/04/23 11:21:33 New Login 87a73292-ffce-4afe-b305-52427ae498b2
+ENotary-log 2019/04/23 11:21:46 Sign updated user: 87a73292-ffce-4afe-b305-52427ae498b2
+ENotary-log 2019/04/23 11:23:55 NEW CONTRACT ADDEDcfbd1b9e-8f33-4614-bcea-ab4d8a93a498
+ENotary-log 2019/04/23 11:24:41 Signer cordinates added ContractID :cfbd1b9e-8f33-4614-bcea-ab4d8a93a498
+ENotary-log 2019/04/23 11:25:23 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwMDc2OTMsImlhdCI6MTU1NjAwMDQ5MywiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6Ijg3YTczMjkyLWZmY2UtNGFmZS1iMzA1LTUyNDI3YWU0OThiMiJ9.oxhl6fmbet2Y-uUhRB55E4DDzvlgXxL9zUXVdiPkqNE
+ENotary-log 2019/04/23 11:25:33 New Login afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 11:26:10 CONTRACT SAVED IN BLOCKCHAIN cfbd1b9e-8f33-4614-bcea-ab4d8a93a498
+ENotary-log 2019/04/23 11:27:51 CAN NOT FIND ANY CONTRACT afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 11:29:03 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwMDc5MzMsImlhdCI6MTU1NjAwMDczMywiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6ImFmY2JjMTUyLWJmNTEtNDZhZC1iYzE2LTQxNmJiNGZiNDhmNCJ9.xrRqQgY98loPE98-rpVqbWmfdCtfAqjSbhzNW3rE9zA
+ENotary-log 2019/04/23 11:29:12 New Login afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 11:30:42 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwMDgxNTIsImlhdCI6MTU1NjAwMDk1MiwiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6ImFmY2JjMTUyLWJmNTEtNDZhZC1iYzE2LTQxNmJiNGZiNDhmNCJ9.6glEYlgyvJMwOmAUABJhlkch1BwkJMpNUU1QJKLK8KQ
+ENotary-log 2019/04/23 11:31:04 New Login afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 11:31:10 CAN NOT FIND ANY CONTRACT afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 11:31:13 CAN NOT FIND ANY CONTRACT afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 11:31:15 CAN NOT FIND ANY CONTRACT afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 11:31:19 CAN NOT FIND ANY CONTRACT afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 11:31:22 CAN NOT FIND ANY CONTRACT afcbc152-bf51-46ad-bc16-416bb4fb48f4
+ENotary-log 2019/04/23 11:31:32 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwMDgyNjQsImlhdCI6MTU1NjAwMTA2NCwiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6ImFmY2JjMTUyLWJmNTEtNDZhZC1iYzE2LTQxNmJiNGZiNDhmNCJ9.40dx7O4SaKHgVhxq7uqXKaDbQ4V6g5-eAgwhIUdLnxc
+ENotary-log 2019/04/23 11:31:46 INVALID PASSWORD usmanfazil99@gmail.com
+ENotary-log 2019/04/23 11:31:48 New Login 87a73292-ffce-4afe-b305-52427ae498b2
+ENotary-log 2019/04/23 11:32:31 Contract Search successful | userID: 87a73292-ffce-4afe-b305-52427ae498b2
+ENotary-log 2019/04/23 11:32:37 Contract Search successful | userID: 87a73292-ffce-4afe-b305-52427ae498b2
+ENotary-log 2019/04/23 11:32:40 Contract Search successful | userID: 87a73292-ffce-4afe-b305-52427ae498b2
+ENotary-log 2019/04/23 11:32:43 Contract Search successful | userID: 87a73292-ffce-4afe-b305-52427ae498b2
+ENotary-log 2019/04/23 11:32:49 Contract Search successful | userID: 87a73292-ffce-4afe-b305-52427ae498b2

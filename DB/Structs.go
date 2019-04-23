@@ -186,8 +186,8 @@ type Base64 struct {
 }
 
 type SignContract struct {
-	FileBase64 string
-	ContractID string
+	FileBase64 string `json: "FileBase64"`
+	ContractID string `json: "ContractID"`
 }
 
 type Coordinates struct {

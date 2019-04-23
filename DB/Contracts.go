@@ -220,7 +220,7 @@ func (d *dbServer) WaitingforOther(userid string) (uint64, error) {
 
 func (d *dbServer) WaitingforMe(userid string) (uint64, error) {
 	Collection := d.sess.Collection(SignerCollection)
-	res := Collection.Find(db.Cond{"userID": userid, "Access": 1, "SignStatus": "needs to sign", "DeleteApprove": 0})
+	res := Collection.Find(db.Cond{"userID": userid, "Access": 1, "SignStatus": "pending"})
 	total, err := res.Count()
 
 	if err != nil {
