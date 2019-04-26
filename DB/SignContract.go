@@ -16,6 +16,8 @@ import (
 	"upper.io/db.v3"
 )
 
+var Coordinate []Coordinates
+
 func (d *dbServer) SaveCoordinates(w http.ResponseWriter, r *http.Request) {
 	var pi []PlaygroundInput
 	_ = json.NewDecoder(r.Body).Decode(&pi)
@@ -41,6 +43,8 @@ func (d *dbServer) SaveCoordinates(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
+	Coordinate = append(Coordinate, sc...)
 	json.NewEncoder(w).Encode(sc)
 	Logger("Signer cordinates added ContractID :" + sc[0].ContractID)
 	return
@@ -60,15 +64,13 @@ func (d *dbServer) ServeCoordinates(w http.ResponseWriter, r *http.Request) {
 	var cords []Coordinates
 	_ = json.NewDecoder(r.Body).Decode(&contract)
 
-	Collection := d.sess.Collection(CoordinatesCol)
-
-	res := Collection.Find(db.Cond{"UserID": uID, "ContractID": contract.ContractID})
-	err := res.All(&cords)
-
-	if err != nil {
-		RenderError(w, "CAN NOT FIND COORDINATES")
-		return
+	for _, value := range Coordinate {
+		if value.ContractID == contract.ContractID && value.UserID == uID {
+			cords = append(cords, value)
+		}
 	}
+
+	fmt.Println(cords)
 
 	json.NewEncoder(w).Encode(cords)
 
@@ -108,6 +110,7 @@ func (d *dbServer) DeclineContract(w http.ResponseWriter, r *http.Request) {
 	}
 	signer.SignStatus = "Declined"
 	contract.Status = "Declined"
+	contract.UpdateTime = time.Now().Format(time.RFC850)
 
 	err = res1.Update(signer)
 	if err != nil {
@@ -154,10 +157,11 @@ func (d *dbServer) SignContract(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	path := Contractfilepath + "/" + contract.ContractID + ".png"
-	Save(sc.FileBase64, path)
+	// path := Contractfilepath + "/" + contract.ContractID + ".png"
+	// Save(sc.FileBase64, path)
 
-	contract.Filepath = path
+	//contract.Filepath = path
+	contract.UpdateTime = time.Now().Format(time.RFC850)
 
 	signerCol := d.sess.Collection(SignerCollection)
 	res1 := signerCol.Find(db.Cond{"ContractID": contract.ContractID, "userID": uID})

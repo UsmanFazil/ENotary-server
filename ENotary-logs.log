@@ -748,3 +748,87 @@ ENotary-log 2019/04/23 18:56:25 New Login 24043f5d-9897-4341-adb2-681bd626d96b
 ENotary-log 2019/04/23 19:20:02 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwMzQ5ODUsImlhdCI6MTU1NjAyNzc4NSwiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjI0MDQzZjVkLTk4OTctNDM0MS1hZGIyLTY4MWJkNjI2ZDk2YiJ9.FBCe2WoIziFnWR0DL9K80SEP5r2fr_xSJoUpLEtl27Y
 ENotary-log 2019/04/23 19:20:25 lowercase letter missing in password okokok@gmail.com
 ENotary-log 2019/04/23 19:24:02 NEW USER SIGNUP okokok@gmail.com
+ENotary-log 2019/04/24 04:05:09 INVALID PASSWORD usmanework99@gmail.com
+ENotary-log 2019/04/24 04:05:20 New Login 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:06:03 CAN NOT FIND ANY CONTRACT 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:07:54 Profile pic updated | userid = 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:10:12 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwNjc5MjAsImlhdCI6MTU1NjA2MDcyMCwiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjI0MDQzZjVkLTk4OTctNDM0MS1hZGIyLTY4MWJkNjI2ZDk2YiJ9.HdfF5rNRv8C8kbkvl6opmFs9Vkb8J_MDHVzmL3AsABQ
+ENotary-log 2019/04/24 04:10:28 New Login 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:12:57 New Login 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:13:06 Sign updated user: 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:13:43 Sign updated user: 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:14:02 Profile pic updated | userid = 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:15:11 CAN NOT FIND ANY CONTRACT 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:15:36 NEW CONTRACT ADDEDacab6356-e0cf-4261-81be-c8a659038f9c
+ENotary-log 2019/04/24 04:15:42 Contract Search successful | userID: 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:15:56 Contract Search successful | userID: 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:16:07 Contract Search successful | userID: 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:16:11 Contract Search successful | userID: 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:17:14 Contract Search successful | userID: 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:17:27 Contract Search successful | userID: 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:18:17 Profile pic updated | userid = 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:18:30 NEW FOLDER CREATED debe786c-3e3e-428f-9f28-eaf39b8082c4
+ENotary-log 2019/04/24 04:18:40 cannot find contract debe786c-3e3e-428f-9f28-eaf39b8082c4
+ENotary-log 2019/04/24 04:18:43 cannot find contract debe786c-3e3e-428f-9f28-eaf39b8082c4
+ENotary-log 2019/04/24 04:18:45 cannot find contract debe786c-3e3e-428f-9f28-eaf39b8082c4
+ENotary-log 2019/04/24 04:19:42 Profile pic updated | userid = 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 04:56:24 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwNjgzNzcsImlhdCI6MTU1NjA2MTE3NywiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjI0MDQzZjVkLTk4OTctNDM0MS1hZGIyLTY4MWJkNjI2ZDk2YiJ9.gwrgnU8YX4gCHYwgZTYGQTxCFR8EbGtdKAu9LlkjAPY
+ENotary-log 2019/04/24 05:52:56 NEW USER SIGNUP usmanfazil99@gmail.com
+ENotary-log 2019/04/24 05:54:15 INVALID PASSWORD usmanework99@gmail.com
+ENotary-log 2019/04/24 05:54:20 New Login 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 05:54:30 Sign updated user: 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 05:54:35 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwNzQ0NjAsImlhdCI6MTU1NjA2NzI2MCwiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjI0MDQzZjVkLTk4OTctNDM0MS1hZGIyLTY4MWJkNjI2ZDk2YiJ9.JzMlj2euVzfmQzvkxDV7WQIs3757N0lJLVIy7WRj_Uo
+ENotary-log 2019/04/24 05:54:43 New Login 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 05:54:59 Sign updated user: 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 05:55:07 Sign updated user: 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 05:55:25 Sign updated user: 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 05:55:30 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwNzQ0ODMsImlhdCI6MTU1NjA2NzI4MywiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjI0MDQzZjVkLTk4OTctNDM0MS1hZGIyLTY4MWJkNjI2ZDk2YiJ9.EJK449LrKG3fI6VIWgpQgn4n9i5oBVhaq4jZ5-FNyho
+ENotary-log 2019/04/24 08:18:05 INVALID EMAIL
+ENotary-log 2019/04/24 08:18:17 New Login 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 08:18:27 Sign updated user: 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 08:18:48 NEW CONTRACT ADDEDbdcbe2bf-4b9a-4c35-b4a3-b1d38a31b0db
+ENotary-log 2019/04/24 08:19:40 Signer cordinates added ContractID :bdcbe2bf-4b9a-4c35-b4a3-b1d38a31b0db
+ENotary-log 2019/04/24 08:21:32 NEW CONTRACT ADDEDa18145be-e78a-4b63-9455-d446ac66213c
+ENotary-log 2019/04/24 08:22:21 Signer cordinates added ContractID :a18145be-e78a-4b63-9455-d446ac66213c
+ENotary-log 2019/04/24 08:28:39 INVALID PASSWORD usmanework99@gmail.com
+ENotary-log 2019/04/24 08:28:42 INVALID PASSWORD usmanework99@gmail.com
+ENotary-log 2019/04/24 08:28:46 New Login 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 08:29:34 NO CONTRACTS FOUND | FolderID :
+ENotary-log 2019/04/24 08:29:58 NEW CONTRACT ADDED6c9c9b77-5e37-4489-94d4-19be27de17d0
+ENotary-log 2019/04/24 08:30:24 Signer cordinates added ContractID :6c9c9b77-5e37-4489-94d4-19be27de17d0
+ENotary-log 2019/04/24 08:33:55 New Login 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 08:45:22 NEW CONTRACT ADDED20ef033b-5feb-4533-8f9a-e2f6b480ed35
+ENotary-log 2019/04/24 08:45:43 Signer cordinates added ContractID :20ef033b-5feb-4533-8f9a-e2f6b480ed35
+ENotary-log 2019/04/24 08:56:30 NEW CONTRACT ADDED39915fdd-1144-425e-8d66-5a910b5830c6
+ENotary-log 2019/04/24 08:56:48 Signer cordinates added ContractID :39915fdd-1144-425e-8d66-5a910b5830c6
+ENotary-log 2019/04/24 08:59:30 NEW CONTRACT ADDED33764ed8-c6b7-486c-8e53-b074939a2fce
+ENotary-log 2019/04/24 08:59:48 Signer cordinates added ContractID :33764ed8-c6b7-486c-8e53-b074939a2fce
+ENotary-log 2019/04/24 10:14:22 New Login 24043f5d-9897-4341-adb2-681bd626d96b
+ENotary-log 2019/04/24 10:14:42 NEW CONTRACT ADDED2371c6b3-eef2-4d6e-a2c3-848e5229ed19
+ENotary-log 2019/04/24 10:14:59 NEW CONTRACT ADDED7e9b5f0c-895e-4450-bcc6-d3fb4864566a
+ENotary-log 2019/04/24 10:15:16 Signer cordinates added ContractID :7e9b5f0c-895e-4450-bcc6-d3fb4864566a
+ENotary-log 2019/04/24 10:17:58 CONTRACT SAVED IN BLOCKCHAIN 7e9b5f0c-895e-4450-bcc6-d3fb4864566a
+ENotary-log 2019/04/24 10:24:51 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwOTAwNjIsImlhdCI6MTU1NjA4Mjg2MiwiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjI0MDQzZjVkLTk4OTctNDM0MS1hZGIyLTY4MWJkNjI2ZDk2YiJ9.S_7TA6zvIBEKQMuoHD1qOU4MjAERUzMhSTHqsvE5HM8
+ENotary-log 2019/04/24 10:25:53 NEW USER SIGNUP usmanfazil99@gmail.com
+ENotary-log 2019/04/24 10:26:14 USER EMAIL VERIFIED SUCCESSFULLY usmanfazil99@gmail.com
+ENotary-log 2019/04/24 10:26:26 New Login 1ed7766f-50b1-4a79-be2b-a556a5f1d0ea
+ENotary-log 2019/04/24 10:51:32 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwOTA3ODYsImlhdCI6MTU1NjA4MzU4NiwiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjFlZDc3NjZmLTUwYjEtNGE3OS1iZTJiLWE1NTZhNWYxZDBlYSJ9.XnisxO1O6rx_j08okoYbXxWlub-ZnY1ePSGuymu-vbE
+ENotary-log 2019/04/24 10:55:22 NEW USER SIGNUP usmanework99@gmail.com
+ENotary-log 2019/04/24 10:55:50 USER EMAIL VERIFIED SUCCESSFULLY usmanework99@gmail.com
+ENotary-log 2019/04/24 10:56:04 New Login 27207cf6-eaef-48d4-b509-174b12b2dedb
+ENotary-log 2019/04/24 10:56:21 Sign updated user: 27207cf6-eaef-48d4-b509-174b12b2dedb
+ENotary-log 2019/04/24 10:57:03 NEW CONTRACT ADDED83a8dd35-28dd-4679-a3c4-64a27655c52e
+ENotary-log 2019/04/24 10:57:28 Signer cordinates added ContractID :83a8dd35-28dd-4679-a3c4-64a27655c52e
+ENotary-log 2019/04/24 10:57:53 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwOTI1NjQsImlhdCI6MTU1NjA4NTM2NCwiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjI3MjA3Y2Y2LWVhZWYtNDhkNC1iNTA5LTE3NGIxMmIyZGVkYiJ9.faS6_nw729c_ZNQdO9JocOjudMAkdMT25hHhLgBGCeM
+ENotary-log 2019/04/24 10:58:05 New Login 1ed7766f-50b1-4a79-be2b-a556a5f1d0ea
+ENotary-log 2019/04/24 10:58:35 Sign updated user: 1ed7766f-50b1-4a79-be2b-a556a5f1d0ea
+ENotary-log 2019/04/24 10:58:48 User logged out | tokenstring :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYwOTI2ODUsImlhdCI6MTU1NjA4NTQ4NSwiaXNzIjoiRU5vdGFyeSIsInVzZXJpZCI6IjFlZDc3NjZmLTUwYjEtNGE3OS1iZTJiLWE1NTZhNWYxZDBlYSJ9.XGHgWlQsePNKClxQe0HUA2Gb_Gz8Sn5bNO-Z8I8dUkY
+ENotary-log 2019/04/24 10:59:12 New Login 27207cf6-eaef-48d4-b509-174b12b2dedb
+ENotary-log 2019/04/24 10:59:36 CAN NOT FIND ANY CONTRACT 27207cf6-eaef-48d4-b509-174b12b2dedb
+ENotary-log 2019/04/24 11:00:35 CONTRACT SAVED IN BLOCKCHAIN 83a8dd35-28dd-4679-a3c4-64a27655c52e
+ENotary-log 2019/04/25 21:54:17 New Login 27207cf6-eaef-48d4-b509-174b12b2dedb
+ENotary-log 2019/04/25 21:54:27 CAN NOT FIND ANY CONTRACT 27207cf6-eaef-48d4-b509-174b12b2dedb
+ENotary-log 2019/04/25 21:54:35 NEW CONTRACT ADDEDda2275c4-5521-4ba0-922e-4528005eb87d
+ENotary-log 2019/04/25 21:55:17 Signer cordinates added ContractID :da2275c4-5521-4ba0-922e-4528005eb87d
+ENotary-log 2019/04/25 22:18:14 NEW CONTRACT ADDEDcfa04a9e-fc31-468c-a7b0-e98ddfbc0c6a
+ENotary-log 2019/04/25 22:18:46 Signer cordinates added ContractID :cfa04a9e-fc31-468c-a7b0-e98ddfbc0c6a
