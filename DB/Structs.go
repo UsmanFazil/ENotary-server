@@ -194,7 +194,7 @@ type SignContract struct {
 
 type Coordinates struct {
 	ContractID string `db:"ContractID"`
-	UserID     string `db: "UserID"`
+	UserID     string `db: "userID"`
 	Name       string `db:"name"`
 	Topcord    int    `db: "topcord"`
 	Leftcord   int    `db:"leftcord"`
@@ -208,10 +208,6 @@ type PlaygroundInput struct {
 	Text       string `json: "text"`
 }
 
-type TestHtml struct {
-	html string
-}
-
 //CONTRACT STATUS TYPES
 // DRAFT
 // In Progress
@@ -220,6 +216,6 @@ type TestHtml struct {
 // Voided
 
 //Signer Status
-// default pending
+// pending
 // Signed
 // Declined

@@ -22,7 +22,7 @@ func (d *dbServer) SaveCoordinates(w http.ResponseWriter, r *http.Request) {
 	var pi []PlaygroundInput
 	_ = json.NewDecoder(r.Body).Decode(&pi)
 
-	//Collection := d.sess.Collection(CoordinatesCol)
+	Collection := d.sess.Collection(CoordinatesCol)
 
 	var sc = make([]Coordinates, len(pi))
 
@@ -33,21 +33,13 @@ func (d *dbServer) SaveCoordinates(w http.ResponseWriter, r *http.Request) {
 		sc[i].Topcord = pi[i].Top
 		sc[i].Leftcord = pi[i].Left
 
-		q := d.sess.InsertInto("Coordinates").Columns("ContractID", "userID", "name", "topcord", "leftcord").Values(sc[i].ContractID, sc[i].UserID, sc[i].Name, sc[i].Topcord, sc[i].Leftcord)
-		_, err := q.Exec()
+		_, _ = Collection.Insert(sc[i])
 
-		if err != nil {
-			RenderError(w, "CAN NOT UPDATE SIGNERS COORDINATES")
-			Logger("Can't add coordinates, ContractID :" + sc[0].ContractID)
-			fmt.Println(err)
-			return
-		}
+		Coordinate = append(Coordinate, sc...)
+		json.NewEncoder(w).Encode(sc)
+		Logger("Signer cordinates added ContractID :" + sc[0].ContractID)
+		return
 	}
-
-	Coordinate = append(Coordinate, sc...)
-	json.NewEncoder(w).Encode(sc)
-	Logger("Signer cordinates added ContractID :" + sc[0].ContractID)
-	return
 }
 
 func (d *dbServer) ServeCoordinates(w http.ResponseWriter, r *http.Request) {
