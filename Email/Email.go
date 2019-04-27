@@ -73,12 +73,12 @@ func Msg(msg string) string {
 
 }
 
-func DeclinedEmail(useremail string, subj string, message string) {
+func StatusEmail(useremail string, subj string, msg string, decline bool) {
 	m := gomail.NewMessage()
 	m.SetHeader("From", "eNotaryOfficial@gmail.com")
 	m.SetHeader("To", useremail)
 	m.SetHeader("Subject", subj)
-	m.SetBody("text/html", Declinemsg(message))
+	m.SetBody("text/html", statusmsg(msg, useremail, decline))
 
 	d := gomail.NewDialer("smtp.gmail.com", 587, "eNotaryOfficial@gmail.com", "Enotary360")
 
@@ -90,7 +90,32 @@ func DeclinedEmail(useremail string, subj string, message string) {
 	return
 }
 
-func Declinemsg(msg string) string {
-	return "Hello! <br/>  Recepient has declined to sign the contract " + "<b>" + msg + "<b>"
+func statusmsg(msg string, email string, decline bool) string {
+	if decline {
+		return "Hello! <br/> It is to inform you that " + email + " has Declined the Contract with ContractID : " + msg
+	} else {
+		return "Hello! <br/> It is to inform you that " + email + " has signed the Contract with ContractID : " + msg
+	}
+}
+
+func CompletedEmail(useremail string, subj string, msg string) {
+	m := gomail.NewMessage()
+	m.SetHeader("From", "eNotaryOfficial@gmail.com")
+	m.SetHeader("To", useremail)
+	m.SetHeader("Subject", subj)
+	m.SetBody("text/html", CompleteMsg(msg))
+
+	d := gomail.NewDialer("smtp.gmail.com", 587, "eNotaryOfficial@gmail.com", "Enotary360")
+
+	if err := d.DialAndSend(m); err != nil {
+		log.Println("CAN NOT GENERATE EMAIL:", err)
+		return
+	}
+	log.Println("EMAIL SENT SUCCESSFULLY")
+	return
+}
+
+func CompleteMsg(msg string) string {
+	return "Hello! <br/>  It is to inform you that Contract with ContractID  : " + msg + " has been completed and signed by all recepients <br/> "
 
 }

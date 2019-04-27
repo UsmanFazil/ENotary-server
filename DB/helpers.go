@@ -199,6 +199,31 @@ func Logger(logstring string) {
 	logger.Println(logstring)
 }
 
+func (d *dbServer) Getemails(cd ContractDetail) (bool, []string) {
+	var emails = make([]string, len(cd.Signers)+1)
+	var user User
+	var idlists = make([]string, len(cd.Signers)+1)
+
+	idlists[0] = cd.ContractData.Creator
+
+	for i := 0; i < len(cd.Signers); i++ {
+		idlists[i+1] = cd.Signers[i].UserID
+	}
+
+	collection := d.sess.Collection(UserCollection)
+
+	for j := 0; j < len(idlists); j++ {
+		res := collection.Find(db.Cond{"userid": idlists[j]})
+		err := res.One(&user)
+
+		if err != nil {
+			return false, nil
+		}
+		emails[j] = user.Email
+	}
+	return true, emails
+}
+
 // func (d *dbServer) GetimageName(userid string) (string, string, error) {
 // 	collection := d.sess.Collection(userCollection)
 // 	res := collection.Find(db.Cond{"userid": userid})

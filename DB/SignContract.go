@@ -1,6 +1,7 @@
 package DB
 
 import (
+	"ENOTARY-Server/Email"
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
@@ -80,6 +81,7 @@ func (d *dbServer) DeclineContract(w http.ResponseWriter, r *http.Request) {
 
 	var contract Contract
 	var signer Signer
+	var signers []Signer
 
 	_ = json.NewDecoder(r.Body).Decode(&contract)
 
@@ -113,6 +115,28 @@ func (d *dbServer) DeclineContract(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		RenderError(w, "Signer status not updated")
 		return
+	}
+
+	res2 := signerCol.Find(db.Cond{"ContractID": contract.ContractID, "CC": 0})
+	err = res2.All(&signers)
+
+	if err != nil {
+		fmt.Println("Can not find signers")
+		return
+	}
+
+	var cd ContractDetail
+	cd.ContractData = contract
+	cd.Signers = signers
+
+	resbool, emails := d.Getemails(cd)
+	if !resbool {
+		RenderResponse(w, "CONTRACT SIGNED BUT CAN NOT GENERATE EMAIL RESPONSE", http.StatusOK)
+		return
+	}
+
+	for _, index := range emails {
+		go Email.StatusEmail(index, "CONTRACT STATUS UPDATE", contract.ContractID, true)
 	}
 
 	json.NewEncoder(w).Encode(contract)
@@ -151,8 +175,8 @@ func (d *dbServer) SignContract(w http.ResponseWriter, r *http.Request) {
 
 	// path := Contractfilepath + "/" + contract.ContractID + ".png"
 	// Save(sc.FileBase64, path)
-
 	//contract.Filepath = path
+
 	contract.UpdateTime = time.Now().Format(time.RFC850)
 
 	signerCol := d.sess.Collection(SignerCollection)
@@ -181,8 +205,17 @@ func (d *dbServer) SignContract(w http.ResponseWriter, r *http.Request) {
 	}
 	res.Update(contract)
 
-	count := 0
+	var cd ContractDetail
+	cd.ContractData = contract
+	cd.Signers = signers
 
+	resbool, emails := d.Getemails(cd)
+	if !resbool {
+		RenderResponse(w, "CONTRACT SIGNED BUT CAN NOT GENERATE EMAIL RESPONSE", http.StatusOK)
+		return
+	}
+
+	count := 0
 	for i := 0; i < len(signers); i++ {
 		if signers[i].SignStatus == "Signed" {
 			count++
@@ -191,6 +224,15 @@ func (d *dbServer) SignContract(w http.ResponseWriter, r *http.Request) {
 	if count == len(signers) {
 		contract.Status = "Completed"
 		res.Update(contract)
+		for _, index := range emails {
+			go Email.CompletedEmail(index, "CONTRACT COMPLETED", contract.ContractID)
+		}
+
+	} else {
+
+		for _, index := range emails {
+			go Email.StatusEmail(index, "CONTRACT STATUS UPDATE", contract.ContractID, false)
+		}
 	}
 
 	json.NewEncoder(w).Encode(signers)
