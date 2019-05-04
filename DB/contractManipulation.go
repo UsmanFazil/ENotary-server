@@ -43,12 +43,21 @@ func (d *dbServer) SignIt(w http.ResponseWriter, r *http.Request) {
 	if err1 != nil {
 		return
 	}
+	var cords []Coordinates
+	for _, value := range Coordinate {
+		if value.ContractID == contract.ContractID && value.UserID == uID {
+			cords = append(cords, value)
+		}
+	}
 
-	ContractManipulation(contract.Filepath, user.Sign)
+	ContractManipulation(contract.Filepath, user.Sign, cords[0].Topcord, cords[0].Leftcord)
+
+	RenderResponse(w, "done", http.StatusOK)
+	return
 
 }
 
-func ContractManipulation(contractpath string, signpath string) {
+func ContractManipulation(contractpath string, signpath string, top int, left int) {
 
 	image1, err := os.Open(contractpath)
 	if err != nil {
@@ -73,9 +82,9 @@ func ContractManipulation(contractpath string, signpath string) {
 	}
 	defer image2.Close()
 
-	m := resize.Resize(150, 150, second, resize.Lanczos3)
+	m := resize.Resize(150, 125, second, resize.Lanczos3)
 
-	offset := image.Pt(292, 410)
+	offset := image.Pt(top, left)
 
 	// b := first.Bounds()
 	c := m.Bounds()

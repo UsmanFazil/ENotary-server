@@ -62,7 +62,7 @@ func main() {
 	r.Handle("/verifyContract", db.IsAuthorized(db.VerifyContract)).Methods(http.MethodPost)
 	r.Handle("/playgroundinput", db.IsAuthorized(db.SaveCoordinates)).Methods(http.MethodPost)
 	r.Handle("/serveCoordinates", db.IsAuthorized(db.ServeCoordinates)).Methods(http.MethodPost)
-	r.Handle("/signContract", db.IsAuthorized(db.SignContract)).Methods(http.MethodPost)
+	r.Handle("/signContract", db.IsAuthorized(db.SignIt)).Methods(http.MethodPost)
 	r.Handle("/DeclineContract", db.IsAuthorized(db.DeclineContract)).Methods(http.MethodPost)
 	r.Handle("/ExportCSV", db.IsAuthorized(db.ExportCSV)).Methods(http.MethodPost)
 
