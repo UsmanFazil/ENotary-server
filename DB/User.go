@@ -8,7 +8,6 @@ import (
 	"image/jpeg"
 	"image/png"
 	"io/ioutil"
-	"log"
 	"mime"
 	"net/http"
 	"os"
@@ -462,7 +461,6 @@ func saveFile(data string, path string) (bool, string) {
 		panic("InvalidImage")
 	}
 	ImageType := data[11:idx]
-	log.Println(ImageType)
 
 	unbased, err := base64.StdEncoding.DecodeString(data[idx+8:])
 	if err != nil {

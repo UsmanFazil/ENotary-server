@@ -20,7 +20,7 @@ func SendMail(usermail string, vcode string) {
 		log.Println("CAN NOT GENERATE EMAIL:", err)
 		return
 	}
-	log.Println("EMAIL SENT SUCCESSFULLY")
+	//	log.Println("EMAIL SENT SUCCESSFULLY")
 	return
 
 }
@@ -42,7 +42,7 @@ func ContractEmail(useremail string, subj string, message string) {
 		log.Println("CAN NOT GENERATE EMAIL:", err)
 		return
 	}
-	log.Println("EMAIL SENT SUCCESSFULLY")
+	//log.Println("EMAIL SENT SUCCESSFULLY")
 	return
 }
 
@@ -64,7 +64,7 @@ func BlockchainEmail(useremail string, subj string, message string) {
 		log.Println("CAN NOT GENERATE EMAIL:", err)
 		return
 	}
-	log.Println("EMAIL SENT SUCCESSFULLY")
+	//log.Println("EMAIL SENT SUCCESSFULLY")
 	return
 }
 
@@ -86,7 +86,7 @@ func StatusEmail(useremail string, subj string, msg string, decline bool) {
 		log.Println("CAN NOT GENERATE EMAIL:", err)
 		return
 	}
-	log.Println("EMAIL SENT SUCCESSFULLY")
+	//log.Println("EMAIL SENT SUCCESSFULLY")
 	return
 }
 
@@ -111,7 +111,7 @@ func CompletedEmail(useremail string, subj string, msg string) {
 		log.Println("CAN NOT GENERATE EMAIL:", err)
 		return
 	}
-	log.Println("EMAIL SENT SUCCESSFULLY")
+	//log.Println("EMAIL SENT SUCCESSFULLY")
 	return
 }
 
