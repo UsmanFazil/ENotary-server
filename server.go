@@ -65,6 +65,7 @@ func main() {
 	r.Handle("/signContract", db.IsAuthorized(db.SignIt)).Methods(http.MethodPost)
 	r.Handle("/DeclineContract", db.IsAuthorized(db.DeclineContract)).Methods(http.MethodPost)
 	r.Handle("/ExportCSV", db.IsAuthorized(db.ExportCSV)).Methods(http.MethodPost)
+	r.Handle("/TemperingEmail", db.IsAuthorized(db.TemperingEmail)).Methods(http.MethodPost)
 
 	r.Handle("/newFolder", db.IsAuthorized(db.NewFolder)).Methods(http.MethodPost)
 	r.Handle("/moveContract", db.IsAuthorized(db.AddContract)).Methods(http.MethodPost)

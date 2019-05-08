@@ -119,3 +119,25 @@ func CompleteMsg(msg string) string {
 	return "Hello! <br/>  It is to inform you that Contract with ContractID  : " + msg + " has been completed and signed by all recepients <br/> "
 
 }
+
+func TemperMail(useremail string, subj string, msg string) {
+	m := gomail.NewMessage()
+	m.SetHeader("From", "eNotaryOfficial@gmail.com")
+	m.SetHeader("To", useremail)
+	m.SetHeader("Subject", subj)
+	m.SetBody("text/html", TemperMsg(msg))
+
+	d := gomail.NewDialer("smtp.gmail.com", 587, "eNotaryOfficial@gmail.com", "Enotary360")
+
+	if err := d.DialAndSend(m); err != nil {
+		log.Println("CAN NOT GENERATE EMAIL:", err)
+		return
+	}
+	//log.Println("EMAIL SENT SUCCESSFULLY")
+	return
+}
+
+func TemperMsg(msg string) string {
+	return "Hello! <br/>  It is to inform you that Contract with ContractID  : " + msg + " has been Tempered <br/> "
+
+}

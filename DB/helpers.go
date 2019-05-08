@@ -1,7 +1,9 @@
 package DB
 
 import (
+	"ENOTARY-Server/Email"
 	"crypto/rand"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -281,4 +283,35 @@ func DownloadFile(writer http.ResponseWriter, request *http.Request) {
 	io.Copy(writer, Openfile) //'Copy' the file to the client
 	return
 
+}
+func (d *dbServer) TemperingEmail(w http.ResponseWriter, r *http.Request) {
+	var contract Contract
+	var signers []Signer
+
+	_ = json.NewDecoder(r.Body).Decode(&contract)
+
+	contractCollection := d.sess.Collection(ContractCollection)
+	Signercollection := d.sess.Collection(SignerCollection)
+
+	res := contractCollection.Find(db.Cond{"ContractID": contract.ContractID})
+	res.One(&contract)
+
+	res2 := Signercollection.Find(db.Cond{"ContractID": contract.ContractID, "CC": 0})
+	res2.All(&signers)
+
+	var cd ContractDetail
+	cd.ContractData = contract
+	cd.Signers = signers
+
+	resbool, emails := d.Getemails(cd)
+	if !resbool {
+		RenderResponse(w, "CAN NOT SEND EMAIL TO THE RECIPIENTS", http.StatusOK)
+		return
+	}
+
+	for _, index := range emails {
+		go Email.TemperMail(index, "CONTRACT TEMPERED", contract.ContractID)
+	}
+	RenderResponse(w, "EMAIL SENT", http.StatusOK)
+	return
 }

@@ -4,6 +4,7 @@ import (
 	"ENOTARY-Server/Email"
 	"ENOTARY-Server/Hashing"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"mime"
 	"net/http"
@@ -128,6 +129,7 @@ func (d *dbServer) AddRecipients(w http.ResponseWriter, r *http.Request) {
 	var signer Signer
 
 	_ = json.NewDecoder(r.Body).Decode(&input)
+	fmt.Println(input)
 	signerCollection := d.sess.Collection(SignerCollection)
 
 	var result = make([]Signer, len(input))

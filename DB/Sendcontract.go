@@ -1,6 +1,7 @@
 package DB
 
 import (
+	"ENOTARY-Server/Email"
 	"encoding/json"
 	"net/http"
 
@@ -37,7 +38,7 @@ func (d *dbServer) SendContract(w http.ResponseWriter, r *http.Request) {
 		res := userCollection.Find(db.Cond{"userid": signers[i].UserID})
 		_ = res.One(&user)
 
-		//go Email.ContractEmail(user.Email, contractinfo.EmailSubj, contractinfo.EmailMsg)
+		go Email.ContractEmail(user.Email, contractinfo.EmailSubj, contractinfo.EmailMsg)
 
 	}
 	RenderResponse(w, "EMAIL SENT TO ALL RECEPIENTS", http.StatusOK)
