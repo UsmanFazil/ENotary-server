@@ -170,7 +170,7 @@ func (d *dbServer) SentContractsList(userid string, drafts bool, completed bool)
 		if total < 1 {
 			return false, nil
 		}
-		err := res.All(&contracts)
+		err := res.OrderBy("contractName").All(&contracts)
 		if err != nil {
 			return false, nil
 		}
@@ -183,7 +183,7 @@ func (d *dbServer) SentContractsList(userid string, drafts bool, completed bool)
 			if total < 1 {
 				return false, nil
 			}
-			err := res.All(&contracts)
+			err := res.OrderBy("contractName").All(&contracts)
 			if err != nil {
 				return false, nil
 			}
@@ -195,7 +195,7 @@ func (d *dbServer) SentContractsList(userid string, drafts bool, completed bool)
 			if total < 1 {
 				return false, nil
 			}
-			err := res.All(&contracts)
+			err := res.OrderBy("contractName").All(&contracts)
 			if err != nil {
 				return false, nil
 			}

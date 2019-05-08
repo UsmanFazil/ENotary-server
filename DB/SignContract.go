@@ -82,8 +82,6 @@ func (d *dbServer) DeclineContract(w http.ResponseWriter, r *http.Request) {
 
 	_ = json.NewDecoder(r.Body).Decode(&contract)
 
-	fmt.Println(contract)
-
 	signerCol := d.sess.Collection(SignerCollection)
 	Collection := d.sess.Collection(ContractCollection)
 	res := Collection.Find(db.Cond{"ContractID": contract.ContractID})

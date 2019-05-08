@@ -54,7 +54,7 @@ func main() {
 
 	r.Handle("/newContract", db.IsAuthorized(db.NewContract)).Methods(http.MethodPost)
 	r.Handle("/addRecipients", db.IsAuthorized(db.AddRecipients)).Methods(http.MethodPost)
-	r.Handle("/delDraft", db.IsAuthorized(db.DeleteDraft)).Methods(http.MethodDelete)
+	r.Handle("/delDraft", db.IsAuthorized(db.DeleteDraft)).Methods(http.MethodPost)
 	r.Handle("/ContractDetails", db.IsAuthorized(db.ContractDetails)).Methods(http.MethodPost)
 	r.Handle("/SendContract", db.IsAuthorized(db.SendContract)).Methods(http.MethodPost)
 	r.Handle("/SaveinBlockchain", db.IsAuthorized(db.ContractHashDetails)).Methods(http.MethodPost)
@@ -76,5 +76,5 @@ func main() {
 	r.PathPrefix("/Files/").Handler(http.StripPrefix("/Files/", http.FileServer(http.Dir(dir))))
 
 	log.Println("Go-lang server started at port 8000 ....")
-	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization", "Token"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(r)))
+	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization", "Token"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS", "DELETE"}), handlers.AllowedOrigins([]string{"*"}))(r)))
 }

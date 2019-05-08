@@ -3,7 +3,6 @@ package DB
 import (
 	"ENOTARY-Server/Email"
 	"encoding/json"
-	"fmt"
 	"image"
 	"image/color"
 	"image/draw"
@@ -118,7 +117,6 @@ func (d *dbServer) SignIt(w http.ResponseWriter, r *http.Request) {
 	err = res4.All(&signers)
 
 	if err != nil {
-		fmt.Println("Can not find signers")
 		return
 	}
 	var cd ContractDetail
@@ -182,7 +180,7 @@ func ContractManipulation(contractpath string, signpath string, top int, left in
 	}
 	defer image2.Close()
 
-	m := resize.Resize(150, 125, second, resize.Lanczos3)
+	m := resize.Resize(108, 96, second, resize.Lanczos3)
 	offset := image.Pt(left, top)
 
 	// b := first.Bounds()
@@ -234,7 +232,7 @@ func pngManip(contractpath string, signpath string, top int, left int) bool {
 	}
 	defer image2.Close()
 
-	m := resize.Resize(150, 125, second, resize.Lanczos3)
+	m := resize.Resize(108, 96, second, resize.Lanczos3)
 
 	offset := image.Pt(left, top)
 
