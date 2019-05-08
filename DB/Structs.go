@@ -208,6 +208,14 @@ type PlaygroundInput struct {
 	Text       string `json: "text"`
 }
 
+type Testing struct {
+	ContractID string `db:"ContractID"`
+	UserID     string `db:"userID"`
+	Name       string `db:"name"`
+	Topcord    string `db: "topcord"`
+	Leftcord   string `db: "leftcord"`
+}
+
 //CONTRACT STATUS TYPES
 // DRAFT
 // In Progress

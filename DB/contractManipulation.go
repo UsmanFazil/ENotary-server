@@ -3,14 +3,19 @@ package DB
 import (
 	"encoding/json"
 	"image"
+	"image/color"
 	"image/draw"
 	"image/jpeg"
 	"image/png"
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/nfnt/resize"
+	"golang.org/x/image/font"
+	"golang.org/x/image/font/basicfont"
+	"golang.org/x/image/math/fixed"
 	"upper.io/db.v3"
 )
 
@@ -43,16 +48,35 @@ func (d *dbServer) SignIt(w http.ResponseWriter, r *http.Request) {
 	if err1 != nil {
 		return
 	}
-	var cords []Coordinates
-	for _, value := range Coordinate {
-		if value.ContractID == contract.ContractID && value.UserID == uID {
-			cords = append(cords, value)
+
+	for _, value := range AllCoordinates {
+		if value.Contractid == contract.ContractID && value.Recipient == uID {
+			if value.Text == "Signature" {
+				ContractManipulation(contract.Filepath, user.Sign, value.Top, value.Left)
+			}
+			if value.Text == "Initial" {
+				ContractManipulation(contract.Filepath, user.Initials, value.Top, value.Left)
+			}
+			if value.Text == "DateSigned" {
+				addLabel(contract.Filepath, value.Left, value.Top, time.Now().Format("2006-01-02"))
+			}
+			if value.Text == "Name" {
+				addLabel(contract.Filepath, value.Left, value.Top, user.Name)
+			}
+			if value.Text == "Email" {
+				addLabel(contract.Filepath, value.Left, value.Top, user.Email)
+			}
+			if value.Text == "Company" {
+				addLabel(contract.Filepath, value.Left, value.Top, user.Company)
+			}
+			if value.Text == "Phone" {
+				addLabel(contract.Filepath, value.Left, value.Top, user.Phone)
+			}
+
 		}
 	}
 
-	ContractManipulation(contract.Filepath, user.Sign, cords[0].Topcord, cords[0].Leftcord)
-
-	RenderResponse(w, "done", http.StatusOK)
+	RenderResponse(w, "Contract Signed Successfully", http.StatusOK)
 	return
 
 }
@@ -63,12 +87,11 @@ func ContractManipulation(contractpath string, signpath string, top int, left in
 	if err != nil {
 		log.Fatalf("failed to open: %s", err)
 	}
-	// spliter := strings.Split(contractpath, ".")
-	// ext := spliter[1]
 
 	first, err := jpeg.Decode(image1)
 	if err != nil {
-		log.Fatalf("failed to decode: %s", err)
+		pngManip(contractpath, signpath, top, left)
+		return
 	}
 	defer image1.Close()
 
@@ -83,8 +106,7 @@ func ContractManipulation(contractpath string, signpath string, top int, left in
 	defer image2.Close()
 
 	m := resize.Resize(150, 125, second, resize.Lanczos3)
-
-	offset := image.Pt(top, left)
+	offset := image.Pt(left, top)
 
 	// b := first.Bounds()
 	c := m.Bounds()
@@ -93,12 +115,171 @@ func ContractManipulation(contractpath string, signpath string, top int, left in
 	draw.Draw(image3, first.Bounds(), first, image.ZP, draw.Src)
 	draw.Draw(image3, c.Add(offset), m, image.ZP, draw.Over)
 
+	// addLabel(image3, 100, 100, "ye karo na jani")
+
 	third, err := os.Create(contractpath)
 	if err != nil {
 		log.Fatalf("failed to create: %s", err)
 	}
 
 	jpeg.Encode(third, image3, &jpeg.Options{jpeg.DefaultQuality})
+
 	defer third.Close()
 
 }
+
+func pngManip(contractpath string, signpath string, top int, left int) {
+	image1, err := os.Open(contractpath)
+	if err != nil {
+		log.Fatalf("failed to open: %s", err)
+	}
+	// spliter := strings.Split(contractpath, ".")
+	// ext := spliter[1]
+
+	first, err := png.Decode(image1)
+	if err != nil {
+		return
+	}
+
+	defer image1.Close()
+
+	image2, err := os.Open(signpath)
+	if err != nil {
+		log.Fatalf("failed to open: %s", err)
+	}
+	second, err := png.Decode(image2)
+	if err != nil {
+		log.Fatalf("failed to decode: %s", err)
+	}
+	defer image2.Close()
+
+	m := resize.Resize(150, 125, second, resize.Lanczos3)
+
+	offset := image.Pt(left, top)
+
+	c := m.Bounds()
+
+	image3 := image.NewRGBA(first.Bounds())
+	draw.Draw(image3, first.Bounds(), first, image.ZP, draw.Src)
+	draw.Draw(image3, c.Add(offset), m, image.ZP, draw.Over)
+
+	// addLabel(image3, 100, 100, "ye karo na jani")
+
+	third, err := os.Create(contractpath)
+	if err != nil {
+		log.Fatalf("failed to create: %s", err)
+	}
+
+	png.Encode(third, image3)
+
+	defer third.Close()
+}
+
+func addLabel(contractpath string, x int, y int, label string) {
+
+	image1, err := os.Open(contractpath)
+	if err != nil {
+		log.Fatalf("failed to open: %s", err)
+	}
+
+	first, err := jpeg.Decode(image1)
+	if err != nil {
+		addpngLabel(contractpath, x, y, label)
+		return
+	}
+	defer image1.Close()
+
+	image3 := image.NewRGBA(first.Bounds())
+	draw.Draw(image3, first.Bounds(), first, image.ZP, draw.Src)
+
+	col := color.RGBA{0, 0, 0, 255}
+	point := fixed.Point26_6{fixed.Int26_6(x * 64), fixed.Int26_6(y * 64)}
+
+	d := &font.Drawer{
+		Dst:  image3,
+		Src:  image.NewUniform(col),
+		Face: basicfont.Face7x13,
+		Dot:  point,
+	}
+	d.DrawString(label)
+
+	third, err := os.Create(contractpath)
+	jpeg.Encode(third, image3, &jpeg.Options{jpeg.DefaultQuality})
+}
+
+func addpngLabel(contractpath string, x int, y int, label string) {
+
+	image1, err := os.Open(contractpath)
+	if err != nil {
+		log.Fatalf("failed to open: %s", err)
+	}
+
+	first, err := png.Decode(image1)
+	if err != nil {
+		return
+	}
+	defer image1.Close()
+
+	image3 := image.NewRGBA(first.Bounds())
+	draw.Draw(image3, first.Bounds(), first, image.ZP, draw.Src)
+
+	col := color.RGBA{0, 0, 0, 255}
+	point := fixed.Point26_6{fixed.Int26_6(x * 64), fixed.Int26_6(y * 64)}
+
+	d := &font.Drawer{
+		Dst:  image3,
+		Src:  image.NewUniform(col),
+		Face: basicfont.Face7x13,
+		Dot:  point,
+	}
+	d.DrawString(label)
+
+	third, err := os.Create(contractpath)
+	png.Encode(third, image3)
+}
+
+// col := color.RGBA{0, 0, 0, 255}
+// point := fixed.Point26_6{fixed.Int26_6(20 * 64), fixed.Int26_6(40 * 64)}
+
+// d := &font.Drawer{
+// 	Dst:  image3,
+// 	Src:  image.NewUniform(col),
+// 	Face: basicfont.Face7x13,
+// 	Dot:  point,
+// }
+// d.DrawString("main time stamp hn")
+
+// spliter := strings.Split(contract.Filepath, ".")
+// ext := spliter[1]
+
+// func (d *dbServer) Tester(w http.ResponseWriter, r *http.Request) {
+// 	var t Testing
+// 	//	var x Testing
+// 	_ = json.NewDecoder(r.Body).Decode(&t)
+
+// 	//col := d.sess.Collection(CoordinatesCol)
+
+// 	q := d.sess.InsertInto("Coordinates").Columns("ContractID", "userID", "name", "topcord", "leftcord").Values("ba8daa9f-7e1b-470a-874e-e841602d3c5a", "c8ecfed8-1838-4f3d-b587-d04836867598", "Signature", "aaa", "bnns")
+// 	_, err := q.Exec()
+
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+
+// }
+// func (d *dbServer) ReadTester(w http.ResponseWriter, r *http.Request) {
+// 	var x Testing
+
+// 	_ = json.NewDecoder(r.Body).Decode(&x)
+
+// 	//col := d.sess.Collection(CoordinatesCol)
+// 	c := "ba8daa9f-7e1b-470a-874e-e841602d3c5a"
+// 	b := "c8ecfed8-1838-4f3d-b587-d04836867598"
+// 	rows, _ := d.sess.Query("SELECT * FROM Coordinates Where ContractID = ? AND userID = ?", c, b)
+
+// 	iter := sqlbuilder.NewIterator(rows)
+// 	iter.One(&x)
+
+// 	fmt.Println(x)
+
+// }

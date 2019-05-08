@@ -17,30 +17,30 @@ import (
 	"upper.io/db.v3"
 )
 
-var Coordinate []Coordinates
+var AllCoordinates []PlaygroundInput
 
 func (d *dbServer) SaveCoordinates(w http.ResponseWriter, r *http.Request) {
 	var pi []PlaygroundInput
 	_ = json.NewDecoder(r.Body).Decode(&pi)
 
-	Collection := d.sess.Collection(CoordinatesCol)
+	//	Collection := d.sess.Collection(CoordinatesCol)
 
 	var sc = make([]Coordinates, len(pi))
 
-	for i := 0; i < len(pi); i++ {
-		sc[i].ContractID = pi[i].Contractid
-		sc[i].UserID = pi[i].Recipient
-		sc[i].Name = pi[i].Text
-		sc[i].Topcord = pi[i].Top
-		sc[i].Leftcord = pi[i].Left
+	// for i := 0; i < len(pi); i++ {
+	// 	sc[i].ContractID = pi[i].Contractid
+	// 	sc[i].UserID = pi[i].Recipient
+	// 	sc[i].Name = pi[i].Text
+	// 	sc[i].Topcord = pi[i].Top
+	// 	sc[i].Leftcord = pi[i].Left
 
-		_, _ = Collection.Insert(sc[i])
+	// 	_, _ = Collection.Insert(sc[i])
+	// }
+	AllCoordinates = append(AllCoordinates, pi...)
 
-		Coordinate = append(Coordinate, sc...)
-		json.NewEncoder(w).Encode(sc)
-		Logger("Signer cordinates added ContractID :" + sc[0].ContractID)
-		return
-	}
+	json.NewEncoder(w).Encode(AllCoordinates)
+	Logger("Signer cordinates added ContractID :" + sc[0].ContractID)
+	return
 }
 
 func (d *dbServer) ServeCoordinates(w http.ResponseWriter, r *http.Request) {
@@ -54,15 +54,14 @@ func (d *dbServer) ServeCoordinates(w http.ResponseWriter, r *http.Request) {
 	uID := claims["userid"].(string)
 
 	var contract Contract
-	var cords []Coordinates
+	var cords []PlaygroundInput
 	_ = json.NewDecoder(r.Body).Decode(&contract)
 
-	for _, value := range Coordinate {
-		if value.ContractID == contract.ContractID && value.UserID == uID {
+	for _, value := range AllCoordinates {
+		if value.Contractid == contract.ContractID && value.Recipient == uID {
 			cords = append(cords, value)
 		}
 	}
-
 	json.NewEncoder(w).Encode(cords)
 
 }
